@@ -13,16 +13,20 @@ The Java API is a Maven project built on Java 1.7. It requires the following thi
 
 Structure
 =========
-- commons
+- `commons`
+
 Contains exceptions, enums and deserializers used throughout the project.
 
-- data
+- `data`
+
 Everything under this package is data structures that serializes into json and deserializes from json.
 
-- requestbuilders
+- `requestbuilders`
+
 Contains the builder classes for the requests. Use these to create the Trustly API requests.
 
-- security
+- `security`
+
 Contains classes for handling of keys and signatures.
 
 Overview
@@ -56,6 +60,7 @@ Initializing the API
 
 
 Example deposit call
+
 		Request deposit = new Deposit.Build("https://example.com/trustlynotification", "user@email.com", "abas421csd123zds1wd99", Currency.SEK)
                 .locale("sv_SE")
                 .amount("54.12")
@@ -70,12 +75,14 @@ Example deposit call
         String iframeUrl = response.getResult().getData().get("url");
 
 Example refund call
+
 		Request refund = new Refund.Build("123543567", "54.12", Currency.SEK)
                 .getRequest();
 
         Response response = api.sendRequest(refund);
 
 Example withdrawal call
+
         Request withdraw = new Withdraw.Build("https://example.com/trustlynotification", "user@email.com", "41bj1h423b12bh323", Currency.PLN)
                 .firstname("Steve")
                 .lastname("Smith")
