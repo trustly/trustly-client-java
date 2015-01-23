@@ -147,15 +147,16 @@ public class SignatureHandler {
             List<Field> fields = getAllFields(new LinkedList<Field>(), data.getClass());
             Collections.sort(
                     fields, new Comparator<Field>() {
-                @Override
-                public int compare(Field o1, Field o2) {
-                    return o1.getName().compareTo(o2.getName());
-                }
-            });
+                        @Override
+                        public int compare(Field o1, Field o2) {
+                            return o1.getName().compareTo(o2.getName());
+                        }
+                    });
 
             //Get values using reflection
             StringBuilder b = new StringBuilder();
             for (Field field : fields) {
+
                 String jsonFieldName;
                 if (field.isAnnotationPresent(SerializedName.class)) {
                     jsonFieldName = field.getAnnotation(SerializedName.class).value();
@@ -163,16 +164,18 @@ public class SignatureHandler {
                 else {
                     jsonFieldName = field.getName();
                 }
-                b.append(jsonFieldName);
 
-                if (field.get(data) == null) {
+                if (field.getType().equals(Map.class)) {
+                    if (field.get(data) != null) {
+                        b.append(jsonFieldName);
+                        b.append(serializeMap((Map) field.get(data)));
+                    }
                     continue;
                 }
 
-                if (field.getType().equals(Map.class)) {
-                    b.append(serializeMap((Map) field.get(data)));
-                }
-                else {
+                b.append(jsonFieldName);
+
+                if (field.get(data) != null) {
                     b.append(field.get(data));
                 }
             }

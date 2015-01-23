@@ -30,6 +30,10 @@ import com.trustly.api.commons.Method;
 import com.trustly.api.commons.NotificationDeserializer;
 import com.trustly.api.commons.ResponseStatus;
 import com.trustly.api.commons.exceptions.TrustlySignatureException;
+import com.trustly.api.data.notification.notificationdata.AccountNotificationData;
+import com.trustly.api.data.notification.notificationdata.CancelNotificationData;
+import com.trustly.api.data.notification.notificationdata.DebitNotificationData;
+import com.trustly.api.data.notification.notificationdata.PendingNotificationData;
 import com.trustly.api.requestbuilders.NotificationResponse;
 import com.trustly.api.data.notification.Notification;
 import com.trustly.api.data.notification.notificationdata.CreditData;
@@ -49,8 +53,14 @@ public class NotificationHandler {
      */
     public Notification handleNotification(String notificationJson) {
         NotificationDeserializer deserializer = new NotificationDeserializer();
+
         deserializer.registerDataType(Method.CREDIT.toString(), CreditData.class);
-        Gson gson = new GsonBuilder().registerTypeAdapter(Request.class, deserializer)
+        deserializer.registerDataType(Method.ACCOUNT.toString(), AccountNotificationData.class);
+        deserializer.registerDataType(Method.CANCEL.toString(), CancelNotificationData.class);
+        deserializer.registerDataType(Method.DEBIT.toString(), DebitNotificationData.class);
+        deserializer.registerDataType(Method.PENDING.toString(), PendingNotificationData.class);
+
+        Gson gson = new GsonBuilder().registerTypeAdapter(Notification.class, deserializer)
                                      .create();
 
         Notification notification = gson.fromJson(notificationJson, Notification.class);

@@ -24,14 +24,9 @@
 
 package com.trustly.api.data.notification;
 
-import com.google.gson.annotations.SerializedName;
-
 public class NotificationParameters {
-    @SerializedName("Signature")
-    private String      signature;
-    @SerializedName("UUID")
-    private String      uuid;
-    @SerializedName("Data")
+    private String signature;
+    private String uuid;
     private NotificationData data;
 
     public NotificationData getData() {
