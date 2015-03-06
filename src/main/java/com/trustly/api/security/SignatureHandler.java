@@ -240,7 +240,7 @@ public class SignatureHandler {
         }
         else {
             ErrorBody error = response.getError().getError();
-            method = (error.getMethod() == null) ? "" : error.getMethod().name();
+            method = (error.getMethod() == null) ? "" : error.getMethod().toString();
             uuid = error.getUuid();
             serializedData = serializeData(error.getData());
             signatureBase64 = error.getSignature();
