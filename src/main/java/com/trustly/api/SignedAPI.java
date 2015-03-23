@@ -101,7 +101,7 @@ public class SignedAPI {
         try {
             CloseableHttpClient httpClient = HttpClients.createDefault();
             HttpPost httpPost = new HttpPost(API_URL);
-            StringEntity jsonRequest = new StringEntity(request);
+            StringEntity jsonRequest = new StringEntity(request, "UTF-8");
             httpPost.addHeader("content-type", "application/json");
             httpPost.setEntity(jsonRequest);
 
