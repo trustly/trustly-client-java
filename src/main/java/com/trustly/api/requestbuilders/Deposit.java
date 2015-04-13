@@ -94,6 +94,11 @@ public class Deposit {
             return this;
         }
 
+        public Build country(String countryISOCode) {
+            attributes.put("Country", countryISOCode);
+            return this;
+        }
+
         public Build ip(String IP) {
             attributes.put("IP", IP);
             return this;
