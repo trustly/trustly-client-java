@@ -37,10 +37,6 @@ public class WithdrawData extends RequestData {
     private String   messageId;
     @SerializedName("Currency")
     private Currency currency;
-    @SerializedName("Amount")
-    private String amount = null;
-
-
 
     public String getNotificationURL() {
         return notificationUrl;
