@@ -166,8 +166,8 @@ public class SignatureHandler {
                 }
 
                 if (field.getType().equals(Map.class)) {
+                    b.append(jsonFieldName);
                     if (field.get(data) != null) {
-                        b.append(jsonFieldName);
                         b.append(serializeMap((Map) field.get(data)));
                     }
                     continue;
