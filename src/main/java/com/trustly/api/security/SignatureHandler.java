@@ -274,7 +274,7 @@ public class SignatureHandler {
     public boolean verifyNotificationSignature(Notification notification) {
         String method = notification.getMethod().toString();
         String uuid = notification.getUUID();
-        String serializedData = serializeData(notification.getParams().getData());
+        String serializedData = serializeData(notification.getParams().getData(), false);
         String signatureBase64 = notification.getParams().getSignature();
 
         return performSignatureVerification(method, uuid, serializedData, signatureBase64);
