@@ -142,6 +142,10 @@ public class SignatureHandler {
     }
 
     private String serializeData(Object data) {
+        return serializeData(data, true);
+    }
+
+    private String serializeData(Object data, boolean serializeNullMap) {
         try {
             //Sort all fields found in the data object class
             List<Field> fields = getAllFields(new LinkedList<Field>(), data.getClass());
@@ -166,11 +170,20 @@ public class SignatureHandler {
                 }
 
                 if (field.getType().equals(Map.class)) {
-                    b.append(jsonFieldName);
-                    if (field.get(data) != null) {
-                        b.append(serializeMap((Map) field.get(data)));
+                    if (serializeNullMap) {
+                        b.append(jsonFieldName);
+                        if (field.get(data) != null) {
+                            b.append(serializeMap((Map) field.get(data)));
+                        }
+                        continue;
                     }
-                    continue;
+                    else {
+                        if (field.get(data) != null) {
+                            b.append(jsonFieldName);
+                            b.append(serializeMap((Map) field.get(data)));
+                        }
+                        continue;
+                    }
                 }
 
                 b.append(jsonFieldName);

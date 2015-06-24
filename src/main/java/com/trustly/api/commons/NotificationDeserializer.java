@@ -70,7 +70,13 @@ public class NotificationDeserializer implements JsonDeserializer<Notification> 
 
         NotificationData dataObject = gson.fromJson(data, commandInstanceClass);
         NotificationParameters paramsObject = gson.fromJson(params, NotificationParameters.class);
-        Notification requestObject= gson.fromJson(request, Notification.class);
+        Notification requestObject = gson.fromJson(request, Notification.class);
+
+        if (data.has("attributes")) {
+            if (data.get("attributes").isJsonNull()) {
+                dataObject.setAttributes(new HashMap<String, Object>());
+            }
+        }
 
         paramsObject.setData(dataObject);
         requestObject.setParams(paramsObject);
