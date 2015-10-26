@@ -91,4 +91,8 @@ public class NotificationHandler {
 
         return response;
     }
+
+    public String toJson(Response response) {
+        return new Gson().toJson(response);
+    }
 }
