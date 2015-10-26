@@ -96,15 +96,17 @@ Example withdrawal call
 
         Assert.assertTrue(response.successfulResult());
 
-Example notification processing
+Example of the notification process
 
-		
+        // A notification is sent to your web server.
+
+        // Convert the incoming notification json to a Notification object.
         NotificationHandler handler = new NotificationHandler();
-        
         Notification notification = handler.handleNotification(incomingNotificationJson);
 
-        //Process the incoming notification data
+        // Process and verify the incoming notification data
 
         Response notificationResponse = handler.prepareNotificationResponse(notification.getMethod(), notification.getUUID(), ResponseStatus.OK);
 
-        //Send response to Trustly
+        final String responseJson = handler.toJson(notificationResponse);
+        // Respond with responseJson as message body.
