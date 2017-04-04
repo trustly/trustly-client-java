@@ -37,11 +37,10 @@ import com.trustly.api.data.response.Result;
  *
  * Builder let you add additional information if any is available for the given response.
  *
- * The api specifics of the response can be found on https://trustly.com/en/developer/
+ * The API specifics of the response can be found on https://trustly.com/en/developer/
  *
  * Example use for a default notification response:
  * Response response = new NotificationResponse.Build(method, uuid, responseStatus).getResponse();
- *
  */
 public class NotificationResponse {
     private final Response response = new Response();

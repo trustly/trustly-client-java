@@ -28,12 +28,23 @@ package com.trustly.api.requestbuilders;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.trustly.api.commons.Currency;
 import com.trustly.api.commons.Method;
 import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestParameters;
 import com.trustly.api.data.request.requestdata.ViewAutomaticSettlementDetailsCSVData;
 import com.trustly.api.security.SignatureHandler;
-
+/**
+ * Creates a ViewAutomaticSettlementDetailsCSV request ready to be sent to Trustly API.
+ * The constructor contains the required fields of a ViewAutomaticSettlementDetailsCSV request.
+ *
+ * Builder lets you add additional information if any is available for the given request.
+ *
+ * The API specifics of the request can be found on https://trustly.com/en/developer/
+ *
+ * Example use for a default ViewAutomaticSettlementDetailsCSV request:
+ * Request viewAutomaticSettlementDetailsCsv = new ViewAutomaticSettlementDetailsCSV.Build(settlementDate, currency).getRequest();
+ */
 public class ViewAutomaticSettlementDetailsCSV {
     private final Request request = new Request();
 
@@ -55,7 +66,7 @@ public class ViewAutomaticSettlementDetailsCSV {
         // Kept for future use
         private final Map<String, Object> attributes = new TreeMap<>();
 
-        public Build(String settlementDate, String currency) {
+        public Build(String settlementDate, Currency currency) {
             data.setSettlementDate(settlementDate);
             data.setCurrency(currency);
             data.setAttributes(attributes);

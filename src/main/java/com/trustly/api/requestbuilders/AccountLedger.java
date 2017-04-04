@@ -25,12 +25,23 @@
 package com.trustly.api.requestbuilders;
 
 
+import com.trustly.api.commons.Currency;
 import com.trustly.api.commons.Method;
 import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestParameters;
 import com.trustly.api.data.request.requestdata.AccountLedgerData;
 import com.trustly.api.security.SignatureHandler;
-
+/**
+ * Creates a AccountLedger request ready to be sent to Trustly API.
+ * The constructor contains the required fields of a AccountLedger request
+ *
+ * Builder lets you add additional information if any is available for the given request.
+ *
+ * The API specifics of the request can be found on https://trustly.com/en/developer/
+ *
+ * Example use for a default AccountLedger request:
+ * Request accountLedger = new AccountLedger.Build(fromDate, toDate, currency).getRequest();
+ */
 public class AccountLedger {
     private final Request request = new Request();
 
@@ -50,7 +61,7 @@ public class AccountLedger {
     public static class Build {
         private final AccountLedgerData data = new AccountLedgerData();
 
-        public Build(String fromDate, String toDate, String currency) {
+        public Build(String fromDate, String toDate, Currency currency) {
             data.setFromDate(fromDate);
             data.setToDate(toDate);
             data.setCurrency(currency);

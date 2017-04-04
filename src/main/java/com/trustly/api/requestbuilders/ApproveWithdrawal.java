@@ -31,15 +31,14 @@ import com.trustly.api.data.request.RequestParameters;
 import com.trustly.api.security.SignatureHandler;
 /**
  * Creates a ApproveWithdrawal request ready to be sent to Trustly API.
- * The constructor contains the required fields of a approvewithdrawal request
+ * The constructor contains the required fields of a ApproveWithdrawal request
  *
- * Builder let you add additional information if any is available for the given request.
+ * Builder lets you add additional information if any is available for the given request.
  *
- * The api specifics of the request can be found on https://trustly.com/en/developer/
+ * The API specifics of the request can be found on https://trustly.com/en/developer/
  *
- * Example use for a default approvewithdrawal request:
- * Request deny = new ApproveWithdrawal.Build(orderid).getRequest();
- *
+ * Example use for a default ApproveWithdrawal request:
+ * Request approveWithdrawal = new ApproveWithdrawal.Build(orderid).getRequest();
  */
 public class ApproveWithdrawal {
     private final Request request = new Request();

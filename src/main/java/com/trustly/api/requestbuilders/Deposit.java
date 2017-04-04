@@ -35,15 +35,14 @@ import com.trustly.api.data.request.RequestParameters;
 import com.trustly.api.security.SignatureHandler;
 /**
  * Creates a Deposit request ready to be sent to Trustly API.
- * The constructor contains the required fields of a withdraw request.
+ * The constructor contains the required fields of a Deposit request.
  *
- * Builder let you add additional information if any is available for the given request.
+ * Builder lets you add additional information if any is available for the given request.
  *
- * The api specifics of the request can be found on https://trustly.com/en/developer/
+ * The API specifics of the request can be found on https://trustly.com/en/developer/
  *
- * Example use for a default deposit request:
- * Request deposit = new Deposit.Build(notificationUrl, enduser, msgid, currency, firstName, lastName, email).getRequest();
- *
+ * Example use for a default Deposit request:
+ * Request deposit = new Deposit.Build(notificationURL, endUserID, messageID, currency, firstName, lastName, email).getRequest();
 */
 public class Deposit {
     private final Request request = new Request();

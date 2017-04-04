@@ -30,7 +30,17 @@ import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestParameters;
 import com.trustly.api.data.request.requestdata.BalanceData;
 import com.trustly.api.security.SignatureHandler;
-
+/**
+ * Creates a Balance request ready to be sent to Trustly API.
+ * The constructor contains the required fields of a Balance request.
+ *
+ * Builder lets you add additional information if any is available for the given request.
+ *
+ * The API specifics of the request can be found on https://trustly.com/en/developer/
+ *
+ * Example use for a default Balance request:
+ * Request balance = new Balance.Build().getRequest();
+ */
 public class Balance {
     private final Request request = new Request();
 

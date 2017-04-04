@@ -26,6 +26,7 @@ package com.trustly.api.data.request.requestdata;
 
 
 import com.google.gson.annotations.SerializedName;
+import com.trustly.api.commons.Currency;
 import com.trustly.api.data.request.RequestData;
 
 public class ViewAutomaticSettlementDetailsCSVData extends RequestData {
@@ -33,7 +34,7 @@ public class ViewAutomaticSettlementDetailsCSVData extends RequestData {
     @SerializedName("SettlementDate")
     private String settlementDate;
     @SerializedName("Currency")
-    private String currency;
+    private Currency currency;
 
     public String getSettlementDate() {
         return settlementDate;
@@ -43,11 +44,11 @@ public class ViewAutomaticSettlementDetailsCSVData extends RequestData {
         this.settlementDate = settlementDate;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(final String currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
     }
 }

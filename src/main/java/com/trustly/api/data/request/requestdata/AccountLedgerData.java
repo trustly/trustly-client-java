@@ -26,6 +26,7 @@ package com.trustly.api.data.request.requestdata;
 
 
 import com.google.gson.annotations.SerializedName;
+import com.trustly.api.commons.Currency;
 import com.trustly.api.data.request.RequestData;
 
 public class AccountLedgerData extends RequestData {
@@ -35,7 +36,7 @@ public class AccountLedgerData extends RequestData {
     @SerializedName("ToDate")
     private String toDate;
     @SerializedName("Currency")
-    private String currency;
+    private Currency currency;
 
 
     public String getFromDate() {
@@ -54,11 +55,11 @@ public class AccountLedgerData extends RequestData {
         this.toDate = toDate;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(final String currency) {
+    public void setCurrency(final Currency currency) {
         this.currency = currency;
     }
 }

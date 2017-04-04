@@ -30,7 +30,17 @@ import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestParameters;
 import com.trustly.api.data.request.requestdata.GetWithdrawalsData;
 import com.trustly.api.security.SignatureHandler;
-
+/**
+ * Creates a GetWithdrawals request ready to be sent to Trustly API.
+ * The constructor contains the required fields of a GetWithdrawals request.
+ *
+ * Builder lets you add additional information if any is available for the given request.
+ *
+ * The API specifics of the request can be found on https://trustly.com/en/developer/
+ *
+ * Example use for a default GetWithdrawals request:
+ * Request getWithdrawals = new GetWithdrawals.Build(orderID).getRequest();
+ */
 public class GetWithdrawals {
     private final Request request = new Request();
 

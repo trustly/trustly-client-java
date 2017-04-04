@@ -35,15 +35,14 @@ import com.trustly.api.data.request.requestdata.WithdrawData;
 import com.trustly.api.security.SignatureHandler;
 /**
  * Creates a Withdraw request ready to be sent to Trustly API.
- * The constructor contains the required fields of a withdraw request.
+ * The constructor contains the required fields of a Withdraw request.
  *
- * Builder let you add additional information if any is available for the given request.
+ * Builder lets you add additional information if any is available for the given request.
  *
- * The api specifics of the request can be found on https://trustly.com/en/developer/
+ * The API specifics of the request can be found on https://trustly.com/en/developer/
  *
- * Example use for a default withdraw request:
+ * Example use for a default Withdraw request:
  * Request withdraw = new Withdraw.Build(notificationUrl, enduser, msgid, currency, firstName, lastName, email, dateOfBirth).getRequest();
- *
  */
 public class Withdraw {
     private final Request request = new Request();

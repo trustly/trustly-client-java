@@ -31,15 +31,14 @@ import com.trustly.api.data.request.RequestParameters;
 import com.trustly.api.security.SignatureHandler;
 /**
  * Creates a DenyWithdrawal request ready to be sent to Trustly API.
- * The constructor contains the required fields of a denywithdrawal request
+ * The constructor contains the required fields of a DenyWithdrawal request
  *
  * Builder let you add additional information if any is available for the given request.
  *
- * The api specifics of the request can be found on https://trustly.com/en/developer/
+ * The API specifics of the request can be found on https://trustly.com/en/developer/
  *
- * Example use for a default denywithdrawal request:
- * Request deny = new DenyWithdrawal.Build(orderid).getRequest();
- *
+ * Example use for a default DenyWithdrawal request:
+ * Request denyWithdrawal = new DenyWithdrawal.Build(orderID).getRequest();
  */
 public class DenyWithdrawal {
     private final Request request = new Request();
