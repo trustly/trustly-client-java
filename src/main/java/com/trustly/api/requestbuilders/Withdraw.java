@@ -74,6 +74,26 @@ public class Withdraw {
             data.setAttributes(attributes);
         }
 
+        public Build firstname(String firstname) {
+            attributes.put("Firstname", firstname);
+            return this;
+        }
+
+        public Build lastname(String lastname) {
+            attributes.put("Lastname", lastname);
+            return this;
+        }
+
+        public Build email(String email) {
+            attributes.put("Email", email);
+            return this;
+        }
+
+        public Build dateOfBirth(String dateOfBirth) {
+            attributes.put("DateOfBirth", dateOfBirth);
+            return this;
+        }
+
         public Build locale(String locale) {
             attributes.put("Locale", locale);
             return this;
@@ -119,11 +139,6 @@ public class Withdraw {
             return this;
         }
 
-        public Build mobilePhone(String mobilePhone) {
-            attributes.put("MobilePhone", mobilePhone);
-            return this;
-        }
-
         public Build clearingHouse(String clearingHouse) {
             attributes.put("ClearingHouse", clearingHouse);
             return this;
@@ -139,18 +154,38 @@ public class Withdraw {
             return this;
         }
 
-        public Build firstname(String firstname) {
-            attributes.put("Firstname", firstname);
-            return this;
-        }
-
-        public Build lastname(String lastname) {
-            attributes.put("Lastname", lastname);
+        public Build mobilePhone(String mobilePhone) {
+            attributes.put("MobilePhone", mobilePhone);
             return this;
         }
 
         public Build nationalIdentificationNumber(String nin) {
             attributes.put("NationalIdentificationNumber", nin);
+            return this;
+        }
+
+        public Build addressCountry(String addressCountry) {
+            attributes.put("AddressCountry", addressCountry);
+            return this;
+        }
+
+        public Build addressPostalCode(String addressPostalCode) {
+            attributes.put("AddressPostalcode", addressPostalCode);
+            return this;
+        }
+
+        public Build addressCity(String addressCity) {
+            attributes.put("AddressCity", addressCity);
+            return this;
+        }
+
+        public Build addressLine1(String addressLine1) {
+            attributes.put("AddressLine1", addressLine1);
+            return this;
+        }
+
+        public Build addressLine2(String addressLine2) {
+            attributes.put("AddressLine2", addressLine2);
             return this;
         }
 

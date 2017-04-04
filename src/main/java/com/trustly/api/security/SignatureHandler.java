@@ -127,10 +127,7 @@ public class SignatureHandler {
             byte[] signature = s.sign();
             return base64Encoder.encode(signature);
         }
-        catch (UnsupportedEncodingException e) {
-            throw new TrustlySignatureException(e);
-        }
-        catch (NoSuchAlgorithmException e) {
+        catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
             throw new TrustlySignatureException(e);
         }
         catch (InvalidKeyException e) {
@@ -148,14 +145,8 @@ public class SignatureHandler {
     private String serializeData(Object data, boolean serializeNullMap) {
         try {
             //Sort all fields found in the data object class
-            List<Field> fields = getAllFields(new LinkedList<Field>(), data.getClass());
-            Collections.sort(
-                    fields, new Comparator<Field>() {
-                        @Override
-                        public int compare(Field o1, Field o2) {
-                            return o1.getName().compareTo(o2.getName());
-                        }
-                    });
+            List<Field> fields = getAllFields(new LinkedList<>(), data.getClass());
+            fields.sort(Comparator.comparing(Field::getName));
 
             //Get values using reflection
             StringBuilder b = new StringBuilder();

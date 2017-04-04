@@ -34,22 +34,20 @@ import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestParameters;
 import com.trustly.api.security.SignatureHandler;
 /**
-* Creates a Deposit request ready to be sent to Trustly API.
-* The constructor contains the required fields of a deposit request
-*
-* Builder let you add additional information if any is available for the given request.
-*
-* The api specifics of the request can be found on https://trustly.com/en/developer/
-*
-* Example use for a default deposit request:
-* Request deposit = new Deposit.Build(notificationUrl, enduser, msgid, currency).getRequest();
-*
+ * Creates a Deposit request ready to be sent to Trustly API.
+ *
+ * Builder let you add additional information if any is available for the given request.
+ *
+ * The api specifics of the request can be found on https://trustly.com/en/developer/
+ *
+ * Example use for a default deposit request:
+ * Request deposit = new Deposit.Build(notificationUrl, enduser, msgid).getRequest();
+ *
 */
 public class Deposit {
     private final Request request = new Request();
 
     private Deposit(Build builder) {
-
         RequestParameters params = new RequestParameters();
         params.setUUID(SignatureHandler.generateNewUUID());
         params.setData(builder.data);
@@ -64,14 +62,33 @@ public class Deposit {
 
     public static class Build {
         private final DepositData data = new DepositData();
-        private final Map<String, Object> attributes = new TreeMap<String, Object>();
+        private final Map<String, Object> attributes = new TreeMap<>();
 
-        public Build(String notificationURL, String endUserID, String messageID, Currency currency) {
+        public Build(String notificationURL, String endUserID, String messageID) {
             data.setNotificationURL(notificationURL);
             data.setEndUserID(endUserID);
             data.setMessageID(messageID);
-            this.attributes.put("Currency", currency);
             data.setAttributes(attributes);
+        }
+
+        public Build currency(String currency) {
+            attributes.put("Currency", currency);
+            return this;
+        }
+
+        public Build firstname(String firstname) {
+            attributes.put("Firstname", firstname);
+            return this;
+        }
+
+        public Build lastname(String lastname) {
+            attributes.put("Lastname", lastname);
+            return this;
+        }
+
+        public Build email(String email) {
+            attributes.put("Email", email);
+            return this;
         }
 
         public Build locale(String locale) {
@@ -129,16 +146,6 @@ public class Deposit {
             return this;
         }
 
-        public Build firstname(String firstname) {
-            attributes.put("Firstname", firstname);
-            return this;
-        }
-
-        public Build lastname(String lastname) {
-            attributes.put("Lastname", lastname);
-            return this;
-        }
-
         public Build nationalIdentificationNumber(String nin) {
             attributes.put("NationalIdentificationNumber", nin);
             return this;
@@ -146,6 +153,51 @@ public class Deposit {
 
         public Build shopperStatement(String shopperStatement) {
             attributes.put("ShopperStatement", shopperStatement);
+            return this;
+        }
+
+        public Build shippingAddressCountry(String shippingAddressCountry) {
+            attributes.put("ShippingAddressCountry", shippingAddressCountry);
+            return this;
+        }
+
+        public Build shippingAddressPostalCode(String shippingAddressPostalCode) {
+            attributes.put("ShippingAddressPostalCode", shippingAddressPostalCode);
+            return this;
+        }
+
+        public Build shippingAddressCity(String shippingAddressCity) {
+            attributes.put("ShippingAddressCity", shippingAddressCity);
+            return this;
+        }
+
+        public Build shippingAddressLine1(String shippingAddressLine1) {
+            attributes.put("ShippingAddressLine1", shippingAddressLine1);
+            return this;
+        }
+
+        public Build shippingAddressLine2(String shippingAddressLine2) {
+            attributes.put("ShippingAddressLine2", shippingAddressLine2);
+            return this;
+        }
+
+        public Build shippingAddress(String shippingAddress) {
+            attributes.put("ShippingAddress", shippingAddress);
+            return this;
+        }
+
+        public Build requestDirectDebitMandate(String requestDirectDebitMandate) {
+            attributes.put("RequestDirectDebitMandate", requestDirectDebitMandate);
+            return this;
+        }
+
+        public Build chargeAccountID(String chargeAccountId) {
+            attributes.put("ChargeAccountID", chargeAccountId);
+            return this;
+        }
+
+        public Build quickDeposit(String quickDeposit) {
+            attributes.put("QuickDeposit", quickDeposit);
             return this;
         }
 

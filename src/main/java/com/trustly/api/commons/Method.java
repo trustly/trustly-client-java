@@ -39,6 +39,18 @@ public enum Method {
     @SerializedName("DenyWithdrawal")
     DENY_WITHDRAWAL("DenyWithdrawal"),
 
+    @SerializedName("AccountLedger")
+    ACCOUNT_LEDGER("AccountLedger"),
+
+    @SerializedName("ViewAutomaticSettlementDetailsCSV")
+    VIEW_AUTOMATIC_SETTLEMENT_DETAILS_CSV("ViewAutomaticSettlementDetailsCSV"),
+
+    @SerializedName("Balance")
+    BALANCE("Balance"),
+
+    @SerializedName("GetWithdrawals")
+    GET_WITHDRAWALS("GetWithdrawals"),
+
     @SerializedName("Refund")
     REFUND("Refund"),
 
