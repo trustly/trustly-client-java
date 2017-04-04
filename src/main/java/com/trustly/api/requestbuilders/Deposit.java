@@ -35,13 +35,14 @@ import com.trustly.api.data.request.RequestParameters;
 import com.trustly.api.security.SignatureHandler;
 /**
  * Creates a Deposit request ready to be sent to Trustly API.
+ * The constructor contains the required fields of a withdraw request.
  *
  * Builder let you add additional information if any is available for the given request.
  *
  * The api specifics of the request can be found on https://trustly.com/en/developer/
  *
  * Example use for a default deposit request:
- * Request deposit = new Deposit.Build(notificationUrl, enduser, msgid).getRequest();
+ * Request deposit = new Deposit.Build(notificationUrl, enduser, msgid, currency, firstName, lastName, email).getRequest();
  *
 */
 public class Deposit {
@@ -64,31 +65,15 @@ public class Deposit {
         private final DepositData data = new DepositData();
         private final Map<String, Object> attributes = new TreeMap<>();
 
-        public Build(String notificationURL, String endUserID, String messageID) {
+        public Build(String notificationURL, String endUserID, String messageID, Currency currency, String firstName, String lastName, String email) {
             data.setNotificationURL(notificationURL);
             data.setEndUserID(endUserID);
             data.setMessageID(messageID);
+            this.attributes.put("Currency", currency);
+            this.attributes.put("Firstname", firstName);
+            this.attributes.put("Lastname", lastName);
+            this.attributes.put("Email", email);
             data.setAttributes(attributes);
-        }
-
-        public Build currency(String currency) {
-            attributes.put("Currency", currency);
-            return this;
-        }
-
-        public Build firstname(String firstname) {
-            attributes.put("Firstname", firstname);
-            return this;
-        }
-
-        public Build lastname(String lastname) {
-            attributes.put("Lastname", lastname);
-            return this;
-        }
-
-        public Build email(String email) {
-            attributes.put("Email", email);
-            return this;
         }
 
         public Build locale(String locale) {

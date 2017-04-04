@@ -35,14 +35,14 @@ import com.trustly.api.data.request.requestdata.WithdrawData;
 import com.trustly.api.security.SignatureHandler;
 /**
  * Creates a Withdraw request ready to be sent to Trustly API.
- * The constructor contains the required fields of a withdraw request
+ * The constructor contains the required fields of a withdraw request.
  *
  * Builder let you add additional information if any is available for the given request.
  *
  * The api specifics of the request can be found on https://trustly.com/en/developer/
  *
  * Example use for a default withdraw request:
- * Request withdraw = new Withdraw.Build(notificationUrl, enduser, msgid, currency).getRequest();
+ * Request withdraw = new Withdraw.Build(notificationUrl, enduser, msgid, currency, firstName, lastName, email, dateOfBirth).getRequest();
  *
  */
 public class Withdraw {
@@ -66,32 +66,16 @@ public class Withdraw {
         private final WithdrawData data = new WithdrawData();
         private final Map<String, Object> attributes = new TreeMap<String, Object>();
 
-        public Build(String notificationURL, String endUserID, String messageID, Currency currency) {
+        public Build(String notificationURL, String endUserID, String messageID, Currency currency, String firstName, String lastName, String email, String dateOfBirth) {
             data.setNotificationURL(notificationURL);
             data.setEndUserID(endUserID);
             data.setMessageID(messageID);
             data.setCurrency(currency);
+            this.attributes.put("Firstname", firstName);
+            this.attributes.put("Lastname", lastName);
+            this.attributes.put("Email", email);
+            this.attributes.put("DateOfBirth", dateOfBirth);
             data.setAttributes(attributes);
-        }
-
-        public Build firstname(String firstname) {
-            attributes.put("Firstname", firstname);
-            return this;
-        }
-
-        public Build lastname(String lastname) {
-            attributes.put("Lastname", lastname);
-            return this;
-        }
-
-        public Build email(String email) {
-            attributes.put("Email", email);
-            return this;
-        }
-
-        public Build dateOfBirth(String dateOfBirth) {
-            attributes.put("DateOfBirth", dateOfBirth);
-            return this;
         }
 
         public Build locale(String locale) {
