@@ -30,9 +30,9 @@ import com.trustly.api.data.request.RequestData;
 
 public class RefundData extends RequestData {
     @SerializedName("OrderID")
-    private String   orderID;
+    private String orderID;
     @SerializedName("Amount")
-    private String   amount;
+    private String amount;
     @SerializedName("Currency")
     private Currency currency;
 
@@ -40,7 +40,7 @@ public class RefundData extends RequestData {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
+    public void setCurrency(final Currency currency) {
         this.currency = currency;
     }
 
@@ -48,7 +48,7 @@ public class RefundData extends RequestData {
         return orderID;
     }
 
-    public void setOrderID(String orderID) {
+    public void setOrderID(final String orderID) {
         this.orderID = orderID;
     }
 
@@ -56,8 +56,7 @@ public class RefundData extends RequestData {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(final String amount) {
         this.amount = amount;
     }
-
 }

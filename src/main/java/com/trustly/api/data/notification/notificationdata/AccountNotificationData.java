@@ -36,7 +36,7 @@ public class AccountNotificationData extends NotificationData {
         return accountId;
     }
 
-    public void setAccountId(String accountId) {
+    public void setAccountId(final String accountId) {
         this.accountId = accountId;
     }
 
@@ -44,15 +44,15 @@ public class AccountNotificationData extends NotificationData {
         return charToBoolean(verified);
     }
 
-    public void setVerified(boolean verified) {
+    public void setVerified(final boolean verified) {
         this.verified = booleanToChar(verified);
     }
 
-    private char booleanToChar(boolean b) {
-        return b ? '1' : '0';
+    private char booleanToChar(final boolean bool) {
+        return bool ? '1' : '0';
     }
 
-    private boolean charToBoolean(char c) {
+    private boolean charToBoolean(final char c) {
         return c == '1';
     }
 }

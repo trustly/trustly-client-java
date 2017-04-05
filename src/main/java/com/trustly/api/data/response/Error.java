@@ -34,7 +34,7 @@ public class Error {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -42,7 +42,7 @@ public class Error {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(final int code) {
         this.code = code;
     }
 
@@ -50,7 +50,7 @@ public class Error {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(final String message) {
         this.message = message;
     }
 
@@ -58,7 +58,7 @@ public class Error {
         return error;
     }
 
-    public void setError(ErrorBody error) {
+    public void setError(final ErrorBody error) {
         this.error = error;
     }
 }

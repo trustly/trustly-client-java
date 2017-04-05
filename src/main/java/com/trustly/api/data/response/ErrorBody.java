@@ -36,7 +36,7 @@ public class ErrorBody {
         return signature;
     }
 
-    public void setSignature(String signature) {
+    public void setSignature(final String signature) {
         this.signature = signature;
     }
 
@@ -44,7 +44,7 @@ public class ErrorBody {
         return uuid;
     }
 
-    public void setUuid(String uuid) {
+    public void setUuid(final String uuid) {
         this.uuid = uuid;
     }
 
@@ -52,7 +52,7 @@ public class ErrorBody {
         return method;
     }
 
-    public void setMethod(Method method) {
+    public void setMethod(final Method method) {
         this.method = method;
     }
 
@@ -60,7 +60,7 @@ public class ErrorBody {
         return data;
     }
 
-    public void setData(ErrorData data) {
+    public void setData(final ErrorData data) {
         this.data = data;
     }
 }

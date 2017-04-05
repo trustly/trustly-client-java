@@ -46,7 +46,9 @@ import com.trustly.api.commons.exceptions.TrustlySignatureException;
 import com.trustly.api.data.notification.Notification;
 import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestData;
-import com.trustly.api.data.response.*;
+import com.trustly.api.data.response.ErrorBody;
+import com.trustly.api.data.response.Response;
+import com.trustly.api.data.response.Result;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -61,9 +63,6 @@ public class SignatureHandler {
     private String username;
     private String password;
 
-    public SignatureHandler() {
-    }
-
     public static SignatureHandler getInstance() {
         if (instance == null) {
             instance = new SignatureHandler();
@@ -71,7 +70,7 @@ public class SignatureHandler {
         return instance;
     }
 
-    public void init(String privateKeyPath, String keyPassword, String username, String password, boolean testEnvironment) throws KeyException {
+    public void init(final String privateKeyPath, final String keyPassword, final String username, final String password, final boolean testEnvironment) throws KeyException {
         this.username = username;
         this.password = password;
 
@@ -83,7 +82,7 @@ public class SignatureHandler {
      * Inserts the api credentials into the given request.
      * @param request Request in which the credentials are inserted.
      */
-    public void insertCredentials(Request request) {
+    public void insertCredentials(final Request request) {
         request.getParams().getData().setUsername(username);
         request.getParams().getData().setPassword(password);
     }
@@ -92,13 +91,13 @@ public class SignatureHandler {
      * Creates a signature for given request.
      * @param request Request to sign.
      */
-    public void signRequest(Request request) {
-        RequestData requestData = request.getParams().getData();
-        String requestMethod = request.getMethod().toString();
-        String uuid = request.getUUID();
-        String plainText = String.format("%s%s%s", requestMethod, uuid, serializeData(requestData));
+    public void signRequest(final Request request) {
+        final RequestData requestData = request.getParams().getData();
+        final String requestMethod = request.getMethod().toString();
+        final String uuid = request.getUUID();
+        final String plainText = String.format("%s%s%s", requestMethod, uuid, serializeData(requestData));
 
-        String signedData = createSignature(plainText);
+        final String signedData = createSignature(plainText);
 
         request.getParams().setSignature(signedData);
     }
@@ -107,52 +106,52 @@ public class SignatureHandler {
      * Creates a signature for given notification response.
      * @param response The notification response to sign.
      */
-    public void signNotificationResponse(Response response) {
-        String requestMethod = response.getResult().getMethod().toString();
-        String uuid = response.getUUID();
-        Map<String, Object> data = response.getResult().getData();
-        String plainText = String.format("%s%s%s", requestMethod, uuid, serializeMap(data));
+    public void signNotificationResponse(final Response response) {
+        final String requestMethod = response.getResult().getMethod().toString();
+        final String uuid = response.getUUID();
+        final Map<String, Object> data = response.getResult().getData();
+        final String plainText = String.format("%s%s%s", requestMethod, uuid, serializeMap(data));
 
-        String signedData = createSignature(plainText);
+        final String signedData = createSignature(plainText);
 
         response.getResult().setSignature(signedData);
     }
 
-    private String createSignature(String plainText) {
+    private String createSignature(final String plainText) {
         try {
-            Signature s = Signature.getInstance("SHA1withRSA");
-            s.initSign(keyChain.getMerchantPrivateKey());
-            s.update(plainText.getBytes("UTF-8"));
+            final Signature signatureInstance = Signature.getInstance("SHA1withRSA");
+            signatureInstance.initSign(keyChain.getMerchantPrivateKey());
+            signatureInstance.update(plainText.getBytes("UTF-8"));
 
-            byte[] signature = s.sign();
+            final byte[] signature = signatureInstance.sign();
             return base64Encoder.encode(signature);
         }
         catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
             throw new TrustlySignatureException(e);
         }
-        catch (InvalidKeyException e) {
+        catch (final InvalidKeyException e) {
             throw new TrustlySignatureException("Invalid private key", e);
         }
-        catch (SignatureException e) {
+        catch (final SignatureException e) {
             throw new TrustlySignatureException("Failed to create signature", e);
         }
     }
 
-    private String serializeData(Object data) {
+    private String serializeData(final Object data) {
         return serializeData(data, true);
     }
 
-    private String serializeData(Object data, boolean serializeNullMap) {
+    private String serializeData(final Object data, final boolean serializeNullMap) {
         try {
             //Sort all fields found in the data object class
-            List<Field> fields = getAllFields(new LinkedList<>(), data.getClass());
+            final List<Field> fields = getAllFields(new LinkedList<>(), data.getClass());
             fields.sort(Comparator.comparing(Field::getName));
 
             //Get values using reflection
-            StringBuilder b = new StringBuilder();
-            for (Field field : fields) {
+            final StringBuilder builder = new StringBuilder();
+            for (final Field field : fields) {
 
-                String jsonFieldName;
+                final String jsonFieldName;
                 if (field.isAnnotationPresent(SerializedName.class)) {
                     jsonFieldName = field.getAnnotation(SerializedName.class).value();
                 }
@@ -162,47 +161,47 @@ public class SignatureHandler {
 
                 if (field.getType().equals(Map.class)) {
                     if (serializeNullMap) {
-                        b.append(jsonFieldName);
+                        builder.append(jsonFieldName);
                         if (field.get(data) != null) {
-                            b.append(serializeMap((Map) field.get(data)));
+                            builder.append(serializeMap((Map) field.get(data)));
                         }
                         continue;
                     }
                     else {
                         if (field.get(data) != null) {
-                            b.append(jsonFieldName);
-                            b.append(serializeMap((Map) field.get(data)));
+                            builder.append(jsonFieldName);
+                            builder.append(serializeMap((Map) field.get(data)));
                         }
                         continue;
                     }
                 }
 
-                b.append(jsonFieldName);
+                builder.append(jsonFieldName);
 
                 if (field.get(data) != null) {
-                    b.append(field.get(data));
+                    builder.append(field.get(data));
                 }
             }
-            return b.toString();
+            return builder.toString();
         }
-        catch (IllegalAccessException e) {
+        catch (final IllegalAccessException e) {
             throw new TrustlyAPIException("Failed to serialize data", e);
         }
     }
 
-    private String serializeMap(Map map) {
-        StringBuilder b = new StringBuilder();
+    private String serializeMap(final Map map) {
+        final StringBuilder builder = new StringBuilder();
 
-        ArrayList<String> strings = new ArrayList<String>(map.keySet());
+        final List<String> strings = new ArrayList<String>(map.keySet());
         Collections.sort(strings);
-        for (String key : strings) {
-            b.append(key);
+        for (final String key : strings) {
+            builder.append(key);
             if(map.get(key) != null) {
-                b.append(map.get(key));
+                builder.append(map.get(key));
             }
         }
 
-        return b.toString();
+        return builder.toString();
     }
 
     /**
@@ -211,8 +210,8 @@ public class SignatureHandler {
      * @param type Type of class
      * @return Given list filled with fields of given class.
      */
-    private List<Field> getAllFields(List<Field> fields, Class<?> type) {
-        for (Field field: type.getDeclaredFields()) {
+    private List<Field> getAllFields(List<Field> fields, final Class<?> type) {
+        for (final Field field: type.getDeclaredFields()) {
             field.setAccessible(true);
             fields.add(field);
         }
@@ -229,22 +228,22 @@ public class SignatureHandler {
      * @param response The response to verify
      * @return true if signature is valid
      */
-    public boolean verifyResponseSignature(Response response)  {
-        String method;
+    public boolean verifyResponseSignature(final Response response)  {
+        final String method;
         String uuid;
-        String serializedData;
-        String signatureBase64;
+        final String serializedData;
+        final String signatureBase64;
 
         if (response.successfulResult()) {
-            Result result = response.getResult();
-            method = (result.getMethod() == null) ? "" : result.getMethod().toString();
+            final Result result = response.getResult();
+            method = result.getMethod() == null ? "" : result.getMethod().toString();
             uuid = result.getUuid();
             serializedData = serializeMap(result.getData());
             signatureBase64 = result.getSignature();
         }
         else {
-            ErrorBody error = response.getError().getError();
-            method = (error.getMethod() == null) ? "" : error.getMethod().toString();
+            final ErrorBody error = response.getError().getError();
+            method = error.getMethod() == null ? "" : error.getMethod().toString();
             uuid = error.getUuid();
             serializedData = serializeData(error.getData());
             signatureBase64 = error.getSignature();
@@ -262,34 +261,34 @@ public class SignatureHandler {
      * @param notification The notification to verify
      * @return true if signature is valid
      */
-    public boolean verifyNotificationSignature(Notification notification) {
-        String method = notification.getMethod().toString();
-        String uuid = notification.getUUID();
-        String serializedData = serializeData(notification.getParams().getData(), false);
-        String signatureBase64 = notification.getParams().getSignature();
+    public boolean verifyNotificationSignature(final Notification notification) {
+        final String method = notification.getMethod().toString();
+        final String uuid = notification.getUUID();
+        final String serializedData = serializeData(notification.getParams().getData(), false);
+        final String signatureBase64 = notification.getParams().getSignature();
 
         return performSignatureVerification(method, uuid, serializedData, signatureBase64);
     }
 
-    private boolean performSignatureVerification(String method, String uuid, String serializedData, String responseSignature) {
-        String expectedPlainText = String.format("%s%s%s", method, uuid, serializedData);
+    private boolean performSignatureVerification(final String method, final String uuid, final String serializedData, final String responseSignature) {
         try {
-            byte[] signature = base64Decoder.decodeBuffer(responseSignature);
-            Signature s = Signature.getInstance("SHA1withRSA");
-            s.initVerify(keyChain.getTrustlyPublicKey());
-            s.update(expectedPlainText.getBytes("UTF-8"));
-            return s.verify(signature);
+            final byte[] signature = base64Decoder.decodeBuffer(responseSignature);
+            final Signature signatureInstance = Signature.getInstance("SHA1withRSA");
+            signatureInstance.initVerify(keyChain.getTrustlyPublicKey());
+            final String expectedPlainText = String.format("%s%s%s", method, uuid, serializedData);
+            signatureInstance.update(expectedPlainText.getBytes("UTF-8"));
+            return signatureInstance.verify(signature);
         }
-        catch (IOException e) {
+        catch (final IOException e) {
             throw new TrustlySignatureException("Failed to decode signature", e);
         }
-        catch (NoSuchAlgorithmException e) {
+        catch (final NoSuchAlgorithmException e) {
             throw new TrustlySignatureException(e);
         }
-        catch (InvalidKeyException e) {
+        catch (final InvalidKeyException e) {
             throw new TrustlySignatureException("Invalid public key", e);
         }
-        catch (SignatureException e) {
+        catch (final SignatureException e) {
             throw new TrustlySignatureException("Failed to verify signature", e);
         }
     }

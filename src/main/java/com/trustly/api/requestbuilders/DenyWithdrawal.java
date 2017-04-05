@@ -25,10 +25,11 @@
 package com.trustly.api.requestbuilders;
 
 import com.trustly.api.commons.Method;
-import com.trustly.api.data.request.requestdata.DenyWithdrawalData;
 import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestParameters;
+import com.trustly.api.data.request.requestdata.DenyWithdrawalData;
 import com.trustly.api.security.SignatureHandler;
+
 /**
  * Creates a DenyWithdrawal request ready to be sent to Trustly API.
  * The constructor contains the required fields of a DenyWithdrawal request
@@ -43,8 +44,8 @@ import com.trustly.api.security.SignatureHandler;
 public class DenyWithdrawal {
     private final Request request = new Request();
 
-    private DenyWithdrawal(Build builder) {
-        RequestParameters params = new RequestParameters();
+    private DenyWithdrawal(final Build builder) {
+        final RequestParameters params = new RequestParameters();
         params.setUUID(SignatureHandler.generateNewUUID());
         params.setData(builder.data);
 
@@ -59,7 +60,7 @@ public class DenyWithdrawal {
     public static class Build {
         private final DenyWithdrawalData data = new DenyWithdrawalData();
 
-        public Build(int orderID) {
+        public Build(final int orderID) {
             data.setOrderID(orderID);
         }
 

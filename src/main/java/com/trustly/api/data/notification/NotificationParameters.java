@@ -33,7 +33,7 @@ public class NotificationParameters {
         return data;
     }
 
-    public void setData(NotificationData data) {
+    public void setData(final NotificationData data) {
         this.data = data;
     }
 
@@ -41,7 +41,7 @@ public class NotificationParameters {
         return signature;
     }
 
-    public void setSignature(String signature) {
+    public void setSignature(final String signature) {
         this.signature = signature;
     }
 
@@ -49,8 +49,7 @@ public class NotificationParameters {
         return uuid;
     }
 
-    public void setUUID(String uuid) {
+    public void setUUID(final String uuid) {
         this.uuid = uuid;
     }
-
 }

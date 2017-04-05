@@ -43,7 +43,7 @@ public class NotificationData {
         return messageId;
     }
 
-    public void setMessageId(String messageId) {
+    public void setMessageId(final String messageId) {
         this.messageId = messageId;
     }
 
@@ -51,7 +51,7 @@ public class NotificationData {
         return notificationId;
     }
 
-    public void setNotificationId(String notificationId) {
+    public void setNotificationId(final String notificationId) {
         this.notificationId = notificationId;
     }
 
@@ -59,14 +59,15 @@ public class NotificationData {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(final String orderId) {
         this.orderId = orderId;
     }
+
     public Map<String, Object> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(Map<String, Object> attributes) {
-        this.attributes = new TreeMap<String, Object>(attributes);
+    public void setAttributes(final Map<String, Object> attributes) {
+        this.attributes = new TreeMap<>(attributes);
     }
 }

@@ -35,9 +35,9 @@ public abstract class RequestData {
     @SerializedName("Password")
     private String password;
     @SerializedName("Attributes")
-    private Map<String, Object> attributes = new TreeMap<String, Object>();
+    private Map<String, Object> attributes = new TreeMap<>();
 
-    public void setUsername(String username) {
+    public void setUsername(final String username) {
         this.username = username;
     }
 
@@ -45,7 +45,7 @@ public abstract class RequestData {
         return username;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
@@ -53,7 +53,7 @@ public abstract class RequestData {
         return password;
     }
 
-    public void setAttributes(Map<String, Object> attributes) {
+    public void setAttributes(final Map<String, Object> attributes) {
         this.attributes = attributes;
     }
 

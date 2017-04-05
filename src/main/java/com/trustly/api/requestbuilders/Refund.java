@@ -26,10 +26,11 @@ package com.trustly.api.requestbuilders;
 
 import com.trustly.api.commons.Currency;
 import com.trustly.api.commons.Method;
-import com.trustly.api.data.request.requestdata.RefundData;
 import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestParameters;
+import com.trustly.api.data.request.requestdata.RefundData;
 import com.trustly.api.security.SignatureHandler;
+
 /**
  * Creates a Refund request ready to be sent to Trustly API.
  * The constructor contains the required fields of a Refund request.
@@ -45,9 +46,8 @@ public class Refund {
 
     private final Request request = new Request();
 
-    private Refund(Build builder) {
-
-        RequestParameters params = new RequestParameters();
+    private Refund(final Build builder) {
+        final RequestParameters params = new RequestParameters();
         params.setUUID(SignatureHandler.generateNewUUID());
         params.setData(builder.data);
 
@@ -62,7 +62,7 @@ public class Refund {
     public static class Build {
         private final RefundData data = new RefundData();
 
-        public Build(String orderID, String amount, Currency currency) {
+        public Build(final String orderID, final String amount, final Currency currency) {
             data.setOrderID(orderID);
             data.setAmount(amount);
             data.setCurrency(currency);

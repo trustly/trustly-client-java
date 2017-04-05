@@ -30,7 +30,6 @@ import com.trustly.api.commons.Currency;
 import com.trustly.api.data.request.RequestData;
 
 public class ViewAutomaticSettlementDetailsCSVData extends RequestData {
-
     @SerializedName("SettlementDate")
     private String settlementDate;
     @SerializedName("Currency")
@@ -48,7 +47,7 @@ public class ViewAutomaticSettlementDetailsCSVData extends RequestData {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
+    public void setCurrency(final Currency currency) {
         this.currency = currency;
     }
 }

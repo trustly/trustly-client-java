@@ -30,6 +30,7 @@ import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestParameters;
 import com.trustly.api.data.request.requestdata.GetWithdrawalsData;
 import com.trustly.api.security.SignatureHandler;
+
 /**
  * Creates a GetWithdrawals request ready to be sent to Trustly API.
  * The constructor contains the required fields of a GetWithdrawals request.
@@ -44,8 +45,8 @@ import com.trustly.api.security.SignatureHandler;
 public class GetWithdrawals {
     private final Request request = new Request();
 
-    private GetWithdrawals(Build builder) {
-        RequestParameters params = new RequestParameters();
+    private GetWithdrawals(final Build builder) {
+        final RequestParameters params = new RequestParameters();
         params.setUUID(SignatureHandler.generateNewUUID());
         params.setData(builder.data);
 
@@ -60,7 +61,7 @@ public class GetWithdrawals {
     public static class Build {
         private final GetWithdrawalsData data = new GetWithdrawalsData();
 
-        public Build(int orderID) {
+        public Build(final int orderID) {
             data.setOrderID(orderID);
         }
 

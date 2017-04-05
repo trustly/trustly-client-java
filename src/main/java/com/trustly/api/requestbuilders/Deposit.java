@@ -29,10 +29,11 @@ import java.util.TreeMap;
 
 import com.trustly.api.commons.Currency;
 import com.trustly.api.commons.Method;
-import com.trustly.api.data.request.requestdata.DepositData;
 import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestParameters;
+import com.trustly.api.data.request.requestdata.DepositData;
 import com.trustly.api.security.SignatureHandler;
+
 /**
  * Creates a Deposit request ready to be sent to Trustly API.
  * The constructor contains the required fields of a Deposit request.
@@ -43,12 +44,12 @@ import com.trustly.api.security.SignatureHandler;
  *
  * Example use for a default Deposit request:
  * Request deposit = new Deposit.Build(notificationURL, endUserID, messageID, currency, firstName, lastName, email).getRequest();
-*/
+ */
 public class Deposit {
     private final Request request = new Request();
 
-    private Deposit(Build builder) {
-        RequestParameters params = new RequestParameters();
+    private Deposit(final Build builder) {
+        final RequestParameters params = new RequestParameters();
         params.setUUID(SignatureHandler.generateNewUUID());
         params.setData(builder.data);
 
@@ -64,123 +65,124 @@ public class Deposit {
         private final DepositData data = new DepositData();
         private final Map<String, Object> attributes = new TreeMap<>();
 
-        public Build(String notificationURL, String endUserID, String messageID, Currency currency, String firstName, String lastName, String email) {
+        public Build(final String notificationURL, final String endUserID, final String messageID, final Currency currency, final String firstName, final String lastName, final String email) {
             data.setNotificationURL(notificationURL);
             data.setEndUserID(endUserID);
             data.setMessageID(messageID);
-            this.attributes.put("Currency", currency);
-            this.attributes.put("Firstname", firstName);
-            this.attributes.put("Lastname", lastName);
-            this.attributes.put("Email", email);
+
+            attributes.put("Currency", currency);
+            attributes.put("Firstname", firstName);
+            attributes.put("Lastname", lastName);
+            attributes.put("Email", email);
             data.setAttributes(attributes);
         }
 
-        public Build locale(String locale) {
+        public Build locale(final String locale) {
             attributes.put("Locale", locale);
             return this;
         }
 
-        public Build suggestedMinAmount(String suggestedMinAmount) {
+        public Build suggestedMinAmount(final String suggestedMinAmount) {
             attributes.put("SuggestedMinAmount", suggestedMinAmount);
             return this;
         }
 
-        public Build suggestedMaxAmount(String suggestedMaxAmount) {
+        public Build suggestedMaxAmount(final String suggestedMaxAmount) {
             attributes.put("SuggestedMaxAmount", suggestedMaxAmount);
             return this;
         }
 
-        public Build amount(String amount) {
+        public Build amount(final String amount) {
             attributes.put("Amount", amount);
             return this;
         }
 
-        public Build country(String countryISOCode) {
+        public Build country(final String countryISOCode) {
             attributes.put("Country", countryISOCode);
             return this;
         }
 
-        public Build ip(String IP) {
+        public Build ip(final String IP) {
             attributes.put("IP", IP);
             return this;
         }
 
-        public Build successURL(String successURL) {
+        public Build successURL(final String successURL) {
             attributes.put("SuccessURL", successURL);
             return this;
         }
 
-        public Build failURL(String failURL) {
+        public Build failURL(final String failURL) {
             attributes.put("FailURL", failURL);
             return this;
         }
 
-        public Build templateURL(String templateURL) {
+        public Build templateURL(final String templateURL) {
             attributes.put("TemplateURL", templateURL);
             return this;
         }
 
-        public Build urlTarget(String urlTarget) {
+        public Build urlTarget(final String urlTarget) {
             attributes.put("URLTarget", urlTarget);
             return this;
         }
 
-        public Build mobilePhone(String mobilePhone) {
+        public Build mobilePhone(final String mobilePhone) {
             attributes.put("MobilePhone", mobilePhone);
             return this;
         }
 
-        public Build nationalIdentificationNumber(String nin) {
+        public Build nationalIdentificationNumber(final String nin) {
             attributes.put("NationalIdentificationNumber", nin);
             return this;
         }
 
-        public Build shopperStatement(String shopperStatement) {
+        public Build shopperStatement(final String shopperStatement) {
             attributes.put("ShopperStatement", shopperStatement);
             return this;
         }
 
-        public Build shippingAddressCountry(String shippingAddressCountry) {
+        public Build shippingAddressCountry(final String shippingAddressCountry) {
             attributes.put("ShippingAddressCountry", shippingAddressCountry);
             return this;
         }
 
-        public Build shippingAddressPostalCode(String shippingAddressPostalCode) {
+        public Build shippingAddressPostalCode(final String shippingAddressPostalCode) {
             attributes.put("ShippingAddressPostalCode", shippingAddressPostalCode);
             return this;
         }
 
-        public Build shippingAddressCity(String shippingAddressCity) {
+        public Build shippingAddressCity(final String shippingAddressCity) {
             attributes.put("ShippingAddressCity", shippingAddressCity);
             return this;
         }
 
-        public Build shippingAddressLine1(String shippingAddressLine1) {
+        public Build shippingAddressLine1(final String shippingAddressLine1) {
             attributes.put("ShippingAddressLine1", shippingAddressLine1);
             return this;
         }
 
-        public Build shippingAddressLine2(String shippingAddressLine2) {
+        public Build shippingAddressLine2(final String shippingAddressLine2) {
             attributes.put("ShippingAddressLine2", shippingAddressLine2);
             return this;
         }
 
-        public Build shippingAddress(String shippingAddress) {
+        public Build shippingAddress(final String shippingAddress) {
             attributes.put("ShippingAddress", shippingAddress);
             return this;
         }
 
-        public Build requestDirectDebitMandate(String requestDirectDebitMandate) {
+        public Build requestDirectDebitMandate(final String requestDirectDebitMandate) {
             attributes.put("RequestDirectDebitMandate", requestDirectDebitMandate);
             return this;
         }
 
-        public Build chargeAccountID(String chargeAccountId) {
+        public Build chargeAccountID(final String chargeAccountId) {
             attributes.put("ChargeAccountID", chargeAccountId);
             return this;
         }
 
-        public Build quickDeposit(String quickDeposit) {
+        public Build quickDeposit(final String quickDeposit) {
             attributes.put("QuickDeposit", quickDeposit);
             return this;
         }

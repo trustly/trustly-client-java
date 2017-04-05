@@ -39,7 +39,7 @@ public class DepositData extends RequestData {
         return notificationURL;
     }
 
-    public void setNotificationURL(String notificationURL) {
+    public void setNotificationURL(final String notificationURL) {
         this.notificationURL = notificationURL;
     }
 
@@ -47,7 +47,7 @@ public class DepositData extends RequestData {
         return endUserID;
     }
 
-    public void setEndUserID(String endUserID) {
+    public void setEndUserID(final String endUserID) {
         this.endUserID = endUserID;
     }
 
@@ -55,8 +55,7 @@ public class DepositData extends RequestData {
         return messageID;
     }
 
-    public void setMessageID(String messageID) {
+    public void setMessageID(final String messageID) {
         this.messageID = messageID;
     }
-
 }

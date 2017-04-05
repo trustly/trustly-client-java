@@ -30,15 +30,15 @@ public class TrustlyAPIException extends RuntimeException {
 
     }
 
-    public TrustlyAPIException(Throwable t) {
+    public TrustlyAPIException(final Throwable t) {
         super(t);
     }
 
-    public TrustlyAPIException(String message) {
+    public TrustlyAPIException(final String message) {
         super(message);
     }
 
-    public TrustlyAPIException(String message, Throwable cause) {
+    public TrustlyAPIException(final String message, final Throwable cause) {
         super(message, cause);
     }
 }

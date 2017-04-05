@@ -25,15 +25,15 @@
 package com.trustly.api.commons.exceptions;
 
 public class TrustlyConnectionException extends TrustlyAPIException {
+
     public TrustlyConnectionException() {
-        super();
     }
 
-    public TrustlyConnectionException(String message) {
+    public TrustlyConnectionException(final String message) {
         super(message);
     }
 
-    public TrustlyConnectionException(String message, Throwable cause) {
+    public TrustlyConnectionException(final String message, final Throwable cause) {
         super(message, cause);
     }
 }

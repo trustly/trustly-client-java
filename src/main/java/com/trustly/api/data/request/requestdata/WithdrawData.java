@@ -30,11 +30,11 @@ import com.trustly.api.data.request.RequestData;
 
 public class WithdrawData extends RequestData {
     @SerializedName("NotificationURL")
-    private String   notificationUrl;
+    private String notificationUrl;
     @SerializedName("EndUserID")
-    private String   enduserId;
+    private String enduserId;
     @SerializedName("MessageID")
-    private String   messageId;
+    private String messageId;
     @SerializedName("Currency")
     private Currency currency;
 
@@ -42,7 +42,7 @@ public class WithdrawData extends RequestData {
         return notificationUrl;
     }
 
-    public void setNotificationURL(String notificationUrl) {
+    public void setNotificationURL(final String notificationUrl) {
         this.notificationUrl = notificationUrl;
     }
 
@@ -50,7 +50,7 @@ public class WithdrawData extends RequestData {
         return enduserId;
     }
 
-    public void setEndUserID(String enduserId) {
+    public void setEndUserID(final String enduserId) {
         this.enduserId = enduserId;
     }
 
@@ -58,7 +58,7 @@ public class WithdrawData extends RequestData {
         return messageId;
     }
 
-    public void setMessageID(String messageId) {
+    public void setMessageID(final String messageId) {
         this.messageId = messageId;
     }
 
@@ -66,8 +66,7 @@ public class WithdrawData extends RequestData {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
+    public void setCurrency(final Currency currency) {
         this.currency = currency;
     }
-
 }

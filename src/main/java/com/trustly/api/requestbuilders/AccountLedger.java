@@ -31,6 +31,7 @@ import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestParameters;
 import com.trustly.api.data.request.requestdata.AccountLedgerData;
 import com.trustly.api.security.SignatureHandler;
+
 /**
  * Creates a AccountLedger request ready to be sent to Trustly API.
  * The constructor contains the required fields of a AccountLedger request
@@ -45,8 +46,8 @@ import com.trustly.api.security.SignatureHandler;
 public class AccountLedger {
     private final Request request = new Request();
 
-    private AccountLedger(Build builder) {
-        RequestParameters params = new RequestParameters();
+    private AccountLedger(final Build builder) {
+        final RequestParameters params = new RequestParameters();
         params.setUUID(SignatureHandler.generateNewUUID());
         params.setData(builder.data);
 
@@ -61,7 +62,7 @@ public class AccountLedger {
     public static class Build {
         private final AccountLedgerData data = new AccountLedgerData();
 
-        public Build(String fromDate, String toDate, Currency currency) {
+        public Build(final String fromDate, final String toDate, final Currency currency) {
             data.setFromDate(fromDate);
             data.setToDate(toDate);
             data.setCurrency(currency);

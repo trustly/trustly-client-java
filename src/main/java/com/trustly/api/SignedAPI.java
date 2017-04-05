@@ -47,33 +47,28 @@ import com.trustly.api.security.SignatureHandler;
 
 public class SignedAPI {
 
-    private SignatureHandler signatureHandler = SignatureHandler.getInstance();
+    private final SignatureHandler signatureHandler = SignatureHandler.getInstance();
 
     private static final String TEST_ENVIRONMENT_API_URL = "https://test.trustly.com/api/1";
     private static final String LIVE_ENVIRONMENT_API_URL = "https://trustly.com/api/1";
-    private static String API_URL;
+    private static String apiUrl;
 
-    public void init(String privateKeyPath, String keyPassword, String username, String password) {
+    public void init(final String privateKeyPath, final String keyPassword, final String username, final String password) {
         init(privateKeyPath, keyPassword, username, password, false);
     }
 
-    public void init(String privateKeyPath, String keyPassword, String username, String password, boolean testEnvironment) {
+    public void init(final String privateKeyPath, final String keyPassword, final String username, final String password, final boolean testEnvironment) {
         setEnvironment(testEnvironment);
         try {
             signatureHandler.init(privateKeyPath, keyPassword, username, password, testEnvironment);
         }
-        catch (KeyException e) {
+        catch (final KeyException e) {
             e.printStackTrace();
         }
     }
 
-    private void setEnvironment(boolean testEnvironment) {
-        if (testEnvironment) {
-            API_URL = TEST_ENVIRONMENT_API_URL;
-        }
-        else {
-            API_URL = LIVE_ENVIRONMENT_API_URL;
-        }
+    private void setEnvironment(final boolean testEnvironment) {
+        apiUrl = testEnvironment ? TEST_ENVIRONMENT_API_URL : LIVE_ENVIRONMENT_API_URL;
     }
 
     /**
@@ -81,13 +76,13 @@ public class SignedAPI {
      * @param request Request to send to Trustly API
      * @return Response generated from the request.
      */
-    public Response sendRequest(Request request) {
-        Gson gson = new GsonBuilder().serializeNulls().create();
+    public Response sendRequest(final Request request) {
+        final Gson gson = new GsonBuilder().serializeNulls().create();
 
         signatureHandler.insertCredentials(request);
         signatureHandler.signRequest(request);
 
-        String jsonResponse = newHttpPost(gson.toJson(request, Request.class));
+        final String jsonResponse = newHttpPost(gson.toJson(request, Request.class));
 
         return handleJsonResponse(jsonResponse, request.getUUID());
     }
@@ -97,18 +92,18 @@ public class SignedAPI {
      * @param request String representation of a request.
      * @return String representation of a response.
      */
-    public String newHttpPost(String request) {
+    public String newHttpPost(final String request) {
         try {
-            CloseableHttpClient httpClient = HttpClients.createDefault();
-            HttpPost httpPost = new HttpPost(API_URL);
-            StringEntity jsonRequest = new StringEntity(request, "UTF-8");
+            final CloseableHttpClient httpClient = HttpClients.createDefault();
+            final HttpPost httpPost = new HttpPost(apiUrl);
+            final StringEntity jsonRequest = new StringEntity(request, "UTF-8");
             httpPost.addHeader("content-type", "application/json");
             httpPost.setEntity(jsonRequest);
 
-            HttpResponse result = httpClient.execute(httpPost);
+            final HttpResponse result = httpClient.execute(httpPost);
             return EntityUtils.toString(result.getEntity(), "UTF-8");
         }
-        catch (IOException e) {
+        catch (final IOException e) {
             throw new TrustlyConnectionException("Failed to send request.", e);
         }
     }
@@ -119,14 +114,14 @@ public class SignedAPI {
      * @param requestUUID UUID from the request that resulted in the response.
      * @return Response object
      */
-    public Response handleJsonResponse(String responseJson, String requestUUID) {
-        Gson gson = new Gson();
-        Response response = gson.fromJson(responseJson, Response.class);
+    public Response handleJsonResponse(final String responseJson, final String requestUUID) {
+        final Gson gson = new Gson();
+        final Response response = gson.fromJson(responseJson, Response.class);
         verifyResponse(response, requestUUID);
         return response;
     }
 
-    private void verifyResponse(Response response, String requestUUID) {
+    private void verifyResponse(final Response response, final String requestUUID) {
         if (!signatureHandler.verifyResponseSignature(response)) {
             throw new TrustlySignatureException("Incoming data signature is not valid");
         }
@@ -140,7 +135,7 @@ public class SignedAPI {
      * @return return a random generated messageid.
      */
     public String newMessageID() {
-        SecureRandom random = new SecureRandom();
+        final SecureRandom random = new SecureRandom();
 
         return new BigInteger(130, random).toString(32);
     }

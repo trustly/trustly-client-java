@@ -25,10 +25,11 @@
 package com.trustly.api.requestbuilders;
 
 import com.trustly.api.commons.Method;
-import com.trustly.api.data.request.requestdata.ApproveWithdrawalData;
 import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestParameters;
+import com.trustly.api.data.request.requestdata.ApproveWithdrawalData;
 import com.trustly.api.security.SignatureHandler;
+
 /**
  * Creates a ApproveWithdrawal request ready to be sent to Trustly API.
  * The constructor contains the required fields of a ApproveWithdrawal request
@@ -43,9 +44,8 @@ import com.trustly.api.security.SignatureHandler;
 public class ApproveWithdrawal {
     private final Request request = new Request();
 
-    private ApproveWithdrawal(Build builder) {
-
-        RequestParameters params = new RequestParameters();
+    private ApproveWithdrawal(final Build builder) {
+        final RequestParameters params = new RequestParameters();
         params.setUUID(SignatureHandler.generateNewUUID());
         params.setData(builder.data);
 
@@ -60,7 +60,7 @@ public class ApproveWithdrawal {
     public static class Build {
         private final ApproveWithdrawalData data = new ApproveWithdrawalData();
 
-        public Build(int orderID) {
+        public Build(final int orderID) {
             data.setOrderID(orderID);
         }
 

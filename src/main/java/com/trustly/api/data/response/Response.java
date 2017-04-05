@@ -36,7 +36,7 @@ public class Response {
         return version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(final String version) {
         this.version = version;
     }
 
@@ -44,7 +44,7 @@ public class Response {
         return result;
     }
 
-    public void setResult(Result result) {
+    public void setResult(final Result result) {
         this.result = result;
     }
 
@@ -52,7 +52,7 @@ public class Response {
         return error;
     }
 
-    public void setError(Error error) {
+    public void setError(final Error error) {
         this.error = error;
     }
 
@@ -61,20 +61,10 @@ public class Response {
     }
 
     public String getUUID() {
-        if (successfulResult()) {
-            return result.getUuid();
-        }
-        else {
-            return error.getError().getUuid();
-        }
+        return successfulResult() ? result.getUuid() : error.getError().getUuid();
     }
 
     public String getSignature() {
-        if (successfulResult()) {
-            return result.getSignature();
-        }
-        else {
-            return error.getError().getSignature();
-        }
+        return successfulResult() ? result.getSignature() : error.getError().getSignature();
     }
 }

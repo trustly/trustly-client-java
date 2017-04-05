@@ -52,7 +52,7 @@ public class KeyChain {
     private PrivateKey merchantPrivateKey;
     private PublicKey trustlyPublicKey;
 
-    public KeyChain(boolean testEnvironment) {
+    public KeyChain(final boolean testEnvironment) {
         loadTrustlyPublicKey(testEnvironment);
     }
 
@@ -62,16 +62,16 @@ public class KeyChain {
      * @param password Password for the private key. "" or null if key requires no password.
      * @throws KeyException if key failed to load. For example if the path is incorrect.
      */
-    public void loadMerchantPrivateKey(String privateKeyFilename, String password) throws KeyException {
+    public void loadMerchantPrivateKey(final String privateKeyFilename, final String password) throws KeyException {
         try {
-            File privateKeyFile = new File(privateKeyFilename); // private key file in PEM format
-            PEMParser pemParser = new PEMParser(new FileReader(privateKeyFile));
-            Object object = pemParser.readObject();
+            final File privateKeyFile = new File(privateKeyFilename); // private key file in PEM format
+            final PEMParser pemParser = new PEMParser(new FileReader(privateKeyFile));
+            final Object object = pemParser.readObject();
 
-            PEMDecryptorProvider decProv = new JcePEMDecryptorProviderBuilder().build(password.toCharArray());
-            JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
+            final PEMDecryptorProvider decProv = new JcePEMDecryptorProviderBuilder().build(password.toCharArray());
+            final JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
 
-            KeyPair kp;
+            final KeyPair kp;
             if (object instanceof PEMEncryptedKeyPair) { // Password required
                 kp = converter.getKeyPair(((PEMEncryptedKeyPair) object).decryptKeyPair(decProv));
             } else {
@@ -80,7 +80,7 @@ public class KeyChain {
 
             merchantPrivateKey = kp.getPrivate();
         }
-        catch (IOException e) {
+        catch (final IOException e) {
             throw new KeyException("Failed to load private key", e);
         }
     }
@@ -89,27 +89,27 @@ public class KeyChain {
      * Loads the Trustly public key.
      * @param testEnvironment whether to load the key for test environment or not.
      */
-    public void loadTrustlyPublicKey(boolean testEnvironment) {
+    public void loadTrustlyPublicKey(final boolean testEnvironment) {
         try {
-            File f;
+            final File file;
             if (testEnvironment) {
-                f = new File(TEST_TRUSTLY_PUBLIC_KEY_PATH);
+                file = new File(TEST_TRUSTLY_PUBLIC_KEY_PATH);
             }
             else {
-                f = new File(LIVE_TRUSTLY_PUBLIC_KEY_PATH);
+                file = new File(LIVE_TRUSTLY_PUBLIC_KEY_PATH);
             }
-            PEMParser pemParser = new PEMParser(new FileReader(f));
-            PemObject object = pemParser.readPemObject();
+            final PEMParser pemParser = new PEMParser(new FileReader(file));
+            final PemObject object = pemParser.readPemObject();
 
-            JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider( new BouncyCastleProvider());
+            final JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider(new BouncyCastleProvider());
 
-            byte[] encoded = object.getContent();
-            SubjectPublicKeyInfo subjectPublicKeyInfo = new SubjectPublicKeyInfo(
+            final byte[] encoded = object.getContent();
+            final SubjectPublicKeyInfo subjectPublicKeyInfo = new SubjectPublicKeyInfo(
                     ASN1Sequence.getInstance(encoded));
 
             trustlyPublicKey = converter.getPublicKey(subjectPublicKeyInfo);
         }
-        catch (IOException e) {
+        catch (final IOException e) {
             throw new TrustlyAPIException("Failed to load Trustly public key", e);
         }
     }

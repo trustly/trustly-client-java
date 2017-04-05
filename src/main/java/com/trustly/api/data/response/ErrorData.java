@@ -32,7 +32,7 @@ public class ErrorData {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(final String code) {
         this.code = code;
     }
 
@@ -40,7 +40,7 @@ public class ErrorData {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(final String message) {
         this.message = message;
     }
 }

@@ -39,7 +39,7 @@ public class Result {
         return signature;
     }
 
-    public void setSignature(String signature) {
+    public void setSignature(final String signature) {
         this.signature = signature;
     }
 
@@ -47,7 +47,7 @@ public class Result {
         return uuid;
     }
 
-    public void setUuid(String uuid) {
+    public void setUuid(final String uuid) {
         this.uuid = uuid;
     }
 
@@ -55,7 +55,7 @@ public class Result {
         return method;
     }
 
-    public void setMethod(Method method) {
+    public void setMethod(final Method method) {
         this.method = method;
     }
 
@@ -63,7 +63,7 @@ public class Result {
         return data;
     }
 
-    public void setData(Map<String, Object> data) {
-        this.data = new TreeMap<String, Object>(data);
+    public void setData(final Map<String, Object> data) {
+        this.data = new TreeMap<>(data);
     }
 }

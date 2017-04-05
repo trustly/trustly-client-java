@@ -35,7 +35,7 @@ public class ApproveWithdrawalData extends RequestData {
         return orderID;
     }
 
-    public void setOrderID(int orderID) {
+    public void setOrderID(final int orderID) {
         this.orderID = orderID;
     }
 }

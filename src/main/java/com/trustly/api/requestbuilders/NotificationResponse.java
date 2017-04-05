@@ -31,6 +31,7 @@ import com.trustly.api.commons.Method;
 import com.trustly.api.commons.ResponseStatus;
 import com.trustly.api.data.response.Response;
 import com.trustly.api.data.response.Result;
+
 /**
  * Creates a new notification response ready to be sent to Trustly API.
  * The constructor contains the required fields of a notificatio response.
@@ -45,8 +46,8 @@ import com.trustly.api.data.response.Result;
 public class NotificationResponse {
     private final Response response = new Response();
 
-    private NotificationResponse(Build builder) {
-        Result result = new Result();
+    private NotificationResponse(final Build builder) {
+        final Result result = new Result();
         result.setUuid(builder.uuid);
         result.setData(builder.data);
         result.setMethod(builder.method);
@@ -60,11 +61,11 @@ public class NotificationResponse {
     }
 
     public static class Build {
-        private final Map<String, Object> data = new HashMap<String, Object>();
+        private final Map<String, Object> data = new HashMap<>();
         final String uuid;
         final Method method;
 
-        public Build(Method method, String uuid, ResponseStatus status) {
+        public Build(final Method method, final String uuid, final ResponseStatus status) {
             this.uuid = uuid;
             this.method = method;
             data.put("status", status);

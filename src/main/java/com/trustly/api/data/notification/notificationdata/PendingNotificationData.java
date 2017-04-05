@@ -39,7 +39,7 @@ public class PendingNotificationData extends NotificationData {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(final String amount) {
         this.amount = amount;
     }
 
@@ -47,7 +47,7 @@ public class PendingNotificationData extends NotificationData {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
+    public void setCurrency(final Currency currency) {
         this.currency = currency;
     }
 
@@ -55,7 +55,7 @@ public class PendingNotificationData extends NotificationData {
         return endUserId;
     }
 
-    public void setEndUserId(String endUserId) {
+    public void setEndUserId(final String endUserId) {
         this.endUserId = endUserId;
     }
 
@@ -63,7 +63,7 @@ public class PendingNotificationData extends NotificationData {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(final String timestamp) {
         this.timestamp = timestamp;
     }
 }

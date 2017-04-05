@@ -36,7 +36,7 @@ public class CancelNotificationData extends NotificationData {
         return endUserId;
     }
 
-    public void setEndUserId(String endUserId) {
+    public void setEndUserId(final String endUserId) {
         this.endUserId = endUserId;
     }
 
@@ -44,7 +44,7 @@ public class CancelNotificationData extends NotificationData {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(final String timestamp) {
         this.timestamp = timestamp;
     }
 }

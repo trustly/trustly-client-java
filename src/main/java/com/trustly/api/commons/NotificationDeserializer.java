@@ -47,34 +47,34 @@ public class NotificationDeserializer implements JsonDeserializer<Notification> 
 
     public NotificationDeserializer() {
         gson = new Gson();
-        dataTypes = new HashMap<String, Class<? extends NotificationData>>();
+        dataTypes = new HashMap<>();
     }
 
     // Registers a notificationData subclass
-    public void registerDataType(String method, Class<? extends NotificationData> dataTypeClass) {
+    public void registerDataType(final String method, final Class<? extends NotificationData> dataTypeClass) {
         dataTypes.put(method, dataTypeClass);
     }
 
     @Override
-    public Notification deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        JsonObject request = jsonElement.getAsJsonObject();
-        JsonObject params = request.get("params").getAsJsonObject();
+    public Notification deserialize(final JsonElement jsonElement, final Type type, final JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        final JsonObject request = jsonElement.getAsJsonObject();
+        final JsonObject params = request.get("params").getAsJsonObject();
 
-        JsonObject data = params.get("data").getAsJsonObject();
+        final JsonObject data = params.get("data").getAsJsonObject();
 
         // Read the field named "Request.method"
-        JsonElement commandTypeElement = request.get("method");
+        final JsonElement commandTypeElement = request.get("method");
 
         // Query the dataTypes map to instance the right subclass
-        Class<? extends NotificationData> commandInstanceClass = dataTypes.get(commandTypeElement.getAsString());
+        final Class<? extends NotificationData> commandInstanceClass = dataTypes.get(commandTypeElement.getAsString());
 
-        NotificationData dataObject = gson.fromJson(data, commandInstanceClass);
-        NotificationParameters paramsObject = gson.fromJson(params, NotificationParameters.class);
-        Notification requestObject = gson.fromJson(request, Notification.class);
+        final NotificationData dataObject = gson.fromJson(data, commandInstanceClass);
+        final NotificationParameters paramsObject = gson.fromJson(params, NotificationParameters.class);
+        final Notification requestObject = gson.fromJson(request, Notification.class);
 
         if (data.has("attributes")) {
             if (data.get("attributes").isJsonNull()) {
-                dataObject.setAttributes(new HashMap<String, Object>());
+                dataObject.setAttributes(new HashMap<>());
             }
         }
 

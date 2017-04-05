@@ -30,6 +30,7 @@ import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestParameters;
 import com.trustly.api.data.request.requestdata.BalanceData;
 import com.trustly.api.security.SignatureHandler;
+
 /**
  * Creates a Balance request ready to be sent to Trustly API.
  * The constructor contains the required fields of a Balance request.
@@ -44,8 +45,8 @@ import com.trustly.api.security.SignatureHandler;
 public class Balance {
     private final Request request = new Request();
 
-    private Balance(Build builder) {
-        RequestParameters params = new RequestParameters();
+    private Balance(final Build builder) {
+        final RequestParameters params = new RequestParameters();
         params.setUUID(SignatureHandler.generateNewUUID());
         params.setData(builder.data);
 
@@ -59,9 +60,6 @@ public class Balance {
 
     public static class Build {
         private final BalanceData data = new BalanceData();
-
-        public Build() {
-        }
 
         public Request getRequest() {
             return new Balance(this).getRequest();

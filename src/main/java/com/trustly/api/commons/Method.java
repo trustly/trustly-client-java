@@ -71,15 +71,15 @@ public enum Method {
 
     private final String jsonName;
 
-    private Method(String s) {
+    Method(final String s) {
         jsonName = s;
     }
 
-    public boolean equalsName(String otherName){
+    public boolean equalsName(final String otherName) {
         return otherName != null && jsonName.equals(otherName);
     }
 
-    public String toString(){
+    public String toString() {
         return jsonName;
     }
 }

@@ -27,7 +27,7 @@ package com.trustly.api.data.notification;
 import com.trustly.api.commons.Method;
 
 public class Notification {
-    private Method            method;
+    private Method method;
     private NotificationParameters params;
     private double version = 1.1;
 
@@ -35,7 +35,7 @@ public class Notification {
         return version;
     }
 
-    public void setVersion(double version) {
+    public void setVersion(final double version) {
         this.version = version;
     }
 
@@ -43,7 +43,7 @@ public class Notification {
         return method;
     }
 
-    public void setMethod(Method method) {
+    public void setMethod(final Method method) {
         this.method = method;
     }
 
@@ -51,7 +51,7 @@ public class Notification {
         return params;
     }
 
-    public void setParams(NotificationParameters params) {
+    public void setParams(final NotificationParameters params) {
         this.params = params;
     }
 

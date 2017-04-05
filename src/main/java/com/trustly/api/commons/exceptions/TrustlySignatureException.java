@@ -25,19 +25,19 @@
 package com.trustly.api.commons.exceptions;
 
 public class TrustlySignatureException extends TrustlyAPIException {
+
     public TrustlySignatureException() {
-        super();
     }
 
-    public TrustlySignatureException(String message) {
+    public TrustlySignatureException(final String message) {
         super(message);
     }
 
-    public TrustlySignatureException(String message, Throwable cause) {
+    public TrustlySignatureException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public TrustlySignatureException(Throwable e) {
+    public TrustlySignatureException(final Throwable e) {
         super(e);
     }
 }

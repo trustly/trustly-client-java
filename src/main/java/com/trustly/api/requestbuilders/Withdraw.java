@@ -33,6 +33,7 @@ import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestParameters;
 import com.trustly.api.data.request.requestdata.WithdrawData;
 import com.trustly.api.security.SignatureHandler;
+
 /**
  * Creates a Withdraw request ready to be sent to Trustly API.
  * The constructor contains the required fields of a Withdraw request.
@@ -47,9 +48,8 @@ import com.trustly.api.security.SignatureHandler;
 public class Withdraw {
     private final Request request = new Request();
 
-    private Withdraw(Build builder) {
-
-        RequestParameters params = new RequestParameters();
+    private Withdraw(final Build builder) {
+        final RequestParameters params = new RequestParameters();
         params.setUUID(SignatureHandler.generateNewUUID());
         params.setData(builder.data);
 
@@ -63,116 +63,117 @@ public class Withdraw {
 
     public static class Build {
         private final WithdrawData data = new WithdrawData();
-        private final Map<String, Object> attributes = new TreeMap<String, Object>();
+        private final Map<String, Object> attributes = new TreeMap<>();
 
-        public Build(String notificationURL, String endUserID, String messageID, Currency currency, String firstName, String lastName, String email, String dateOfBirth) {
+        public Build(final String notificationURL, final String endUserID, final String messageID, final Currency currency, final String firstName, final String lastName, final String email, final String dateOfBirth) {
             data.setNotificationURL(notificationURL);
             data.setEndUserID(endUserID);
             data.setMessageID(messageID);
             data.setCurrency(currency);
-            this.attributes.put("Firstname", firstName);
-            this.attributes.put("Lastname", lastName);
-            this.attributes.put("Email", email);
-            this.attributes.put("DateOfBirth", dateOfBirth);
+
+            attributes.put("Firstname", firstName);
+            attributes.put("Lastname", lastName);
+            attributes.put("Email", email);
+            attributes.put("DateOfBirth", dateOfBirth);
             data.setAttributes(attributes);
         }
 
-        public Build locale(String locale) {
+        public Build locale(final String locale) {
             attributes.put("Locale", locale);
             return this;
         }
 
-        public Build suggestedMinAmount(String suggestedMinAmount) {
+        public Build suggestedMinAmount(final String suggestedMinAmount) {
             attributes.put("SuggestedMinAmount", suggestedMinAmount);
             return this;
         }
 
-        public Build suggestedMaxAmount(String suggestedMaxAmount) {
+        public Build suggestedMaxAmount(final String suggestedMaxAmount) {
             attributes.put("SuggestedMaxAmount", suggestedMaxAmount);
             return this;
         }
 
-        public Build country(String countryISOCode) {
+        public Build country(final String countryISOCode) {
             attributes.put("Country", countryISOCode);
             return this;
         }
 
-        public Build ip(String IP) {
+        public Build ip(final String IP) {
             attributes.put("IP", IP);
             return this;
         }
 
-        public Build successURL(String successURL) {
+        public Build successURL(final String successURL) {
             attributes.put("SuccessURL", successURL);
             return this;
         }
 
-        public Build failURL(String failURL) {
+        public Build failURL(final String failURL) {
             attributes.put("FailURL", failURL);
             return this;
         }
 
-        public Build templateURL(String templateURL) {
+        public Build templateURL(final String templateURL) {
             attributes.put("TemplateURL", templateURL);
             return this;
         }
 
-        public Build urlTarget(String urlTarget) {
+        public Build urlTarget(final String urlTarget) {
             attributes.put("URLTarget", urlTarget);
             return this;
         }
 
-        public Build clearingHouse(String clearingHouse) {
+        public Build clearingHouse(final String clearingHouse) {
             attributes.put("ClearingHouse", clearingHouse);
             return this;
         }
 
-        public Build bankNumber(String bankNumber) {
+        public Build bankNumber(final String bankNumber) {
             attributes.put("BankNumber", bankNumber);
             return this;
         }
 
-        public Build accountNumber(String accountNumber) {
+        public Build accountNumber(final String accountNumber) {
             attributes.put("AccountNumber", accountNumber);
             return this;
         }
 
-        public Build mobilePhone(String mobilePhone) {
+        public Build mobilePhone(final String mobilePhone) {
             attributes.put("MobilePhone", mobilePhone);
             return this;
         }
 
-        public Build nationalIdentificationNumber(String nin) {
+        public Build nationalIdentificationNumber(final String nin) {
             attributes.put("NationalIdentificationNumber", nin);
             return this;
         }
 
-        public Build addressCountry(String addressCountry) {
+        public Build addressCountry(final String addressCountry) {
             attributes.put("AddressCountry", addressCountry);
             return this;
         }
 
-        public Build addressPostalCode(String addressPostalCode) {
+        public Build addressPostalCode(final String addressPostalCode) {
             attributes.put("AddressPostalcode", addressPostalCode);
             return this;
         }
 
-        public Build addressCity(String addressCity) {
+        public Build addressCity(final String addressCity) {
             attributes.put("AddressCity", addressCity);
             return this;
         }
 
-        public Build addressLine1(String addressLine1) {
+        public Build addressLine1(final String addressLine1) {
             attributes.put("AddressLine1", addressLine1);
             return this;
         }
 
-        public Build addressLine2(String addressLine2) {
+        public Build addressLine2(final String addressLine2) {
             attributes.put("AddressLine2", addressLine2);
             return this;
         }
 
-        public Build address(String address) {
+        public Build address(final String address) {
             attributes.put("Address", address);
             return this;
         }

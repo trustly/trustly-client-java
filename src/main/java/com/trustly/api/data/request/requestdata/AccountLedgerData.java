@@ -30,7 +30,6 @@ import com.trustly.api.commons.Currency;
 import com.trustly.api.data.request.RequestData;
 
 public class AccountLedgerData extends RequestData {
-
     @SerializedName("FromDate")
     private String fromDate;
     @SerializedName("ToDate")

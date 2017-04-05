@@ -25,19 +25,19 @@
 package com.trustly.api.commons.exceptions;
 
 public class TrustlyDataException extends TrustlyAPIException {
+
     public TrustlyDataException() {
-        super();
     }
 
-    public TrustlyDataException(String message) {
+    public TrustlyDataException(final String message) {
         super(message);
     }
 
-    public TrustlyDataException(String message, Throwable cause) {
+    public TrustlyDataException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public TrustlyDataException(Throwable e) {
+    public TrustlyDataException(final Throwable e) {
         super(e);
     }
 }
