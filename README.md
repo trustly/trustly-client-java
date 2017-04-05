@@ -9,7 +9,7 @@ This code is provided as-is, use it as inspiration, reference or drop it directl
 
 If you find problem in the code or want to extend it feel free to fork it and send us a pull request.
 
-The Java API is a Maven project built on Java 1.7. It requires the following third-party frameworks: Google Gson, Apache httpclient, Bouncy Castle Crypto API.
+The Java API is a Maven project built on Java 1.8. It requires the following third-party frameworks: Google Gson, Apache httpclient, Bouncy Castle Crypto API.
 
 Structure
 =========
