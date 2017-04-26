@@ -60,7 +60,7 @@ public class ApproveWithdrawal {
     public static class Build {
         private final ApproveWithdrawalData data = new ApproveWithdrawalData();
 
-        public Build(final int orderID) {
+        public Build(final String orderID) {
             data.setOrderID(orderID);
         }
 

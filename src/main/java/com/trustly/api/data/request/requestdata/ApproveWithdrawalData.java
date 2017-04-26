@@ -29,13 +29,13 @@ import com.trustly.api.data.request.RequestData;
 
 public class ApproveWithdrawalData extends RequestData {
     @SerializedName("OrderID")
-    private int orderID;
+    private String orderID;
 
-    public int getOrderID() {
+    public String getOrderID() {
         return orderID;
     }
 
-    public void setOrderID(final int orderID) {
+    public void setOrderID(final String orderID) {
         this.orderID = orderID;
     }
 }

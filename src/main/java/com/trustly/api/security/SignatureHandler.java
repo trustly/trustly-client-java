@@ -38,9 +38,11 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.internal.LinkedTreeMap;
 import com.trustly.api.commons.exceptions.TrustlyAPIException;
 import com.trustly.api.commons.exceptions.TrustlySignatureException;
 import com.trustly.api.data.notification.Notification;
@@ -109,8 +111,8 @@ public class SignatureHandler {
     public void signNotificationResponse(final Response response) {
         final String requestMethod = response.getResult().getMethod().toString();
         final String uuid = response.getUUID();
-        final Map<String, Object> data = response.getResult().getData();
-        final String plainText = String.format("%s%s%s", requestMethod, uuid, serializeMap(data));
+        final Object data = response.getResult().getData();
+        final String plainText = String.format("%s%s%s", requestMethod, uuid, serializeObject(data));
 
         final String signedData = createSignature(plainText);
 
@@ -163,14 +165,14 @@ public class SignatureHandler {
                     if (serializeNullMap) {
                         builder.append(jsonFieldName);
                         if (field.get(data) != null) {
-                            builder.append(serializeMap((Map) field.get(data)));
+                            builder.append(serializeObject(field.get(data)));
                         }
                         continue;
                     }
                     else {
                         if (field.get(data) != null) {
                             builder.append(jsonFieldName);
-                            builder.append(serializeMap((Map) field.get(data)));
+                            builder.append(serializeObject(field.get(data)));
                         }
                         continue;
                     }
@@ -189,19 +191,33 @@ public class SignatureHandler {
         }
     }
 
-    private String serializeMap(final Map map) {
+    private String serializeObject(final Object object) {
         final StringBuilder builder = new StringBuilder();
 
-        final List<String> strings = new ArrayList<String>(map.keySet());
-        Collections.sort(strings);
-        for (final String key : strings) {
-            builder.append(key);
-            if(map.get(key) != null) {
-                builder.append(map.get(key));
+        if (object instanceof TreeMap || object instanceof com.google.gson.internal.LinkedTreeMap) {
+            populateStringBuilder(builder, (Map) object);
+        }
+        else if (object instanceof ArrayList) {
+            for (final Object mapEntry : (ArrayList) object) {
+                populateStringBuilder(builder, (Map) mapEntry);
             }
+        }
+        else {
+            throw new RuntimeException("Unhandled class of object: " + object.getClass());
         }
 
         return builder.toString();
+    }
+
+    private void populateStringBuilder(final StringBuilder builder, final Map mapEntry) {
+        final List<String> strings = new ArrayList<String>(mapEntry.keySet());
+        Collections.sort(strings);
+        for (final String key : strings) {
+            builder.append(key);
+            if (mapEntry.get(key) != null) {
+                builder.append(mapEntry.get(key));
+            }
+        }
     }
 
     /**
@@ -238,7 +254,7 @@ public class SignatureHandler {
             final Result result = response.getResult();
             method = result.getMethod() == null ? "" : result.getMethod().toString();
             uuid = result.getUuid();
-            serializedData = serializeMap(result.getData());
+            serializedData = serializeObject(result.getData());
             signatureBase64 = result.getSignature();
         }
         else {

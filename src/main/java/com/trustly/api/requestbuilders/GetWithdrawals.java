@@ -61,7 +61,7 @@ public class GetWithdrawals {
     public static class Build {
         private final GetWithdrawalsData data = new GetWithdrawalsData();
 
-        public Build(final int orderID) {
+        public Build(final String orderID) {
             data.setOrderID(orderID);
         }
 

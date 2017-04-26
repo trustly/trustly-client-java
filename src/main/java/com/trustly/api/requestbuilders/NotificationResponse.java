@@ -34,7 +34,7 @@ import com.trustly.api.data.response.Result;
 
 /**
  * Creates a new notification response ready to be sent to Trustly API.
- * The constructor contains the required fields of a notificatio response.
+ * The constructor contains the required fields of a notification response.
  *
  * Builder let you add additional information if any is available for the given response.
  *

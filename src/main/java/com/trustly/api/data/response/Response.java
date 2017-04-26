@@ -67,4 +67,9 @@ public class Response {
     public String getSignature() {
         return successfulResult() ? result.getSignature() : error.getError().getSignature();
     }
+
+    @Override
+    public String toString() {
+        return "VERSION: " + version +  "\nERROR: " + error + "\nRESULT:\n" + result.toString();
+    }
 }

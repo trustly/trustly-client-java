@@ -60,7 +60,7 @@ public class DenyWithdrawal {
     public static class Build {
         private final DenyWithdrawalData data = new DenyWithdrawalData();
 
-        public Build(final int orderID) {
+        public Build(final String orderID) {
             data.setOrderID(orderID);
         }
 
