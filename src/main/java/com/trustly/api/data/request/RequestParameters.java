@@ -50,7 +50,7 @@ public class RequestParameters {
         this.signature = signature;
     }
 
-    public String getUUID() {
+    String getUUID() {
         return uuid;
     }
 

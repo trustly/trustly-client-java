@@ -24,7 +24,6 @@
 
 package com.trustly.api.requestbuilders;
 
-
 import com.trustly.api.commons.Method;
 import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestParameters;

@@ -24,7 +24,6 @@
 
 package com.trustly.api.requestbuilders;
 
-
 import com.trustly.api.commons.Method;
 import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestParameters;
@@ -42,6 +41,7 @@ import com.trustly.api.security.SignatureHandler;
  * Example use for a default GetWithdrawals request:
  * Request getWithdrawals = new GetWithdrawals.Build(orderID).getRequest();
  */
+// TODO: 2017-05-02 Ask integration to add some data in the testenvironment.
 public class GetWithdrawals {
     private final Request request = new Request();
 

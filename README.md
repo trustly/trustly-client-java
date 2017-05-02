@@ -3,7 +3,7 @@ Trustly Java Client
 
 This is an example implementation of the communication with the Trustly API using Java. It implements the standard Payments API which includes deposits, withdrawals and refunds.
 
-For full documentation on the Trustly API internals visit our developer website: http://trustly.com/developer. All information about software flows and call patters can be found on that site. The documentation within this code will only cover the code itself, not how you use the Trustly API.
+For full documentation on the Trustly API internals visit our developer website: http://trustly.com/developer. All information about software flows and call patterns can be found on that site. The documentation within this code will only cover the code itself, not how you use the Trustly API.
 
 This code is provided as-is, use it as inspiration, reference or drop it directly into your own project and use it.
 
@@ -19,7 +19,7 @@ Contains exceptions, enums and deserializers used throughout the project.
 
 - `data`
 
-Everything under this package is data structures that serializes into json and deserializes from json.
+Everything under this package are data structures that serializes into json and deserializes from json.
 
 - `requestbuilders`
 

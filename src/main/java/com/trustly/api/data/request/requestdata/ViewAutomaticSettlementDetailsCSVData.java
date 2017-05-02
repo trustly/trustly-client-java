@@ -24,7 +24,6 @@
 
 package com.trustly.api.data.request.requestdata;
 
-
 import com.google.gson.annotations.SerializedName;
 import com.trustly.api.commons.Currency;
 import com.trustly.api.data.request.RequestData;

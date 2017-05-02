@@ -45,24 +45,24 @@ import org.bouncycastle.util.io.pem.PemObject;
 
 import com.trustly.api.commons.exceptions.TrustlyAPIException;
 
-public class KeyChain {
+class KeyChain {
     private static final String TEST_TRUSTLY_PUBLIC_KEY_PATH = "src/main/resources/keys/test_trustly_public.pem";
     private static final String LIVE_TRUSTLY_PUBLIC_KEY_PATH = "src/main/resources/keys/trustly_public.pem";
 
     private PrivateKey merchantPrivateKey;
     private PublicKey trustlyPublicKey;
 
-    public KeyChain(final boolean testEnvironment) {
+    KeyChain(final boolean testEnvironment) {
         loadTrustlyPublicKey(testEnvironment);
     }
 
     /**
-     * Loads the merchant private key
+     * Loads the merchant private key.
      * @param privateKeyFilename path to and name of private key.
      * @param password Password for the private key. "" or null if key requires no password.
      * @throws KeyException if key failed to load. For example if the path is incorrect.
      */
-    public void loadMerchantPrivateKey(final String privateKeyFilename, final String password) throws KeyException {
+    void loadMerchantPrivateKey(final String privateKeyFilename, final String password) throws KeyException {
         try {
             final File privateKeyFile = new File(privateKeyFilename); // private key file in PEM format
             final PEMParser pemParser = new PEMParser(new FileReader(privateKeyFile));
@@ -89,15 +89,10 @@ public class KeyChain {
      * Loads the Trustly public key.
      * @param testEnvironment whether to load the key for test environment or not.
      */
-    public void loadTrustlyPublicKey(final boolean testEnvironment) {
+    private void loadTrustlyPublicKey(final boolean testEnvironment) {
         try {
-            final File file;
-            if (testEnvironment) {
-                file = new File(TEST_TRUSTLY_PUBLIC_KEY_PATH);
-            }
-            else {
-                file = new File(LIVE_TRUSTLY_PUBLIC_KEY_PATH);
-            }
+            final File file = testEnvironment ? new File(TEST_TRUSTLY_PUBLIC_KEY_PATH) : new File(LIVE_TRUSTLY_PUBLIC_KEY_PATH);
+
             final PEMParser pemParser = new PEMParser(new FileReader(file));
             final PemObject object = pemParser.readPemObject();
 
@@ -114,12 +109,11 @@ public class KeyChain {
         }
     }
 
-    public PrivateKey getMerchantPrivateKey() {
+    PrivateKey getMerchantPrivateKey() {
         return merchantPrivateKey;
     }
 
-    public PublicKey getTrustlyPublicKey() {
+    PublicKey getTrustlyPublicKey() {
         return trustlyPublicKey;
     }
-
 }

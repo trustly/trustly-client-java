@@ -45,7 +45,7 @@ public class NotificationParameters {
         this.signature = signature;
     }
 
-    public String getUUID() {
+    String getUUID() {
         return uuid;
     }
 

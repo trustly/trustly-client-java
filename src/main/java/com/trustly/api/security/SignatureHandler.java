@@ -194,7 +194,7 @@ public class SignatureHandler {
     private String serializeObject(final Object object) {
         final StringBuilder builder = new StringBuilder();
 
-        if (object instanceof TreeMap || object instanceof com.google.gson.internal.LinkedTreeMap) {
+        if (object instanceof TreeMap || object instanceof LinkedTreeMap) {
             populateStringBuilder(builder, (Map) object);
         }
         else if (object instanceof ArrayList) {
@@ -221,7 +221,7 @@ public class SignatureHandler {
     }
 
     /**
-     * Returns a list of declared fields for given class
+     * Returns a list of declared fields for given class.
      * @param fields List to add found fields
      * @param type Type of class
      * @return Given list filled with fields of given class.
@@ -310,7 +310,7 @@ public class SignatureHandler {
     }
 
     /**
-     * Generates a new UUID (Universally Unique Identifier ) based on UUID v4
+     * Generates a new UUID (Universally Unique Identifier) based on UUID v4
      * @return a random generated UUID in form of xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
      * where x is a hexadecimal digit (0-9 and A-F)
      */

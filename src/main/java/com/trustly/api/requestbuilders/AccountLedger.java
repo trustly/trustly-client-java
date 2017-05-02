@@ -24,7 +24,6 @@
 
 package com.trustly.api.requestbuilders;
 
-
 import com.trustly.api.commons.Currency;
 import com.trustly.api.commons.Method;
 import com.trustly.api.data.request.Request;
@@ -33,8 +32,8 @@ import com.trustly.api.data.request.requestdata.AccountLedgerData;
 import com.trustly.api.security.SignatureHandler;
 
 /**
- * Creates a AccountLedger request ready to be sent to Trustly API.
- * The constructor contains the required fields of a AccountLedger request
+ * Creates an AccountLedger request ready to be sent to Trustly API.
+ * The constructor contains the required fields of an AccountLedger request.
  *
  * Builder lets you add additional information if any is available for the given request.
  *

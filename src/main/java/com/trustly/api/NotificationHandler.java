@@ -40,15 +40,14 @@ import com.trustly.api.data.response.Response;
 import com.trustly.api.requestbuilders.NotificationResponse.Build;
 import com.trustly.api.security.SignatureHandler;
 
-
 public class NotificationHandler {
 
     final SignatureHandler signatureHandler = SignatureHandler.getInstance();
 
     /**
-     * Deserializes and verifies incoming notification
-     * @param notificationJson Notification sent from trustly.
-     * @return Request object, a deserialized notification
+     * Deserializes and verifies incoming notification.
+     * @param notificationJson Notification sent from Trustly.
+     * @return Request object, a deserialized notification.
      */
     public Notification handleNotification(final String notificationJson) {
         final NotificationDeserializer deserializer = new NotificationDeserializer();

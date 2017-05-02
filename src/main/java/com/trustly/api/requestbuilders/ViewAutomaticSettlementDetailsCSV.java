@@ -24,7 +24,6 @@
 
 package com.trustly.api.requestbuilders;
 
-
 import java.util.Map;
 
 import com.trustly.api.commons.Currency;

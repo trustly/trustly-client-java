@@ -92,7 +92,7 @@ public class SignedAPI {
      * @param request String representation of a request.
      * @return String representation of a response.
      */
-    public String newHttpPost(final String request) {
+    private String newHttpPost(final String request) {
         try {
             final CloseableHttpClient httpClient = HttpClients.createDefault();
             final HttpPost httpPost = new HttpPost(apiUrl);
@@ -114,7 +114,7 @@ public class SignedAPI {
      * @param requestUUID UUID from the request that resulted in the response.
      * @return Response object
      */
-    public Response handleJsonResponse(final String responseJson, final String requestUUID) {
+    private Response handleJsonResponse(final String responseJson, final String requestUUID) {
         final Gson gson = new Gson();
         final Response response = gson.fromJson(responseJson, Response.class);
         verifyResponse(response, requestUUID);

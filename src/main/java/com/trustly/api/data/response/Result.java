@@ -24,7 +24,6 @@
 
 package com.trustly.api.data.response;
 
-
 import com.trustly.api.commons.Method;
 
 public class Result {
