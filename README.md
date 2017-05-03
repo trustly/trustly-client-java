@@ -7,9 +7,9 @@ For full documentation on the Trustly API internals visit our developer website:
 
 This code is provided as-is, use it as inspiration, reference or drop it directly into your own project and use it.
 
-If you find problem in the code or want to extend it feel free to fork it and send us a pull request.
+If you find a problem in the code or want to extend it, feel free to fork it and send us a pull request.
 
-The Java API is a Maven project built on Java 1.8. It requires the following third-party frameworks: Google Gson, Apache httpclient, Bouncy Castle Crypto API.
+The Java API is a Maven project built on Java 1.8. It requires the following third-party frameworks: Google Gson, Apache HttpClient and Bouncy Castle Crypto API.
 
 Structure
 =========
@@ -61,13 +61,11 @@ Initializing the API
 
 Example deposit call
 
-		Request deposit = new Deposit.Build("https://example.com/trustlynotification", "user@email.com", "abas421csd123zds1wd99", Currency.SEK)
+		Request deposit = new Deposit.Build("https://example.com/trustlynotification", "user@email.com", "abas421csd123zds1wd99", Currency.SEK, "Steve", "Smith", "steve@smith.com")
                 .locale("sv_SE")
                 .amount("54.12")
-                .firstname("Steve")
-                .lastname("Smith")
                 .mobilePhone("070-1234567")
-                .nationalIdentificationNumber("741130-1234")
+                .nationalIdentificationNumber("891212-4545")
                 .getRequest();
 
         Response response = api.sendRequest(deposit);
@@ -83,11 +81,9 @@ Example refund call
 
 Example withdrawal call
 
-        Request withdraw = new Withdraw.Build("https://example.com/trustlynotification", "user@email.com", "41bj1h423b12bh323", Currency.PLN)
-                .firstname("Steve")
-                .lastname("Smith")
+        Request withdraw = new Withdraw.Build("https://example.com/trustlynotification", "user@email.com", "41bj1h423b12bh323", Currency.PLN, "Steve", "Smith", "steve@smith.com", "1989-12-12")
                 .locale("sv_SE")
-                .nationalIdentificationNumber("891312-4545")
+                .nationalIdentificationNumber("891212-4545")
                 .clearingHouse("1234")
                 .accountNumber("56789012")
                 .getRequest();

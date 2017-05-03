@@ -153,8 +153,6 @@ public class Withdraw {
             return this;
         }
 
-        // TODO: 2017-04-27 There's a consistency problem regarding the capitalization of the word 'code' in the postalcode attribute in the API. In a withdraw request the attribute of the postalcode is named AddressPostalcode
-        // TODO: 2017-04-27 and in a deposit the attribute for the postalcode of the shipping address is called ShippingAddressPostalCode. Probably nothing we can do here but we can notify integration about it.
         public Build addressPostalCode(final String addressPostalCode) {
             attributes.put("AddressPostalcode", addressPostalCode);
             return this;
