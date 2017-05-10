@@ -53,14 +53,14 @@ public class SignedAPI {
     private static final String LIVE_ENVIRONMENT_API_URL = "https://trustly.com/api/1";
     private static String apiUrl;
 
-    public void init(final String privateKeyPath, final String keyPassword, final String username, final String password) {
-        init(privateKeyPath, keyPassword, username, password, false);
+    public void init(final String privateKeyPath, final String username, final String password) {
+        init(privateKeyPath, username, password, false);
     }
 
-    public void init(final String privateKeyPath, final String keyPassword, final String username, final String password, final boolean testEnvironment) {
+    public void init(final String privateKeyPath, final String username, final String password, final boolean testEnvironment) {
         setEnvironment(testEnvironment);
         try {
-            signatureHandler.init(privateKeyPath, keyPassword, username, password, testEnvironment);
+            signatureHandler.init(privateKeyPath, username, password, testEnvironment);
         }
         catch (final KeyException e) {
             e.printStackTrace();
