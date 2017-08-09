@@ -53,14 +53,21 @@ public class SignedAPI {
     private static final String LIVE_ENVIRONMENT_API_URL = "https://trustly.com/api/1";
     private static String API_URL;
 
-    public void init(String privateKeyPath, String keyPassword, String username, String password) {
-        init(privateKeyPath, keyPassword, username, password, false);
+    public void init(String privateKey, String keyPassword, String username, String password) {
+        init(privateKey, keyPassword, username, password, false);
     }
 
-    public void init(String privateKeyPath, String keyPassword, String username, String password, boolean testEnvironment) {
+    /**
+     * Initialize SignedAPI
+     * @param privateKey - full private key OR private key path and name of private key.
+     * @param password - Password for the private key. "" or null if key requires no password.
+     * @param testEnvironment - is this the test environment
+     * @throws KeyException if key failed to load. For example if the path is incorrect.
+     */
+    public void init(String privateKey, String keyPassword, String username, String password, boolean testEnvironment) {
         setEnvironment(testEnvironment);
         try {
-            signatureHandler.init(privateKeyPath, keyPassword, username, password, testEnvironment);
+            signatureHandler.init(privateKey, keyPassword, username, password, testEnvironment);
         }
         catch (KeyException e) {
             e.printStackTrace();

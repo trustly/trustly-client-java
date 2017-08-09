@@ -24,9 +24,12 @@
 
 package com.trustly.api.security;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.security.KeyException;
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -46,8 +49,9 @@ import org.bouncycastle.util.io.pem.PemObject;
 import com.trustly.api.commons.exceptions.TrustlyAPIException;
 
 public class KeyChain {
-    private static final String TEST_TRUSTLY_PUBLIC_KEY_PATH = "src/main/resources/keys/test_trustly_public.pem";
-    private static final String LIVE_TRUSTLY_PUBLIC_KEY_PATH = "src/main/resources/keys/trustly_public.pem";
+    private static final String TEST_TRUSTLY_PUBLIC_KEY_PATH = "/keys/test_trustly_public.pem";
+    private static final String LIVE_TRUSTLY_PUBLIC_KEY_PATH = "/keys/trustly_public.pem"; 
+    private static final String NEWLINE = System.getProperty("line.separator");
 
     private PrivateKey merchantPrivateKey;
     private PublicKey trustlyPublicKey;
@@ -58,14 +62,20 @@ public class KeyChain {
 
     /**
      * Loads the merchant private key
-     * @param privateKeyFilename path to and name of private key.
+     * @param privateKey - private key or path to and name of private key.
      * @param password Password for the private key. "" or null if key requires no password.
      * @throws KeyException if key failed to load. For example if the path is incorrect.
      */
-    public void loadMerchantPrivateKey(String privateKeyFilename, String password) throws KeyException {
+    public void loadMerchantPrivateKey(String privateKey, String password) throws KeyException {
         try {
-            File privateKeyFile = new File(privateKeyFilename); // private key file in PEM format
-            PEMParser pemParser = new PEMParser(new FileReader(privateKeyFile));
+        	PEMParser pemParser = null;
+        	if (privateKey.contains(NEWLINE)) {
+        		pemParser = new PEMParser(new StringReader(privateKey));
+        	}
+        	else {
+        		File privateKeyFile = new File(privateKey); // private key file in PEM format
+        		pemParser = new PEMParser(new FileReader(privateKeyFile));
+        	}
             Object object = pemParser.readObject();
 
             PEMDecryptorProvider decProv = new JcePEMDecryptorProviderBuilder().build(password.toCharArray());
@@ -91,14 +101,14 @@ public class KeyChain {
      */
     public void loadTrustlyPublicKey(boolean testEnvironment) {
         try {
-            File f;
+            BufferedReader br;
             if (testEnvironment) {
-                f = new File(TEST_TRUSTLY_PUBLIC_KEY_PATH);
+            	br =  new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(TEST_TRUSTLY_PUBLIC_KEY_PATH)));
             }
             else {
-                f = new File(LIVE_TRUSTLY_PUBLIC_KEY_PATH);
+            	br =  new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(LIVE_TRUSTLY_PUBLIC_KEY_PATH)));
             }
-            PEMParser pemParser = new PEMParser(new FileReader(f));
+            PEMParser pemParser = new PEMParser(br);
             PemObject object = pemParser.readPemObject();
 
             JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider( new BouncyCastleProvider());
