@@ -59,15 +59,16 @@ class KeyChain {
     /**
      * Loads the merchant private key.
      * @param privateKeyFilename path to and name of private key.
+     * @param password Password for the private key. "" or null if key requires no password.
      * @throws KeyException if key failed to load. For example if the path is incorrect.
      */
-    void loadMerchantPrivateKey(final String privateKeyFilename) throws KeyException {
+    void loadMerchantPrivateKey(final String privateKeyFilename, final String password) throws KeyException {
         try {
             final File privateKeyFile = new File(privateKeyFilename); // private key file in PEM format
             final PEMParser pemParser = new PEMParser(new FileReader(privateKeyFile));
             final Object object = pemParser.readObject();
 
-            final PEMDecryptorProvider decProv = new JcePEMDecryptorProviderBuilder().build("".toCharArray());
+            final PEMDecryptorProvider decProv = new JcePEMDecryptorProviderBuilder().build(password.toCharArray());
             final JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
 
             final KeyPair kp;

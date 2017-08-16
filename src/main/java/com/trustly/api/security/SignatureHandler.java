@@ -72,12 +72,12 @@ public class SignatureHandler {
         return instance;
     }
 
-    public void init(final String privateKeyPath, final String username, final String password, final boolean testEnvironment) throws KeyException {
+    public void init(final String privateKeyPath, final String keyPassword, final String username, final String password, final boolean testEnvironment) throws KeyException {
         this.username = username;
         this.password = password;
 
         keyChain = new KeyChain(testEnvironment);
-        keyChain.loadMerchantPrivateKey(privateKeyPath);
+        keyChain.loadMerchantPrivateKey(privateKeyPath, keyPassword);
     }
 
     /**
