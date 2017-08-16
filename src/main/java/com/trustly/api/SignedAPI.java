@@ -56,7 +56,7 @@ public class SignedAPI {
     /**
      * Method used for initializing a SignatureHandler.
      *
-     * Seeing that the private key is somewhat considered a password in
+     * @param keyPassword Seeing that the private key is somewhat considered a password in
      * itself, the private key password is usually an empty string.
      */
     public void init(final String privateKeyPath, final String keyPassword, final String username, final String password) {
@@ -66,7 +66,7 @@ public class SignedAPI {
     /**
      * Method used for initializing a SignatureHandler.
      *
-     * Seeing that the private key is somewhat considered a password in
+     * @param keyPassword Seeing that the private key is somewhat considered a password in
      * itself, the private key password is usually an empty string.
      */
     public void init(final String privateKeyPath, final String keyPassword, final String username, final String password, final boolean testEnvironment) {
