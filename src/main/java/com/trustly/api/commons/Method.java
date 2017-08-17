@@ -67,7 +67,13 @@ public enum Method {
     CANCEL("cancel"),
 
     @SerializedName("account")
-    ACCOUNT("account");
+    ACCOUNT("account"),
+
+    @SerializedName("Charge")
+    CHARGE("Charge"),
+
+    @SerializedName("SelectAccount")
+    SELECT_ACCOUNT("SelectAccount");
 
     private final String jsonName;
 
