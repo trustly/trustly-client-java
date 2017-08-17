@@ -35,7 +35,13 @@ import com.trustly.api.data.request.requestdata.ChargeData;
 import com.trustly.api.security.SignatureHandler;
 
 /**
- * bla bla bla
+ * Creates a Charge request ready to be sent to Trustly API.
+ * The constructor contains the required fields of a Charge request.
+ *
+ * The API specifics of the request can be found on https://trustly.com/en/developer/
+ *
+ * Example use for a default Charge request:
+ * Request charge = new Charge.Build(notificationURL, endUserID, messageID, amount, currency, shopperStatement, email).getRequest();
  */
 public class Charge {
     private final Request request = new Request();

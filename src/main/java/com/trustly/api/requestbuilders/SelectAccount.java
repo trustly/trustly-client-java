@@ -33,6 +33,17 @@ import com.trustly.api.data.request.RequestParameters;
 import com.trustly.api.data.request.requestdata.SelectAccountData;
 import com.trustly.api.security.SignatureHandler;
 
+/**
+ * Creates a SelectAccount request ready to be sent to Trustly API.
+ * The constructor contains the required fields of a SelectAccount request.
+ *
+ * Builder lets you add additional information if any is available for the given request.
+ *
+ * The API specifics of the request can be found on https://trustly.com/en/developer/
+ *
+ * Example use for a default SelectAccount request:
+ * Request selectAccount = new SelectAccount.Build(notificationURL, endUserID, messageID).getRequest();
+ */
 public class SelectAccount {
     private Request request = new Request();
 
