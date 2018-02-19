@@ -33,6 +33,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -52,14 +53,11 @@ import com.trustly.api.data.response.ErrorBody;
 import com.trustly.api.data.response.Response;
 import com.trustly.api.data.response.Result;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-
 public class SignatureHandler {
     private static SignatureHandler instance;
 
-    private final BASE64Encoder base64Encoder = new BASE64Encoder();
-    private final BASE64Decoder base64Decoder = new BASE64Decoder();
+    private final Base64.Encoder base64Encoder = Base64.getEncoder();
+    private final Base64.Decoder base64Decoder = Base64.getDecoder();
     private KeyChain keyChain;
 
     private String username;
@@ -126,7 +124,7 @@ public class SignatureHandler {
             signatureInstance.update(plainText.getBytes("UTF-8"));
 
             final byte[] signature = signatureInstance.sign();
-            return base64Encoder.encode(signature);
+            return base64Encoder.encodeToString(signature);
         }
         catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
             throw new TrustlySignatureException(e);
@@ -288,7 +286,7 @@ public class SignatureHandler {
 
     private boolean performSignatureVerification(final String method, final String uuid, final String serializedData, final String responseSignature) {
         try {
-            final byte[] signature = base64Decoder.decodeBuffer(responseSignature);
+            final byte[] signature = base64Decoder.decode(responseSignature);
             final Signature signatureInstance = Signature.getInstance("SHA1withRSA");
             signatureInstance.initVerify(keyChain.getTrustlyPublicKey());
             final String expectedPlainText = String.format("%s%s%s", method, uuid, serializedData);
