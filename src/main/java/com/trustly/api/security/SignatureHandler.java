@@ -146,13 +146,8 @@ public class SignatureHandler {
     private String serializeData(final Object data, final boolean serializeNullMap) {
         try {
             //Sort all fields found in the data object class
-            final List<Field> fields = getAllFields(new LinkedList<Field>(), data.getClass());
-            Collections.sort(fields, new Comparator<Field>() {
-                @Override
-                public int compare(final Field o1, final Field o2) {
-                    return o1.getName().compareTo(o2.getName());
-                }
-            });
+            final List<Field> fields = getAllFields(new LinkedList<>(), data.getClass());
+            fields.sort(Comparator.comparing(Field::getName));
 
             //Get values using reflection
             final StringBuilder builder = new StringBuilder();

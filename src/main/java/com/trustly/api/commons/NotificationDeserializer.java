@@ -74,7 +74,7 @@ public class NotificationDeserializer implements JsonDeserializer<Notification> 
 
         if (data.has("attributes")) {
             if (data.get("attributes").isJsonNull()) {
-                dataObject.setAttributes(new HashMap<String, Object>());
+                dataObject.setAttributes(new HashMap<>());
             }
         }
 
