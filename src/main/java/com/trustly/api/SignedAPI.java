@@ -38,6 +38,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.trustly.api.commons.Method;
 import com.trustly.api.commons.exceptions.TrustlyConnectionException;
 import com.trustly.api.commons.exceptions.TrustlyDataException;
 import com.trustly.api.commons.exceptions.TrustlySignatureException;
@@ -89,7 +90,13 @@ public class SignedAPI {
      * @return Response generated from the request.
      */
     public Response sendRequest(final Request request) {
-        final Gson gson = new GsonBuilder().serializeNulls().create();
+        final GsonBuilder gsonBuilder = new GsonBuilder();
+
+        if (request.getMethod() == Method.VIEW_AUTOMATIC_SETTLEMENT_DETAILS_CSV) {
+            gsonBuilder.serializeNulls();
+        }
+
+        final Gson gson = gsonBuilder.create();
 
         signatureHandler.insertCredentials(request);
         signatureHandler.signRequest(request);

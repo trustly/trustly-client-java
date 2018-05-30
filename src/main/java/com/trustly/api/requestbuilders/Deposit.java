@@ -32,6 +32,7 @@ import com.trustly.api.commons.Method;
 import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestParameters;
 import com.trustly.api.data.request.requestdata.DepositData;
+import com.trustly.api.data.request.requestdata.RecipientInformation;
 import com.trustly.api.security.SignatureHandler;
 
 /**
@@ -134,6 +135,11 @@ public class Deposit {
 
         public Build nationalIdentificationNumber(final String nin) {
             attributes.put("NationalIdentificationNumber", nin);
+            return this;
+        }
+
+        public Build recipientInformation(final RecipientInformation recipientInformation) {
+            attributes.put("RecipientInformation", recipientInformation);
             return this;
         }
 
