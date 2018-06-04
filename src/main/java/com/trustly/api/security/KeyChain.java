@@ -27,6 +27,7 @@ package com.trustly.api.security;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.security.KeyException;
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -46,8 +47,8 @@ import org.bouncycastle.util.io.pem.PemObject;
 import com.trustly.api.commons.exceptions.TrustlyAPIException;
 
 class KeyChain {
-    private static final String TEST_TRUSTLY_PUBLIC_KEY_PATH = "src/main/resources/keys/test_trustly_public.pem";
-    private static final String LIVE_TRUSTLY_PUBLIC_KEY_PATH = "src/main/resources/keys/trustly_public.pem";
+    private static final String TEST_TRUSTLY_PUBLIC_KEY_PATH = "/keys/test_trustly_public.pem";
+    private static final String LIVE_TRUSTLY_PUBLIC_KEY_PATH = "/keys/trustly_public.pem";
 
     private PrivateKey merchantPrivateKey;
     private PublicKey trustlyPublicKey;
@@ -67,7 +68,8 @@ class KeyChain {
             final File privateKeyFile = new File(privateKeyFilename); // private key file in PEM format
             final PEMParser pemParser = new PEMParser(new FileReader(privateKeyFile));
             final Object object = pemParser.readObject();
-
+            pemParser.close();
+            
             final PEMDecryptorProvider decProv = new JcePEMDecryptorProviderBuilder().build(password.toCharArray());
             final JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
 
@@ -91,10 +93,11 @@ class KeyChain {
      */
     private void loadTrustlyPublicKey(final boolean testEnvironment) {
         try {
-            final File file = testEnvironment ? new File(TEST_TRUSTLY_PUBLIC_KEY_PATH) : new File(LIVE_TRUSTLY_PUBLIC_KEY_PATH);
+            final String file = testEnvironment ? TEST_TRUSTLY_PUBLIC_KEY_PATH : LIVE_TRUSTLY_PUBLIC_KEY_PATH;
 
-            final PEMParser pemParser = new PEMParser(new FileReader(file));
+            final PEMParser pemParser = new PEMParser(new InputStreamReader(this.getClass().getResourceAsStream(file)));
             final PemObject object = pemParser.readPemObject();
+            pemParser.close();
 
             final JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider(new BouncyCastleProvider());
 
