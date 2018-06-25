@@ -63,4 +63,28 @@ public class RecipientInformation {
         this.dateOfBirth = dateOfBirth;
         return this;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("Partytype").append(partyType);
+        stringBuilder.append("Firstname").append(firstName);
+        stringBuilder.append("Lastname").append(lastName);
+        stringBuilder.append("CountryCode").append(countryCode);
+
+        if (customerId != null) {
+            stringBuilder.append("CustomerID").append(customerId);
+        }
+
+        if (address != null) {
+            stringBuilder.append("Address").append(address);
+        }
+
+        if (dateOfBirth != null) {
+            stringBuilder.append("DateOfBirth").append(dateOfBirth);
+        }
+
+        return stringBuilder.toString();
+    }
 }
