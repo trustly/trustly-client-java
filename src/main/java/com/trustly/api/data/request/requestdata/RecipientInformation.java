@@ -24,6 +24,10 @@
 
 package com.trustly.api.data.request.requestdata;
 
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+
 import com.google.gson.annotations.SerializedName;
 
 public class RecipientInformation {
@@ -62,5 +66,39 @@ public class RecipientInformation {
     public RecipientInformation setDateOfBirth(final String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
         return this;
+    }
+
+    /**
+     * Method for returning a String representation of the
+     * RecipientInformation object. Used for serialization.
+     * <p>
+     * Uses a TreeMap for automatically sorting the object's
+     * field values in an alphabetical order, which is required
+     * for generating a valid signature from the serialized string.
+     */
+    @Override
+    public String toString() {
+        final Map<String, String> attributes = new TreeMap<>();
+
+        attributes.put("Partytype", partyType);
+        attributes.put("Firstname", firstName);
+        attributes.put("Lastname", lastName);
+        attributes.put("CountryCode", countryCode);
+
+        if (customerId != null) {
+            attributes.put("CustomerID", customerId);
+        }
+
+        if (address != null) {
+            attributes.put("Address", address);
+        }
+
+        if (dateOfBirth != null) {
+            attributes.put("DateOfBirth", dateOfBirth);
+        }
+
+        return attributes.entrySet().stream()
+                .map(entry -> entry.getKey() + entry.getValue())
+                .collect(Collectors.joining());
     }
 }
