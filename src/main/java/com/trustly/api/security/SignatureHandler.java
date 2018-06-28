@@ -47,6 +47,7 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.trustly.api.commons.exceptions.TrustlyAPIException;
 import com.trustly.api.commons.exceptions.TrustlySignatureException;
 import com.trustly.api.data.notification.Notification;
+import com.trustly.api.data.request.AttributeData;
 import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestData;
 import com.trustly.api.data.response.ErrorBody;
@@ -212,8 +213,15 @@ public class SignatureHandler {
         Collections.sort(strings);
         for (final String key : strings) {
             builder.append(key);
-            if (mapEntry.get(key) != null) {
-                builder.append(mapEntry.get(key));
+            final Object data = mapEntry.get(key);
+
+            if (data != null) {
+                if (data instanceof AttributeData) {
+                    builder.append(serializeData(data));
+                }
+                else {
+                    builder.append(data);
+                }
             }
         }
     }
