@@ -213,12 +213,14 @@ public class SignatureHandler {
         Collections.sort(strings);
         for (final String key : strings) {
             builder.append(key);
-            if (mapEntry.get(key) != null) {
-                if (mapEntry.get(key) instanceof AttributeData) {
-                    builder.append(serializeData(mapEntry.get(key)));
+            final Object data = mapEntry.get(key);
+
+            if (data != null) {
+                if (data instanceof AttributeData) {
+                    builder.append(serializeData(data));
                 }
                 else {
-                    builder.append(mapEntry.get(key));
+                    builder.append(data);
                 }
             }
         }
