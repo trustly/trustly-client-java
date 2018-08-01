@@ -152,6 +152,10 @@ public class SignatureHandler {
             final StringBuilder builder = new StringBuilder();
             for (final Field field : fields) {
 
+                if (field.get(data) == null && data instanceof AttributeData) {
+                    continue;
+                }
+
                 final String jsonFieldName;
                 if (field.isAnnotationPresent(SerializedName.class)) {
                     jsonFieldName = field.getAnnotation(SerializedName.class).value();
