@@ -55,8 +55,6 @@ import com.trustly.api.data.response.Response;
 import com.trustly.api.data.response.Result;
 
 public class SignatureHandler {
-    private static SignatureHandler instance;
-
     private final Base64.Encoder base64Encoder = Base64.getEncoder();
     private final Base64.Decoder base64Decoder = Base64.getDecoder();
     private KeyChain keyChain;
@@ -65,10 +63,7 @@ public class SignatureHandler {
     private String password;
 
     public static SignatureHandler getInstance() {
-        if (instance == null) {
-            instance = new SignatureHandler();
-        }
-        return instance;
+        return new SignatureHandler();
     }
 
     public void init(final String privateKeyPath, final String keyPassword, final String username, final String password, final boolean testEnvironment) throws KeyException {
