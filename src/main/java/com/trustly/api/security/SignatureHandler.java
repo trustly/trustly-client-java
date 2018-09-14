@@ -33,6 +33,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -46,20 +47,18 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.trustly.api.commons.exceptions.TrustlyAPIException;
 import com.trustly.api.commons.exceptions.TrustlySignatureException;
 import com.trustly.api.data.notification.Notification;
+import com.trustly.api.data.request.AttributeData;
 import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestData;
 import com.trustly.api.data.response.ErrorBody;
 import com.trustly.api.data.response.Response;
 import com.trustly.api.data.response.Result;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-
 public class SignatureHandler {
     private static SignatureHandler instance;
 
-    private final BASE64Encoder base64Encoder = new BASE64Encoder();
-    private final BASE64Decoder base64Decoder = new BASE64Decoder();
+    private final Base64.Encoder base64Encoder = Base64.getEncoder();
+    private final Base64.Decoder base64Decoder = Base64.getDecoder();
     private KeyChain keyChain;
 
     private String username;
@@ -126,7 +125,7 @@ public class SignatureHandler {
             signatureInstance.update(plainText.getBytes("UTF-8"));
 
             final byte[] signature = signatureInstance.sign();
-            return base64Encoder.encode(signature);
+            return base64Encoder.encodeToString(signature);
         }
         catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
             throw new TrustlySignatureException(e);
@@ -152,6 +151,10 @@ public class SignatureHandler {
             //Get values using reflection
             final StringBuilder builder = new StringBuilder();
             for (final Field field : fields) {
+
+                if (field.get(data) == null && data instanceof AttributeData) {
+                    continue;
+                }
 
                 final String jsonFieldName;
                 if (field.isAnnotationPresent(SerializedName.class)) {
@@ -214,8 +217,15 @@ public class SignatureHandler {
         Collections.sort(strings);
         for (final String key : strings) {
             builder.append(key);
-            if (mapEntry.get(key) != null) {
-                builder.append(mapEntry.get(key));
+            final Object data = mapEntry.get(key);
+
+            if (data != null) {
+                if (data instanceof AttributeData) {
+                    builder.append(serializeData(data));
+                }
+                else {
+                    builder.append(data);
+                }
             }
         }
     }
@@ -288,7 +298,7 @@ public class SignatureHandler {
 
     private boolean performSignatureVerification(final String method, final String uuid, final String serializedData, final String responseSignature) {
         try {
-            final byte[] signature = base64Decoder.decodeBuffer(responseSignature);
+            final byte[] signature = base64Decoder.decode(responseSignature);
             final Signature signatureInstance = Signature.getInstance("SHA1withRSA");
             signatureInstance.initVerify(keyChain.getTrustlyPublicKey());
             final String expectedPlainText = String.format("%s%s%s", method, uuid, serializedData);

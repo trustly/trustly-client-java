@@ -25,8 +25,9 @@
 package com.trustly.api.data.request.requestdata;
 
 import com.google.gson.annotations.SerializedName;
+import com.trustly.api.data.request.AttributeData;
 
-public class RecipientInformation {
+public class RecipientInformation extends AttributeData {
     @SerializedName("Partytype")
     private String partyType;
     @SerializedName("Firstname")
