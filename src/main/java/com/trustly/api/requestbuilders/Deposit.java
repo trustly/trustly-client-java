@@ -193,6 +193,50 @@ public class Deposit {
             return this;
         }
 
+        public Build accountId(final String accountId) {
+            attributes.put("AccountID", accountId);
+            return this;
+        }
+
+        public Build unchangeableNationalIdentificationNumber(final short unchangeableNationalIdentificationNumber) {
+            attributes.put("UnchangeableNationalIdentificationNumber", unchangeableNationalIdentificationNumber);
+            return this;
+        }
+
+        public Build urlScheme(final String urlScheme) {
+            attributes.put("URLScheme", urlScheme);
+            return this;
+        }
+
+        public Build pspMerchant(final String pspMerchant) {
+            attributes.put("PSPMerchant", pspMerchant);
+            return this;
+        }
+
+        public Build pspMerchantURL(final String pspMerchantUrl) {
+            attributes.put("PSPMerchantURL", pspMerchantUrl);
+            return this;
+        }
+
+        public Build merchantCategoryCode(final String merchantCategoryCode) {
+            attributes.put("MerchantCategoryCode", merchantCategoryCode);
+            return this;
+        }
+
+        public Build externalReference(final String externalReference) {
+            attributes.put("ExternalReference", externalReference);
+            return this;
+        }
+
+        /*
+         * Method: deposit.bank.netherlands.ideal
+         * https://developers.trustly.com/emea/docs/ideal
+         */
+        public Build method(final String method) {
+            attributes.put("Method", method);
+            return this;
+        }
+
         public Request getRequest() {
             return new Deposit(this).getRequest();
         }

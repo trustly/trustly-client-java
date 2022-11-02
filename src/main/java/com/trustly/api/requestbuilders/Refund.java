@@ -30,6 +30,8 @@ import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestParameters;
 import com.trustly.api.data.request.requestdata.RefundData;
 import com.trustly.api.security.SignatureHandler;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Creates a Refund request ready to be sent to Trustly API.
@@ -60,12 +62,18 @@ public class Refund {
     }
 
     public static class Build {
+        private final Map<String, Object> attributes = new TreeMap<>();
         private final RefundData data = new RefundData();
 
         public Build(final String orderID, final String amount, final Currency currency) {
             data.setOrderID(orderID);
             data.setAmount(amount);
             data.setCurrency(currency);
+        }
+
+        public Build externalReference(final String externalReference) {
+            attributes.put("ExternalReference", externalReference);
+            return this;
         }
 
         public Request getRequest() {

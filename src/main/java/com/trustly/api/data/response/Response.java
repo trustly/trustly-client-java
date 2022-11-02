@@ -70,6 +70,6 @@ public class Response {
 
     @Override
     public String toString() {
-        return "VERSION: " + version +  "\nERROR: " + error + "\nRESULT:\n" + result.toString();
+        return "VERSION: " + version +  "\nERROR: " + error + "\nRESULT:\n" + result;
     }
 }

@@ -24,6 +24,7 @@
 
 package com.trustly.api.requestbuilders;
 
+import com.google.gson.JsonObject;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -65,7 +66,16 @@ public class Withdraw {
         private final WithdrawData data = new WithdrawData();
         private final Map<String, Object> attributes = new TreeMap<>();
 
-        public Build(final String notificationURL, final String endUserID, final String messageID, final Currency currency, final String firstName, final String lastName, final String email, final String dateOfBirth) {
+        public Build(
+            final String notificationURL,
+            final String endUserID,
+            final String messageID,
+            final Currency currency,
+            final String firstName,
+            final String lastName,
+            final String email,
+            final String dateOfBirth
+        ) {
             data.setNotificationURL(notificationURL);
             data.setEndUserID(endUserID);
             data.setMessageID(messageID);
@@ -175,6 +185,51 @@ public class Withdraw {
 
         public Build address(final String address) {
             attributes.put("Address", address);
+            return this;
+        }
+
+        public Build suggestedAmount(final String suggestedAmount) {
+            attributes.put("SuggestedAmount", suggestedAmount);
+            return this;
+        }
+
+        public Build shopperStatement(final String shopperStatement) {
+            attributes.put("ShopperStatement", shopperStatement);
+            return this;
+        }
+
+        public Build unchangeableNationalIdentificationNumber(final short unchangeableNationalIdentificationNumber) {
+            attributes.put("UnchangeableNationalIdentificationNumber", unchangeableNationalIdentificationNumber);
+            return this;
+        }
+
+        public Build urlScheme(final String urlScheme) {
+            attributes.put("URLScheme", urlScheme);
+            return this;
+        }
+
+        public Build externalReference(final String externalReference) {
+            attributes.put("ExternalReference", externalReference);
+            return this;
+        }
+
+        public Build pspMerchant(final String pspMerchant) {
+            attributes.put("PSPMerchant", pspMerchant);
+            return this;
+        }
+
+        public Build pspMerchantURL(final String pspMerchantURL) {
+            attributes.put("PSPMerchantURL", pspMerchantURL);
+            return this;
+        }
+
+        public Build merchantCategoryCode(final String merchantCategoryCode) {
+            attributes.put("MerchantCategoryCode", merchantCategoryCode);
+            return this;
+        }
+
+        public Build senderInformation(final JsonObject senderInformation) {
+            attributes.put("SenderInformation", senderInformation);
             return this;
         }
 
