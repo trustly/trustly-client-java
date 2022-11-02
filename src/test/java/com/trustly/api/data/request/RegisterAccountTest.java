@@ -4,19 +4,12 @@ import com.trustly.api.SignedAPI;
 import com.trustly.api.data.TrustlyApiSettings;
 import com.trustly.api.data.response.Response;
 import com.trustly.api.requestbuilders.RegisterAccount;
-import java.util.UUID;
-import java.util.function.Supplier;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 class RegisterAccountTest {
-
-  private static final Supplier<UUID> UUID_SUPPLIER = UUID::randomUUID;
-  private static final Logger LOGGER = LoggerFactory.getLogger(RegisterAccountTest.class);
 
   private SignedAPI api;
 

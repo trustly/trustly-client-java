@@ -8,6 +8,17 @@ import com.trustly.api.security.SignatureHandler;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Creates a RegisterAccount request ready to be sent to Trustly API.
+ * The constructor contains the required fields of a RegisterAccount request.
+ *
+ * Builder lets you add additional information if any is available for the given request.
+ *
+ * The API specifics of the request can be found on https://developers.trustly.com/emea/docs/registeraccount
+ *
+ * Example use for a default RegisterAccount request:
+ * Request registerAccountPayout = new RegisterAccount.Build(...).getRequest();
+ */
 public class RegisterAccount {
 
   private final Request request = new Request();

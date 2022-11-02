@@ -1,17 +1,16 @@
 package com.trustly.api.data.request;
 
 import com.trustly.api.SignedAPI;
-import com.trustly.api.commons.Currency;
 import com.trustly.api.data.TrustlyApiSettings;
 import com.trustly.api.data.response.Response;
-import com.trustly.api.requestbuilders.Deposit;
+import com.trustly.api.requestbuilders.SelectAccount;
 import java.util.UUID;
 import java.util.function.Supplier;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class DepositTest {
+class SelectAccountTest {
 
   private static final Supplier<UUID> UUID_SUPPLIER = UUID::randomUUID;
 
@@ -32,27 +31,24 @@ class DepositTest {
   }
 
   @Test
-  void testDeposit() {
+  void testSelectAccount() {
 
-    Request depositRequest = new Deposit.Build(
-        "https://test.trustly.com/trustlynotification",
-        UUID_SUPPLIER.get().toString(),
-        UUID_SUPPLIER.get().toString(),
-        Currency.SEK,
-        "Jon",
-        "Doe",
-        "test@example.com"
+    Request selectAccountRequest = new SelectAccount.Build(
+        "https://notify.me",
+        "EndUserId",
+        UUID_SUPPLIER.get().toString()
     )
-        .externalReference("23423525234")
+        // Attributes
         .pspMerchant("Merchant Ltd.")
-        .pspMerchantURL("www.merchant.com")
+        .shopperStatement("MyBrand.com")
         .merchantCategoryCode("5499")
-        .amount("22")
+        .pspMerchantURL("www.merchant.com")
         .getRequest();
 
-    Response depositResponse = api.sendRequest(depositRequest);
+    Response selectAccountResponse = api.sendRequest(selectAccountRequest);
 
-    Assertions.assertNotNull(depositResponse.getResult().getData());
-    Assertions.assertNull(depositResponse.getError());
+    Assertions.assertNotNull(selectAccountResponse);
+    Assertions.assertNotNull(selectAccountResponse.getResult());
+    Assertions.assertNull(selectAccountResponse.getError());
   }
 }
