@@ -24,15 +24,14 @@
 
 package com.trustly.api.requestbuilders;
 
-import java.util.Map;
-import java.util.TreeMap;
-
 import com.trustly.api.commons.Currency;
 import com.trustly.api.commons.Method;
 import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestParameters;
 import com.trustly.api.data.request.requestdata.ChargeData;
 import com.trustly.api.security.SignatureHandler;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Creates a Charge request ready to be sent to Trustly API.
@@ -63,7 +62,16 @@ public class Charge {
         private final ChargeData data = new ChargeData();
         private final Map<String, Object> attributes = new TreeMap<>();
 
-        public Build(final String accountID, final String notificationURL, final String endUserID, final String messageID, final String amount, final Currency currency, final String shopperStatement, final String email) {
+        public Build(
+            final String accountID,
+            final String notificationURL,
+            final String endUserID,
+            final String messageID,
+            final String amount,
+            final Currency currency,
+            final String shopperStatement,
+            final String email
+        ) {
             data.setAccountID(accountID);
             data.setNotificationURL(notificationURL);
             data.setEndUserID(endUserID);
@@ -74,6 +82,31 @@ public class Charge {
             attributes.put("ShopperStatement", shopperStatement);
             attributes.put("Email", email);
             data.setAttributes(attributes);
+        }
+
+        public Build externalReference(final String externalReference) {
+            attributes.put("ExternalReference", externalReference);
+            return this;
+        }
+
+        public Build paymentDate(final String paymentDate) {
+            attributes.put("PaymentDate", paymentDate);
+            return this;
+        }
+
+        public Build pspMerchant(final String pspMerchant) {
+            attributes.put("PSPMerchant", pspMerchant);
+            return this;
+        }
+
+        public Build pspMerchantURL(final String pspMerchantURL) {
+            attributes.put("PSPMerchantURL", pspMerchantURL);
+            return this;
+        }
+
+        public Build merchantCategoryCode(final String merchantCategoryCode) {
+            attributes.put("MerchantCategoryCode", merchantCategoryCode);
+            return this;
         }
 
         public Request getRequest() {
