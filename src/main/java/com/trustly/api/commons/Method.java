@@ -76,7 +76,10 @@ public enum Method {
     SELECT_ACCOUNT("SelectAccount"),
 
     @SerializedName("AccountPayout")
-    ACCOUNT_PAYOUT("AccountPayout");
+    ACCOUNT_PAYOUT("AccountPayout"),
+
+    @SerializedName("RegisterAccount")
+    REGISTER_ACCOUNT("RegisterAccount");
 
     private final String jsonName;
 
