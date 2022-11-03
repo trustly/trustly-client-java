@@ -36,8 +36,6 @@ public abstract class RequestData {
     private String password;
     @SerializedName("Attributes")
     private Map<String, Object> attributes = new TreeMap<>();
-    @SerializedName("SenderInformation")
-    private Map<String, Object> senderInformation = new TreeMap<>();
 
     public void setUsername(final String username) {
         this.username = username;
@@ -63,11 +61,7 @@ public abstract class RequestData {
         return attributes;
     }
 
-    public Map<String, Object> getSenderInformation() {
-        return senderInformation;
-    }
-
     public void setSenderInformation(Map<String, Object> senderInformation) {
-        this.senderInformation = senderInformation;
+        this.attributes.put("SenderInformation", senderInformation);
     }
 }

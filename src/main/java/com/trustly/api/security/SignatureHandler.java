@@ -24,35 +24,25 @@
 
 package com.trustly.api.security;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Field;
-import java.security.InvalidKeyException;
-import java.security.KeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.Signature;
-import java.security.SignatureException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.UUID;
-
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.internal.LinkedTreeMap;
-import com.trustly.api.commons.exceptions.TrustlyAPIException;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.trustly.api.commons.exceptions.TrustlySignatureException;
 import com.trustly.api.data.notification.Notification;
-import com.trustly.api.data.request.AttributeData;
 import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestData;
 import com.trustly.api.data.response.ErrorBody;
 import com.trustly.api.data.response.Response;
 import com.trustly.api.data.response.Result;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.KeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.Signature;
+import java.security.SignatureException;
+import java.util.Base64;
+import java.util.TreeSet;
+import java.util.UUID;
 
 public class SignatureHandler {
     private static SignatureHandler instance;
@@ -103,6 +93,35 @@ public class SignatureHandler {
         request.getParams().setSignature(signedData);
     }
 
+    private String serializeData(Object requestData) {
+        Gson gson = new Gson();
+        JsonElement jsonElement = gson.toJsonTree(requestData);
+        StringBuilder serializedData = new StringBuilder();
+        serializeJsonData(jsonElement, serializedData);
+
+        return serializedData.toString();
+    }
+
+    private void serializeJsonData(final JsonElement data, StringBuilder builder) {
+
+        TreeSet<String> keys = new TreeSet<>(data.getAsJsonObject().keySet());
+
+        for (String key : keys) {
+            JsonElement value = data.getAsJsonObject().get(key);
+
+            if (value.isJsonNull()) {
+                continue;
+            }
+
+            if (value.isJsonPrimitive()) {
+                builder.append(key).append(value.getAsString());
+            } else if (value.isJsonArray() || value.isJsonObject()) {
+                builder.append(key);
+                serializeJsonData(value, builder);
+            }
+        }
+    }
+
     /**
      * Creates a signature for given notification response.
      * @param response The notification response to sign.
@@ -111,7 +130,7 @@ public class SignatureHandler {
         final String requestMethod = response.getResult().getMethod().toString();
         final String uuid = response.getUUID();
         final Object data = response.getResult().getData();
-        final String plainText = String.format("%s%s%s", requestMethod, uuid, serializeObject(data));
+        final String plainText = String.format("%s%s%s", requestMethod, uuid, serializeData(data));
 
         final String signedData = createSignature(plainText);
 
@@ -138,117 +157,6 @@ public class SignatureHandler {
         }
     }
 
-    private String serializeData(final Object data) {
-        return serializeData(data, true);
-    }
-
-    private String serializeData(final Object data, final boolean serializeNullMap) {
-        try {
-            //Sort all fields found in the data object class
-            final List<Field> fields = getAllFields(new LinkedList<>(), data.getClass());
-            fields.sort(Comparator.comparing(Field::getName));
-
-            //Get values using reflection
-            final StringBuilder builder = new StringBuilder();
-            for (final Field field : fields) {
-
-                if (field.get(data) == null && data instanceof AttributeData) {
-                    continue;
-                }
-
-                final String jsonFieldName;
-                if (field.isAnnotationPresent(SerializedName.class)) {
-                    jsonFieldName = field.getAnnotation(SerializedName.class).value();
-                }
-                else {
-                    jsonFieldName = field.getName();
-                }
-
-                if (field.getType().equals(Map.class)) {
-                    if (serializeNullMap) {
-                        builder.append(jsonFieldName);
-                        if (field.get(data) != null) {
-                            builder.append(serializeObject(field.get(data)));
-                        }
-                        continue;
-                    }
-                    else {
-                        if (field.get(data) != null) {
-                            builder.append(jsonFieldName);
-                            builder.append(serializeObject(field.get(data)));
-                        }
-                        continue;
-                    }
-                }
-
-                builder.append(jsonFieldName);
-
-                if (field.get(data) != null) {
-                    builder.append(field.get(data));
-                }
-            }
-            return builder.toString();
-        }
-        catch (final IllegalAccessException e) {
-            throw new TrustlyAPIException("Failed to serialize data", e);
-        }
-    }
-
-    private String serializeObject(final Object object) {
-        final StringBuilder builder = new StringBuilder();
-
-        if (object instanceof TreeMap || object instanceof LinkedTreeMap) {
-            populateStringBuilder(builder, (Map) object);
-        }
-        else if (object instanceof ArrayList) {
-            for (final Object mapEntry : (ArrayList) object) {
-                populateStringBuilder(builder, (Map) mapEntry);
-            }
-        }
-        else {
-            throw new RuntimeException("Unhandled class of object: " + object.getClass());
-        }
-
-        return builder.toString();
-    }
-
-    private void populateStringBuilder(final StringBuilder builder, final Map mapEntry) {
-        final List<String> strings = new ArrayList<String>(mapEntry.keySet());
-        Collections.sort(strings);
-        for (final String key : strings) {
-            builder.append(key);
-            final Object data = mapEntry.get(key);
-
-            if (data != null) {
-                if (data instanceof AttributeData) {
-                    builder.append(serializeData(data));
-                }
-                else {
-                    builder.append(data);
-                }
-            }
-        }
-    }
-
-    /**
-     * Returns a list of declared fields for given class.
-     * @param fields List to add found fields
-     * @param type Type of class
-     * @return Given list filled with fields of given class.
-     */
-    private List<Field> getAllFields(List<Field> fields, final Class<?> type) {
-        for (final Field field: type.getDeclaredFields()) {
-            field.setAccessible(true);
-            fields.add(field);
-        }
-
-        if (type.getSuperclass() != null) {
-            fields = getAllFields(fields, type.getSuperclass());
-        }
-
-        return fields;
-    }
-
     /**
      * Verifies the signature of an incoming response.
      * @param response The response to verify
@@ -264,7 +172,7 @@ public class SignatureHandler {
             final Result result = response.getResult();
             method = result.getMethod() == null ? "" : result.getMethod().toString();
             uuid = result.getUuid();
-            serializedData = serializeObject(result.getData());
+            serializedData = serializeData(result.getData());
             signatureBase64 = result.getSignature();
         }
         else {
@@ -290,7 +198,7 @@ public class SignatureHandler {
     public boolean verifyNotificationSignature(final Notification notification) {
         final String method = notification.getMethod().toString();
         final String uuid = notification.getUUID();
-        final String serializedData = serializeData(notification.getParams().getData(), false);
+        final String serializedData = serializeData(notification.getParams().getData());
         final String signatureBase64 = notification.getParams().getSignature();
 
         return performSignatureVerification(method, uuid, serializedData, signatureBase64);
