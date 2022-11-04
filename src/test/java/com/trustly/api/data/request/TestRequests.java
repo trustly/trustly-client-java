@@ -74,7 +74,7 @@ class TestRequests {
         .externalReference("23423525234")
         .merchantCategoryCode("5499")
         .pspMerchantURL("www.merchant.com")
-        .senderInformation(senderInformationBuilder)
+        .senderInformation(senderInformationBuilder.getSenderInformation())
         .getRequest();
 
     Response accountPayoutResponse = api.sendRequest(accountPayoutRequest);
