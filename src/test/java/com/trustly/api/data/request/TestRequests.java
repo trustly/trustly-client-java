@@ -5,6 +5,7 @@ import com.trustly.api.commons.Currency;
 import com.trustly.api.data.TrustlyApiSettings;
 import com.trustly.api.data.response.Response;
 import com.trustly.api.requestbuilders.AccountPayout;
+import com.trustly.api.requestbuilders.AccountPayout.Build.SenderInformationBuilder;
 import com.trustly.api.requestbuilders.CancelCharge;
 import com.trustly.api.requestbuilders.Charge;
 import com.trustly.api.requestbuilders.Deposit;
@@ -50,6 +51,15 @@ class TestRequests {
   @Test
   void testAccountPayout() {
 
+    SenderInformationBuilder senderInformationBuilder = new AccountPayout.Build.SenderInformationBuilder()
+        .partytype("PERSON")
+        .address("Street 1, 12345 Barcelona")
+        .countryCode("SE")
+        .firstname("Steve")
+        .lastname("Smith")
+        .customerID("123456789")
+        .dateOfBirth("1990-03-31");
+
     Request accountPayoutRequest = new AccountPayout.Build(
         "https://notify.me",
         "AccountID",
@@ -64,14 +74,7 @@ class TestRequests {
         .externalReference("23423525234")
         .merchantCategoryCode("5499")
         .pspMerchantURL("www.merchant.com")
-        // Sender information
-        .partytype("PERSON")
-        .address("Street 1, 12345 Barcelona")
-        .countryCode("SE")
-        .firstname("Steve")
-        .lastname("Smith")
-        .customerID("123456789")
-        .dateOfBirth("1990-03-31")
+        .senderInformation(senderInformationBuilder)
         .getRequest();
 
     Response accountPayoutResponse = api.sendRequest(accountPayoutRequest);

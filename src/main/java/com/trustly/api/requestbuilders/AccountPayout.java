@@ -41,7 +41,6 @@ public class AccountPayout {
 
     private final AccountPayoutData data = new AccountPayoutData();
     private final Map<String, Object> attributes = new TreeMap<>();
-    private final Map<String, Object> senderInformation = new TreeMap<>();
 
     public Build(
         final String notificationURL,
@@ -58,7 +57,6 @@ public class AccountPayout {
       data.setAmount(amount);
       data.setCurrency(currency);
       data.setAttributes(attributes);
-      setSenderInformation();
     }
 
     /* Attributes */
@@ -87,48 +85,60 @@ public class AccountPayout {
       return this;
     }
 
+    public Build senderInformation(SenderInformationBuilder senderInformationBuilder) {
+      attributes.put("SenderInformation", senderInformationBuilder.getSenderInformation());
+      return this;
+    }
+
     /* Sender information */
-    public Build partytype(final String partytype) {
-      senderInformation.put("Partytype", partytype);
-      return this;
-    }
+    public static class SenderInformationBuilder {
 
-    public Build address(final String address) {
-      senderInformation.put("Address", address);
-      return this;
-    }
+      private final Map<String, Object> senderInformation = new TreeMap<>();
 
-    public Build countryCode(final String countryCode) {
-      senderInformation.put("CountryCode", countryCode);
-      return this;
-    }
+      public SenderInformationBuilder() {}
 
-    public Build firstname(final String firstname) {
-      senderInformation.put("Firstname", firstname);
-      return this;
-    }
+      public SenderInformationBuilder partytype(final String partytype) {
+        senderInformation.put("Partytype", partytype);
+        return this;
+      }
 
-    public Build lastname(final String lastname) {
-      senderInformation.put("Lastname", lastname);
-      return this;
-    }
+      public SenderInformationBuilder address(final String address) {
+        senderInformation.put("Address", address);
+        return this;
+      }
 
-    public Build customerID(final String customerID) {
-      senderInformation.put("CustomerID", customerID);
-      return this;
-    }
+      public SenderInformationBuilder countryCode(final String countryCode) {
+        senderInformation.put("CountryCode", countryCode);
+        return this;
+      }
 
-    public Build dateOfBirth(final String dateOfBirth) {
-      senderInformation.put("DateOfBirth", dateOfBirth);
-      return this;
+      public SenderInformationBuilder firstname(final String firstname) {
+        senderInformation.put("Firstname", firstname);
+        return this;
+      }
+
+      public SenderInformationBuilder lastname(final String lastname) {
+        senderInformation.put("Lastname", lastname);
+        return this;
+      }
+
+      public SenderInformationBuilder customerID(final String customerID) {
+        senderInformation.put("CustomerID", customerID);
+        return this;
+      }
+
+      public SenderInformationBuilder dateOfBirth(final String dateOfBirth) {
+        senderInformation.put("DateOfBirth", dateOfBirth);
+        return this;
+      }
+
+      public Map<String, Object> getSenderInformation() {
+        return senderInformation;
+      }
     }
 
     public Request getRequest() {
       return new AccountPayout(this).getRequest();
-    }
-
-    private void setSenderInformation() {
-      attributes.put("SenderInformation", senderInformation);
     }
   }
 
