@@ -27,7 +27,6 @@ public class AccountPayout {
   private AccountPayout(final AccountPayout.Build builder) {
     final RequestParameters params = new RequestParameters();
     params.setUUID(SignatureHandler.generateNewUUID());
-    builder.data.setSenderInformation(builder.senderInformation);
     params.setData(builder.data);
 
     request.setMethod(Method.ACCOUNT_PAYOUT);
@@ -59,7 +58,7 @@ public class AccountPayout {
       data.setAmount(amount);
       data.setCurrency(currency);
       data.setAttributes(attributes);
-      data.setSenderInformation(senderInformation);
+      setSenderInformation();
     }
 
     /* Attributes */
@@ -126,6 +125,10 @@ public class AccountPayout {
 
     public Request getRequest() {
       return new AccountPayout(this).getRequest();
+    }
+
+    private void setSenderInformation() {
+      attributes.put("SenderInformation", senderInformation);
     }
   }
 

@@ -93,7 +93,7 @@ public class SignatureHandler {
         request.getParams().setSignature(signedData);
     }
 
-    private String serializeData(Object requestData) {
+    public String serializeData(Object requestData) {
         Gson gson = new Gson();
         JsonElement jsonElement = gson.toJsonTree(requestData);
         StringBuilder serializedData = new StringBuilder();

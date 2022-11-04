@@ -60,8 +60,4 @@ public abstract class RequestData {
     public Map<String, Object> getAttributes() {
         return attributes;
     }
-
-    public void setSenderInformation(Map<String, Object> senderInformation) {
-        this.attributes.put("SenderInformation", senderInformation);
-    }
 }
