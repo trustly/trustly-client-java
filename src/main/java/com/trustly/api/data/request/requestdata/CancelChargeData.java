@@ -22,54 +22,21 @@
  * THE SOFTWARE.
  */
 
-package com.trustly.api.data.response;
+package com.trustly.api.data.request.requestdata;
 
-import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+import com.trustly.api.data.request.RequestData;
 
-public class Response {
-    private String version;
-    private Result result;
-    @Expose(serialize = false)
-    private Error error;
+public class CancelChargeData extends RequestData {
 
-    public String getVersion() {
-        return version;
+    @SerializedName("OrderID")
+    private String orderId;
+
+    public String getOrderId() {
+        return orderId;
     }
 
-    public void setVersion(final String version) {
-        this.version = version;
-    }
-
-    public Result getResult() {
-        return result;
-    }
-
-    public void setResult(final Result result) {
-        this.result = result;
-    }
-
-    public Error getError() {
-        return error;
-    }
-
-    public void setError(final Error error) {
-        this.error = error;
-    }
-
-    public boolean successfulResult() {
-        return result != null && error == null;
-    }
-
-    public String getUUID() {
-        return successfulResult() ? result.getUuid() : error.getError().getUuid();
-    }
-
-    public String getSignature() {
-        return successfulResult() ? result.getSignature() : error.getError().getSignature();
-    }
-
-    @Override
-    public String toString() {
-        return "VERSION: " + version +  "\nERROR: " + error + "\nRESULT:\n" + result;
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 }

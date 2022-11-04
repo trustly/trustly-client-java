@@ -24,14 +24,13 @@
 
 package com.trustly.api.requestbuilders;
 
-import java.util.Map;
-import java.util.TreeMap;
-
 import com.trustly.api.commons.Method;
 import com.trustly.api.data.request.Request;
 import com.trustly.api.data.request.RequestParameters;
 import com.trustly.api.data.request.requestdata.SelectAccountData;
 import com.trustly.api.security.SignatureHandler;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Creates a SelectAccount request ready to be sent to Trustly API.
@@ -144,6 +143,31 @@ public class SelectAccount {
 
         public Build requestDirectDebitMandate(final String requestDirectDebitMandate) {
             attributes.put("RequestDirectDebitMandate", requestDirectDebitMandate);
+            return this;
+        }
+
+        public Build shopperStatement(final String shopperStatement) {
+            attributes.put("ShopperStatement", shopperStatement);
+            return this;
+        }
+
+        public Build urlScheme(final String urlScheme) {
+            attributes.put("URLScheme", urlScheme);
+            return this;
+        }
+
+        public Build pspMerchant(final String pspMerchant) {
+            attributes.put("PSPMerchant", pspMerchant);
+            return this;
+        }
+
+        public Build pspMerchantURL(final String pspMerchantURL) {
+            attributes.put("PSPMerchantURL", pspMerchantURL);
+            return this;
+        }
+
+        public Build merchantCategoryCode(final String merchantCategoryCode) {
+            attributes.put("MerchantCategoryCode", merchantCategoryCode);
             return this;
         }
 
