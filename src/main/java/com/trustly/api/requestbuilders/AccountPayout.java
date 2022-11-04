@@ -85,25 +85,12 @@ public class AccountPayout {
       return this;
     }
 
-    public Build senderInformation(SenderInformation senderInformation) {
+    public Build senderInformation(SenderInformationBuilder senderInformation) {
       attributes.put("SenderInformation", senderInformation.getSenderInformation());
       return this;
     }
 
     /* Sender information */
-    public static class SenderInformation {
-
-      private Map<String, Object> senderInformation;
-
-      public SenderInformation(Map<String, Object> senderInformation) {
-        this.senderInformation = senderInformation;
-      }
-
-      public Map<String, Object> getSenderInformation() {
-        return senderInformation;
-      }
-    }
-
     public static class SenderInformationBuilder {
 
       private final Map<String, Object> senderInformation = new TreeMap<>();
@@ -145,8 +132,8 @@ public class AccountPayout {
         return this;
       }
 
-      public SenderInformation getSenderInformation() {
-        return new SenderInformation(senderInformation);
+      public Map<String, Object> getSenderInformation() {
+        return senderInformation;
       }
     }
 
