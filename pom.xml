@@ -4,9 +4,29 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>trustly-java-client</groupId>
+    <groupId>com.trustly.api</groupId>
     <artifactId>trustly-java-client</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.0.1</version>
+
+    <name>trustly-java-client</name>
+    <description>An example client for testing Trustlys api</description>
+    <url>https://github.com/trustly/trustly-client-java</url>
+
+    <licenses>
+        <license>
+            <name>MIT License, Copyright (c) 2021 Trustly</name>
+            <url>https://github.com/trustly/trustly-client-java/blob/master/LICENSE</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Team Ceres</name>
+            <email>ceres@trustly.com</email>
+            <organization>Trustly</organization>
+            <organizationUrl>https://trustly.com</organizationUrl>
+        </developer>
+    </developers>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -47,8 +67,14 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
+    <distributionManagement>
+        <repository>
+            <id>ossrh</id>
+            <name>Central Repository OSSRH</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
 </project>
