@@ -1,3 +1,5 @@
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.trustly.api/trustly-java-client/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.trustly.api/trustly-java-client/)
+
 Trustly Java Client
 ===================
 
