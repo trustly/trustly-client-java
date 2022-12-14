@@ -81,6 +81,9 @@ public enum Method {
     @SerializedName("RegisterAccount")
     REGISTER_ACCOUNT("RegisterAccount"),
 
+    @SerializedName("RegisterAccountPayout")
+    REGISTER_ACCOUNT_PAYOUT("RegisterAccountPayout"),
+
     @SerializedName("CancelCharge")
     CANCEL_CHARGE("CancelCharge");
 

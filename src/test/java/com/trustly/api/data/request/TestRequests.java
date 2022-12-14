@@ -11,6 +11,8 @@ import com.trustly.api.requestbuilders.Charge;
 import com.trustly.api.requestbuilders.Deposit;
 import com.trustly.api.requestbuilders.Refund;
 import com.trustly.api.requestbuilders.RegisterAccount;
+import com.trustly.api.requestbuilders.RegisterAccountPayout;
+import com.trustly.api.requestbuilders.RegisterAccountPayout.Build;
 import com.trustly.api.requestbuilders.SelectAccount;
 import com.trustly.api.requestbuilders.Withdraw;
 import java.util.UUID;
@@ -26,7 +28,7 @@ import org.junit.jupiter.api.Test;
  * trustly_client_public.pem - your public key
  * trustly_client_public.pem - your private key
  *
- * If those files exists and is correct you are able to make requests to Trustlys test environment
+ * If those files exist and is correct you are able to make requests to Trustlys test environment
  */
 class TestRequests {
 
@@ -232,4 +234,45 @@ class TestRequests {
     Assertions.assertNull(withdrawResponse.getError());
   }
 
+  @Test
+  void testRegisterAccountPayout() {
+    String uniqueMessageId = UUID.randomUUID().toString();
+    Build.SenderInformationBuilder senderInformationBuilder = new RegisterAccountPayout.Build.SenderInformationBuilder()
+        .partytype("PERSON")
+        .address("Street 1, 12345 Barcelona")
+        .countryCode("SE")
+        .firstname("Steve")
+        .lastname("Smith")
+        .customerID("123456789")
+        .dateOfBirth("1990-03-31");
+
+    Request registerAccountPayoutRequest = new RegisterAccountPayout.Build(
+        "123123",
+        "SWEDEN",
+        "6112",
+        "69706212",
+        "Steve",
+        "Smith",
+        "https://test.trustly.com/trustlynotification",
+        uniqueMessageId,
+        "99.99",
+        "SEK"
+    )        // Attributes
+        .pspMerchant("Merchant Ltd.")
+        .shopperStatement("MyBrand.com")
+        .externalReference("23423525234")
+        .merchantCategoryCode("5499")
+        .pspMerchant("pspMerchant")
+        .pspMerchantURL("www.merchant.com")
+        .merchantCategoryCode("5499")
+        .senderInformation(senderInformationBuilder)
+        .addressCountry("SE")
+        .dateOfBirth("1990-01-20")
+        .email("test@trustly.com")
+        .getRequest();
+
+    Response registerAccountPayoutResponse = api.sendRequest(registerAccountPayoutRequest);
+    Assertions.assertNotNull(registerAccountPayoutResponse.getResult().getData());
+    Assertions.assertNull(registerAccountPayoutResponse.getError());
+  }
 }
