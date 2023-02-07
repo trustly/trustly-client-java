@@ -4,6 +4,7 @@ import com.trustly.api.commons.Currency;
 import com.trustly.api.data.TrustlyApiSettings;
 import com.trustly.api.data.request.Request;
 import com.trustly.api.requestbuilders.Deposit;
+import com.trustly.api.security.KeyChain;
 import com.trustly.api.security.SignatureHandler;
 import java.security.KeyException;
 import org.junit.jupiter.api.Assertions;
@@ -19,16 +20,16 @@ import org.junit.jupiter.api.Test;
  */
 class SignatureHandlerTest {
 
-  private static final SignatureHandler signatureHandler = SignatureHandler.getInstance();
+  private final SignatureHandler signatureHandler = new SignatureHandler();
 
   @BeforeEach
   void setup() throws KeyException {
     signatureHandler.init(
-        TrustlyApiSettings.getClientPrivateKeyFromUserHome(),
-        TrustlyApiSettings.getClientPublicKeyFromUserHome(),
+        TrustlyApiSettings.getClientPrivateKey(),
+        "",
         TrustlyApiSettings.getClientUsername(),
         TrustlyApiSettings.getClientPassword(),
-        true
+        new KeyChain(true)
     );
   }
 

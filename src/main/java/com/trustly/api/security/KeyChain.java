@@ -25,14 +25,17 @@
 package com.trustly.api.security;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.security.KeyException;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
 import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMDecryptorProvider;
@@ -45,66 +48,88 @@ import org.bouncycastle.util.io.pem.PemObject;
 
 import com.trustly.api.commons.exceptions.TrustlyAPIException;
 
-class KeyChain {
-    private static final String TEST_TRUSTLY_PUBLIC_KEY_PATH = "src/main/resources/keys/test_trustly_public.pem";
-    private static final String LIVE_TRUSTLY_PUBLIC_KEY_PATH = "src/main/resources/keys/trustly_public.pem";
+public class KeyChain {
 
     private PrivateKey merchantPrivateKey;
     private PublicKey trustlyPublicKey;
 
-    KeyChain(final boolean testEnvironment) {
-        loadTrustlyPublicKey(testEnvironment);
+    public KeyChain(boolean testEnvironment) {
+        this(testEnvironment ? "/keys/trustly_test_public.pem" : "/keys/trustly_live_public.pem");
+    }
+
+    public KeyChain(File file) throws IOException {
+        loadTrustlyPublicKey(Files.newInputStream(file.toPath()));
+    }
+
+    public KeyChain(String classPath) {
+        loadTrustlyPublicKey(this.getClass().getResourceAsStream(classPath));
+    }
+
+    public KeyChain(InputStream inputStream) {
+        loadTrustlyPublicKey(inputStream);
     }
 
     /**
      * Loads the merchant private key.
+     *
      * @param privateKeyFilename path to and name of private key.
-     * @param password Password for the private key. "" or null if key requires no password.
+     * @param password           Password for the private key. "" or null if key requires no password.
      * @throws KeyException if key failed to load. For example if the path is incorrect.
      */
-    void loadMerchantPrivateKey(final String privateKeyFilename, final String password) throws KeyException {
+    void loadMerchantPrivateKey(final InputStream privateKey, final String password) throws KeyException {
         try {
-            final File privateKeyFile = new File(privateKeyFilename); // private key file in PEM format
-            final PEMParser pemParser = new PEMParser(new FileReader(privateKeyFile));
-            final Object object = pemParser.readObject();
-
-            final PEMDecryptorProvider decProv = new JcePEMDecryptorProviderBuilder().build(password.toCharArray());
-            final JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
-
-            final KeyPair kp;
-            if (object instanceof PEMEncryptedKeyPair) { // Password required
-                kp = converter.getKeyPair(((PEMEncryptedKeyPair) object).decryptKeyPair(decProv));
-            } else {
-                kp = converter.getKeyPair((PEMKeyPair) object);
+//            final File privateKeyFile = new File(privateKeyFilename); // private key file in PEM format
+            final Object object;
+            try (final PEMParser pemParser = new PEMParser(new InputStreamReader(privateKey))) {
+                object = pemParser.readObject();
             }
 
-            merchantPrivateKey = kp.getPrivate();
-        }
-        catch (final IOException e) {
+            final JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
+
+            if (object instanceof PrivateKeyInfo) {
+
+                final PrivateKeyInfo privateKeyInfo = (PrivateKeyInfo) object;
+                merchantPrivateKey = converter.getPrivateKey(privateKeyInfo);
+            } else {
+
+                final KeyPair kp;
+                if (object instanceof PEMKeyPair) {
+                    kp = converter.getKeyPair((PEMKeyPair) object);
+                } else if (object instanceof PEMEncryptedKeyPair) { // Password required
+                    final PEMDecryptorProvider decProv = new JcePEMDecryptorProviderBuilder().build(password.toCharArray());
+                    kp = converter.getKeyPair(((PEMEncryptedKeyPair) object).decryptKeyPair(decProv));
+                } else {
+                    throw new IllegalArgumentException(String.format(
+                        "Do not know how to handle pem object '%s' since it it not a PrivateKey, PEM KeyPair nor PEM Encrypted KeyPair",
+                        object
+                    ));
+                }
+                merchantPrivateKey = kp.getPrivate();
+            }
+        } catch (final IOException e) {
             throw new KeyException("Failed to load private key", e);
         }
     }
 
     /**
      * Loads the Trustly public key.
-     * @param testEnvironment whether to load the key for test environment or not.
+     *
+     * @param is The input stream containing the trustly public key
      */
-    private void loadTrustlyPublicKey(final boolean testEnvironment) {
+    private void loadTrustlyPublicKey(final InputStream is) {
         try {
-            final File file = testEnvironment ? new File(TEST_TRUSTLY_PUBLIC_KEY_PATH) : new File(LIVE_TRUSTLY_PUBLIC_KEY_PATH);
 
-            final PEMParser pemParser = new PEMParser(new FileReader(file));
+            final PEMParser pemParser = new PEMParser(new InputStreamReader(is));
             final PemObject object = pemParser.readPemObject();
 
             final JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider(new BouncyCastleProvider());
 
             final byte[] encoded = object.getContent();
-            final SubjectPublicKeyInfo subjectPublicKeyInfo = new SubjectPublicKeyInfo(
-                    ASN1Sequence.getInstance(encoded));
+
+            final SubjectPublicKeyInfo subjectPublicKeyInfo = SubjectPublicKeyInfo.getInstance(ASN1Sequence.getInstance(encoded));
 
             trustlyPublicKey = converter.getPublicKey(subjectPublicKeyInfo);
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             throw new TrustlyAPIException("Failed to load Trustly public key", e);
         }
     }
