@@ -46,7 +46,6 @@ import java.util.TreeSet;
 import java.util.UUID;
 
 public class SignatureHandler {
-//    private static SignatureHandler instance;
 
     private final Base64.Encoder base64Encoder = Base64.getEncoder();
     private final Base64.Decoder base64Decoder = Base64.getDecoder();
@@ -54,13 +53,6 @@ public class SignatureHandler {
 
     private String username;
     private String password;
-
-//    public static SignatureHandler getInstance() {
-//        if (instance == null) {
-//            instance = new SignatureHandler();
-//        }
-//        return instance;
-//    }
 
     public void init(
         final InputStream privateKey,
