@@ -24,11 +24,16 @@
 
 package com.trustly.api;
 
+import com.trustly.api.security.KeyChain;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.KeyException;
 import java.security.SecureRandom;
 
+import java.util.regex.Pattern;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -48,44 +53,89 @@ import com.trustly.api.security.SignatureHandler;
 
 public class SignedAPI {
 
-    private final SignatureHandler signatureHandler = SignatureHandler.getInstance();
+    private final SignatureHandler signatureHandler = new SignatureHandler();
 
+    private static final Pattern TEST_ENVIRONMENT_API_URL_AMERICA = Pattern.compile(".*?\\.one");
     private static final String TEST_ENVIRONMENT_API_URL = "https://test.trustly.com/api/1";
-    private static final String LIVE_ENVIRONMENT_API_URL = "https://trustly.com/api/1";
-    private static String apiUrl;
+    private static final String LIVE_ENVIRONMENT_API_URL = "https://api.trustly.com/1";
+
+    private String apiUrl;
 
     /**
      * Method used for initializing a SignatureHandler.
      *
-     * @param keyPassword Seeing that the private key is somewhat considered a password in
-     * itself, the private key password is usually an empty string.
+     * @param keyPassword Seeing that the private key is somewhat considered a password in itself, the private key password is usually an
+     *                    empty string.
      */
-    public void init(final String privateKeyPath, final String keyPassword, final String username, final String password) {
+    public void init(final String privateKeyPath, final String keyPassword, final String username, final String password)
+        throws IOException {
         init(privateKeyPath, keyPassword, username, password, false);
+    }
+
+    public void init(
+        final String privateKeyPath,
+        final String keyPassword,
+        final String username,
+        final String password,
+        final boolean testEnvironment
+    ) throws IOException {
+        init(
+            Files.newInputStream(Paths.get(privateKeyPath)),
+            keyPassword,
+            username,
+            password,
+            testEnvironment ? TEST_ENVIRONMENT_API_URL : LIVE_ENVIRONMENT_API_URL,
+            new KeyChain(testEnvironment)
+        );
+    }
+
+    public void init(
+        final InputStream privateKey,
+        final String keyPassword,
+        final String username,
+        final String password,
+        final boolean testEnvironment
+    ) {
+        init(
+            privateKey,
+            keyPassword,
+            username,
+            password,
+            testEnvironment ? TEST_ENVIRONMENT_API_URL : LIVE_ENVIRONMENT_API_URL,
+            new KeyChain(testEnvironment)
+        );
     }
 
     /**
      * Method used for initializing a SignatureHandler.
      *
-     * @param keyPassword Seeing that the private key is somewhat considered a password in
-     * itself, the private key password is usually an empty string.
+     * @param keyPassword Usually an empty string
      */
-    public void init(final String privateKeyPath, final String keyPassword, final String username, final String password, final boolean testEnvironment) {
-        setEnvironment(testEnvironment);
-        try {
-            signatureHandler.init(privateKeyPath, keyPassword, username, password, testEnvironment);
+    public void init(
+        final InputStream privateKey,
+        final String keyPassword,
+        final String username,
+        final String password,
+        final String url,
+        final KeyChain keyChain
+    ) {
+
+        if (TEST_ENVIRONMENT_API_URL_AMERICA.matcher(url).matches()) {
+            throw new IllegalArgumentException("You seem to have given an URL to the American Trustly API; This library is for the EMEA version");
         }
-        catch (final KeyException e) {
+
+        this.apiUrl = url;
+
+        try {
+            signatureHandler.init(privateKey, keyPassword, username, password, keyChain);
+        } catch (final KeyException e) {
             e.printStackTrace();
         }
     }
 
-    private void setEnvironment(final boolean testEnvironment) {
-        apiUrl = testEnvironment ? TEST_ENVIRONMENT_API_URL : LIVE_ENVIRONMENT_API_URL;
-    }
-
     /**
      * Sends given request to Trustly.
+     *
      * @param request Request to send to Trustly API
      * @return Response generated from the request.
      */
@@ -108,12 +158,12 @@ public class SignedAPI {
 
     /**
      * Sends a POST data to Trustly server.
+     *
      * @param request String representation of a request.
      * @return String representation of a response.
      */
     private String newHttpPost(final String request) {
-        try {
-            final CloseableHttpClient httpClient = HttpClients.createDefault();
+        try (final CloseableHttpClient httpClient = HttpClients.createDefault()) {
             final HttpPost httpPost = new HttpPost(apiUrl);
             final StringEntity jsonRequest = new StringEntity(request, "UTF-8");
             httpPost.addHeader("content-type", "application/json");
@@ -121,16 +171,16 @@ public class SignedAPI {
 
             final HttpResponse result = httpClient.execute(httpPost);
             return EntityUtils.toString(result.getEntity(), "UTF-8");
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             throw new TrustlyConnectionException("Failed to send request.", e);
         }
     }
 
     /**
      * Deserializes and verifies incoming response.
+     *
      * @param responseJson response from Trustly.
-     * @param requestUUID UUID from the request that resulted in the response.
+     * @param requestUUID  UUID from the request that resulted in the response.
      * @return Response object
      */
     private Response handleJsonResponse(final String responseJson, final String requestUUID) {
@@ -144,18 +194,23 @@ public class SignedAPI {
         if (!signatureHandler.verifyResponseSignature(response)) {
             throw new TrustlySignatureException("Incoming data signature is not valid");
         }
-        if(response.getUUID() != null && !response.getUUID().equals(requestUUID) ) {
+        if (response.getUUID() != null && !response.getUUID().equals(requestUUID)) {
             throw new TrustlyDataException("Incoming data signature is not valid");
         }
     }
 
     /**
      * Generates a random messageID. Good for testing.
+     *
      * @return return a random generated messageid.
      */
     public String newMessageID() {
         final SecureRandom random = new SecureRandom();
 
         return new BigInteger(130, random).toString(32);
+    }
+
+    SignatureHandler getSignatureHandler() {
+        return signatureHandler;
     }
 }

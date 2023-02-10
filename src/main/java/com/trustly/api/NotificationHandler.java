@@ -42,7 +42,11 @@ import com.trustly.api.security.SignatureHandler;
 
 public class NotificationHandler {
 
-    final SignatureHandler signatureHandler = SignatureHandler.getInstance();
+    private final SignatureHandler signatureHandler;
+
+    public NotificationHandler(SignedAPI signedAPI) {
+        this.signatureHandler = signedAPI.getSignatureHandler();
+    }
 
     /**
      * Deserializes and verifies incoming notification.

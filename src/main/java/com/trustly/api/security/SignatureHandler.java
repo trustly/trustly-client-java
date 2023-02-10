@@ -34,7 +34,8 @@ import com.trustly.api.data.response.ErrorBody;
 import com.trustly.api.data.response.Response;
 import com.trustly.api.data.response.Result;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.KeyException;
 import java.security.NoSuchAlgorithmException;
@@ -45,7 +46,6 @@ import java.util.TreeSet;
 import java.util.UUID;
 
 public class SignatureHandler {
-    private static SignatureHandler instance;
 
     private final Base64.Encoder base64Encoder = Base64.getEncoder();
     private final Base64.Decoder base64Decoder = Base64.getDecoder();
@@ -54,19 +54,18 @@ public class SignatureHandler {
     private String username;
     private String password;
 
-    public static SignatureHandler getInstance() {
-        if (instance == null) {
-            instance = new SignatureHandler();
-        }
-        return instance;
-    }
-
-    public void init(final String privateKeyPath, final String keyPassword, final String username, final String password, final boolean testEnvironment) throws KeyException {
+    public void init(
+        final InputStream privateKey,
+        final String keyPassword,
+        final String username,
+        final String password,
+        final KeyChain keyChain
+    ) throws KeyException {
         this.username = username;
         this.password = password;
+        this.keyChain = keyChain;
 
-        keyChain = new KeyChain(testEnvironment);
-        keyChain.loadMerchantPrivateKey(privateKeyPath, keyPassword);
+        this.keyChain.loadMerchantPrivateKey(privateKey, keyPassword);
     }
 
     /**
@@ -141,12 +140,12 @@ public class SignatureHandler {
         try {
             final Signature signatureInstance = Signature.getInstance("SHA1withRSA");
             signatureInstance.initSign(keyChain.getMerchantPrivateKey());
-            signatureInstance.update(plainText.getBytes("UTF-8"));
+            signatureInstance.update(plainText.getBytes(StandardCharsets.UTF_8));
 
             final byte[] signature = signatureInstance.sign();
             return base64Encoder.encodeToString(signature);
         }
-        catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
+        catch (NoSuchAlgorithmException e) {
             throw new TrustlySignatureException(e);
         }
         catch (final InvalidKeyException e) {
