@@ -1,0 +1,14 @@
+{
+  "result": {
+    "signature": "R9+hjuMqbsH0Ku ... S16VbzRsw==",
+    "uuid": "11111111-1111-1111-1111-111111111111",
+    "method": "RegisterAccount",
+    "data": {
+      "accountid": "7653385737",
+      "clearinghouse": "SWEDEN",
+      "bank": "Handelsbanken",
+      "descriptor": "**706212"
+    }
+  },
+  "version": "1.1"
+}

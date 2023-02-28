@@ -1,0 +1,31 @@
+{
+  "Username": "merchant_username",
+  "Password": "merchant_password",
+  "NotificationURL": "https://URL_to_your_notification_service/dajskldjakls123",
+  "EndUserID": "12345",
+  "MessageID": "your_unique_deposit_id",
+  "Attributes": {
+    "Country": "SE",
+    "Locale": "sv_SE",
+    "Currency": "SEK",
+    "Amount": "103.00",
+    "IP": "123.123.123.123",
+    "MobilePhone": "+46709876543",
+    "Firstname": "John",
+    "Lastname": "Doe",
+    "Email": "test@trustly.com",
+    "NationalIdentificationNumber": "790131-1234",
+    "SuccessURL": "https://yourpage.com/success",
+    "FailURL": "https://yourpage.com/fail",
+    "ShopperStatement": "MyBrand.com",
+    "RecipientInformation": {
+      "Partytype": "PERSON",
+      "Firstname": "Mark",
+      "Lastname": "Smith",
+      "CountryCode": "ES",
+      "CustomerID": "123456789",
+      "Address": "Main street 1, 12345, Barcelona",
+      "DateOfBirth": "1980-01-30"
+    }
+  }
+}

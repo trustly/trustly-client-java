@@ -1,0 +1,12 @@
+{
+  "version": "1.1",
+  "result": {
+    "data": {
+      "result": "1",
+      "rejected": null
+    },
+    "method": "CancelCharge",
+    "signature": "hlrqrPIf[...]771b6c709",
+    "uuid": "11111111-1111-1111-1111-111111111111"
+  }
+}

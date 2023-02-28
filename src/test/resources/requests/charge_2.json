@@ -1,0 +1,17 @@
+ {
+      "AccountID": "1234567890",
+      "Amount": "25.00",
+      "Attributes": {
+        "PSPMerchant": "merchant_name",
+        "PSPMerchantURL": "https://merchantURL.com/",
+        "MerchantCategoryCode": "1234",
+        "Email": "test@trustly.com",
+        "ShopperStatement": "Trustly"
+      },
+      "Currency": "SEK",
+      "EndUserID": 12345,
+      "MessageID": "your_unique_transaction_id",
+      "NotificationURL": "https://URL_to_your_notification_service",
+      "Password": "merchant_password",
+      "Username": "merchant_username"
+    }

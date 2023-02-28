@@ -1,0 +1,13 @@
+{
+      "AccountID": "1234567890",
+      "Amount": "800.00",
+      "Attributes": {
+        "ShopperStatement": "Trustly.com"
+      },
+      "Currency": "EUR",
+      "EndUserID": "123123",
+      "MessageID": "771463386074",
+      "NotificationURL": "https://mynotifications.com/listener/f346212d",
+      "Password": "*",
+      "Username": "your_username"
+    }

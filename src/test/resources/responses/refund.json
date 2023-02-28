@@ -1,0 +1,12 @@
+{
+  "version": "1.1",
+  "result": {
+    "signature": "CeYDdgTi...jfzXlR3iSLQjt5Yl9w==",
+    "method": "Refund",
+    "data": {
+      "result": "1",
+      "orderid": "1187741486"
+    },
+    "uuid": "11111111-1111-1111-1111-111111111111"
+  }
+}

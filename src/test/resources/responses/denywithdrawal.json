@@ -1,0 +1,12 @@
+{
+  "result": {
+    "signature": "U+T3UUQNG...MqMbywrsTQ==",
+    "method": "DenyWithdrawal",
+    "data": {
+      "result": "1",
+      "orderid": "2755547734"
+    },
+    "uuid": "11111111-1111-1111-1111-111111111111"
+  },
+  "version": "1.1"
+}

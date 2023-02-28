@@ -1,0 +1,20 @@
+{
+  "Attributes": {
+    "Country": "NL",
+    "Locale": "en_NL",
+    "Lastname": "Svensson",
+    "Firstname": "Sven",
+    "Email": "test@trustly.com",
+    "Method": "deposit.bank.netherlands.ideal",
+    "Amount": "10",
+    "Currency": "EUR",
+    "FailURL": "https://yourpage.com/fail",
+    "SuccessURL": "https://yourpage.com/success",
+    "ShopperStatement": "MyBrand.com"
+  },
+  "Username": "username",
+  "Password": "password",
+  "NotificationURL": "https://your_notification_page/123",
+  "EndUserID": "test",
+  "MessageID": "111111"
+}

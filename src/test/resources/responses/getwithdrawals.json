@@ -1,0 +1,21 @@
+{
+  "result": {
+    "uuid": "11111111-1111-1111-1111-111111111111",
+    "method": "GetWithdrawals",
+    "data": [
+      {
+        "reference": "5000010000",
+        "modificationdate": "2015-05-12 11:16:30.957975+02",
+        "orderid": "1436557899",
+        "datestamp": "2015-05-12 11:14:22.982842+02",
+        "transferstate": "CONFIRMED",
+        "amount": "1.00",
+        "accountid": "1234567890",
+        "currency": "SEK",
+        "eta": "2015-05-12 12:00:00.000000+02"
+      }
+    ],
+    "signature": "mIaoBEIsrE[...]VOzV3YCaXgvIM84FA=="
+  },
+  "version": "1.1"
+}

@@ -1,0 +1,20 @@
+ {
+      "AccountNumber": "69706212",
+      "Attributes": {
+        "AddressCountry": "SE",
+        "AddressPostalCode": "SE-11253",
+        "AddressCity": "Stockholm",
+        "AddressLine1": "Main street 1",
+        "MobilePhone": "+46709876543",
+        "NationalIdentificationNumber": "900219-1234",
+        "Email": "test@trustly.com",
+        "DateOfBirth": "1990-02-19"
+      },
+      "BankNumber": "6112",
+      "ClearingHouse": "SWEDEN",
+      "EndUserID": "123123",
+      "Firstname": "Steve",
+      "Lastname": "Smith",
+      "Password": "merchant_password",
+      "Username": "merchant_username"
+    }

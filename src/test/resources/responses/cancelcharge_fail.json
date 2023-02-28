@@ -1,0 +1,11 @@
+{
+  "result": {
+    "method": "CancelCharge",
+    "data": {
+      "result": "0",
+      "rejected": "Payment already executed"
+    },
+    "signature": "XU+T8rk6Pm[...]5-7641-1169bd]4388ca"
+  },
+  "version": "1.1"
+}

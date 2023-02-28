@@ -1,0 +1,22 @@
+{
+  "version": "1.1",
+  "result": {
+    "signature": "XLoaNzXDZ9m[...]XiMBip6spu7KT0zg==",
+    "method": "Balance",
+    "data": [
+      {
+        "currency": "DKK",
+        "balance": "80.64"
+      },
+      {
+        "currency": "EUR",
+        "balance": "10.83"
+      },
+      {
+        "currency": "SEK",
+        "balance": "1403.64"
+      }
+    ],
+    "uuid": "11111111-1111-1111-1111-111111111111"
+  }
+}

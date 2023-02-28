@@ -1,0 +1,22 @@
+{
+      "AccountID": "1234567890",
+      "Amount": "800.00",
+      "Attributes": {
+        "SenderInformation": {
+          "Address": "Street 1, 12345 Barcelona",
+          "CountryCode": "ES",
+          "CustomerID": "123456789",
+          "DateOfBirth": "1990-03-31",
+          "Firstname": "Steve",
+          "Lastname": "Smith",
+          "Partytype": "PERSON"
+        },
+        "ShopperStatement": "Trustly.com"
+      },
+      "Currency": "EUR",
+      "EndUserID": "123123",
+      "MessageID": "771463386074",
+      "NotificationURL": "https://mynotifications.com/listener/f346212d",
+      "Password": "*",
+      "Username": "your_username"
+    }
