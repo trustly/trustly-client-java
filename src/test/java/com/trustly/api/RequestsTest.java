@@ -7,18 +7,14 @@ import com.trustly.api.domain.exceptions.TrustlyErrorResponseException;
 import com.trustly.api.domain.exceptions.TrustlyRequestException;
 import com.trustly.api.domain.methods.accountpayout.AccountPayoutRequestData;
 import com.trustly.api.domain.methods.accountpayout.AccountPayoutRequestDataAttributes;
-import com.trustly.api.domain.methods.accountpayout.AccountPayoutResponseData;
 import com.trustly.api.domain.methods.cancelcharge.CancelChargeRequestData;
-import com.trustly.api.domain.methods.cancelcharge.CancelChargeResponseData;
 import com.trustly.api.domain.methods.charge.ChargeRequestData;
 import com.trustly.api.domain.methods.charge.ChargeRequestDataAttributes;
-import com.trustly.api.domain.methods.charge.ChargeResponseData;
 import com.trustly.api.domain.methods.deposit.DepositRequestData;
 import com.trustly.api.domain.methods.deposit.DepositRequestDataAttributes;
 import com.trustly.api.domain.methods.deposit.DepositResponseData;
 import com.trustly.api.domain.methods.refund.RefundRequestData;
 import com.trustly.api.domain.methods.refund.RefundRequestDataAttributes;
-import com.trustly.api.domain.methods.refund.RefundResponseData;
 import com.trustly.api.domain.methods.registeraccount.RegisterAccountRequestData;
 import com.trustly.api.domain.methods.registeraccount.RegisterAccountRequestDataAttributes;
 import com.trustly.api.domain.methods.registeraccount.RegisterAccountResponseData;
@@ -42,7 +38,7 @@ import org.junit.jupiter.api.Test;
  * <p>
  * If those files exist and is correct you are able to make requests to Trustlys test environment
  */
-class TestRequestsNew {
+class RequestsTest {
 
   private final TrustlyApiClientSettings settings = TrustlyApiClientSettings.forTest()
     .withCredentialsFromUserHome()
@@ -75,30 +71,12 @@ class TestRequestsNew {
       DepositResponseData response = client.deposit(request);
 
       Assertions.assertNotNull(response);
-      Assertions.assertNotNull(response.getOrderId());
+      Assertions.assertNotNull(response.getUrl());
     }
   }
 
-//  private static final Supplier<UUID> UUID_SUPPLIER = UUID::randomUUID;
-//
-//  private SignedAPI api;
-
-//  @BeforeEach
-//  void setup() {
-//    api = new SignedAPI();
-//
-//    // Init for test environment
-//    api.init(
-//      TrustlyApiSettings.getClientPrivateKey(),
-//      "",
-//      TrustlyApiSettings.getClientUsername(),
-//      TrustlyApiSettings.getClientPassword(),
-//      true
-//    );
-//  }
-
   @Test
-  void testAccountPayout() throws Exception {
+  void testAccountPayout() {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
@@ -132,10 +110,6 @@ class TestRequestsNew {
         )
         .build();
 
-//      AccountPayoutResponseData accountPayoutResponse = client.accountPayout(
-//
-//      );
-
       try {
 
         client.accountPayout(data);
@@ -146,14 +120,11 @@ class TestRequestsNew {
         Assertions.assertEquals(TrustlyErrorResponseException.class, ex.getCause().getClass());
         Assertions.assertEquals(620, ((TrustlyErrorResponseException) ex.getCause()).getResponseError().getCode());
       }
-
-//      Assertions.assertNotNull(accountPayoutResponse);
-//      Assertions.assertNotNull(accountPayoutResponse.getError());
     }
   }
 
   @Test
-  void testCancelCharge() throws Exception {
+  void testCancelCharge() {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
@@ -212,7 +183,7 @@ class TestRequestsNew {
   }
 
   @Test
-  void testRefund() throws Exception {
+  void testRefund() {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
@@ -227,10 +198,6 @@ class TestRequestsNew {
         )
         .build();
 
-//      RefundResponseData refundResponse = client.refund(
-//
-//      );
-
       try {
 
         client.refund(data);
@@ -243,19 +210,6 @@ class TestRequestsNew {
         // ERROR_INVALID_ORDER_ID
         Assertions.assertEquals(655, ((TrustlyErrorResponseException) ex.getCause()).getResponseError().getCode());
       }
-
-//      Request refundRequest = new Refund.Build(
-//        "123456",
-//        "22",
-//        Currency.SEK
-//      )
-//        .externalReference("123")
-//        .getRequest();
-
-      // Order won't exist, assert error
-//      Response refundResponse = api.sendRequest(refundRequest);
-//      Assertions.assertNotNull(refundResponse);
-//      Assertions.assertNotNull(refundResponse.getError());
     }
   }
 
@@ -397,24 +351,7 @@ class TestRequestsNew {
           .build()
       );
 
-//      Request registerAccountPayoutRequest = new RegisterAccountPayout.Build(
-//        "123123",
-//        "SWEDEN",
-//        "6112",
-//        "69706212",
-//        "Steve",
-//        "Smith",
-//        "https://test.trustly.com/trustlynotification",
-//        uniqueMessageId,
-//        "99.99",
-//        "SEK"
-//      )        // Attributes
-//
-//        .getRequest();
-
-//      Response registerAccountPayoutResponse = api.sendRequest(registerAccountPayoutRequest);
       Assertions.assertNotNull(registerAccountPayoutResponse);
-//      Assertions.assertNull(registerAccountPayoutResponse.getError());
     }
   }
 }

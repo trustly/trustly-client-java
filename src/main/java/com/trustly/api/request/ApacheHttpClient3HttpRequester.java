@@ -48,7 +48,7 @@ public class ApacheHttpClient3HttpRequester implements HttpRequester {
     String responseBody = TrustlyStreamUtils.readerToString(sr);
 
     if (statusCode > 299) {
-      throw new RuntimeException(String.format("Received error response %d: %s", statusCode, responseBody));
+      throw new IOException(String.format("Received error response %d: %s", statusCode, responseBody));
     }
 
     return responseBody;

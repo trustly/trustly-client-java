@@ -1,6 +1,5 @@
 package com.trustly.api.domain.common;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -13,12 +12,8 @@ public class StringBooleanDeserializer extends StdDeserializer<Boolean> {
   }
 
   @Override
-  public Boolean deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+  public Boolean deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
     String valueString = p.getValueAsString("");
-    if ("1".equals(valueString)) {
-      return true;
-    }
-
-    return false;
+    return "1".equals(valueString);
   }
 }

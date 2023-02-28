@@ -17,19 +17,11 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Security;
-import java.security.spec.ECParameterSpec;
-import java.security.spec.ECPoint;
-import java.security.spec.ECPublicKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Locale;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
-import org.bouncycastle.crypto.params.ECPublicKeyParameters;
-import org.bouncycastle.jcajce.provider.asymmetric.util.EC5Util;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.openssl.PEMEncryptedKeyPair;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 
@@ -82,8 +74,16 @@ public class TrustlyApiClientSettings {
     return includeMessageInNotificationResponse;
   }
 
+  public void setIncludeMessageInNotificationResponse(boolean includeMessageInNotificationResponse) {
+    this.includeMessageInNotificationResponse = includeMessageInNotificationResponse;
+  }
+
   public boolean isIncludeExceptionMessageInNotificationResponse() {
     return includeExceptionMessageInNotificationResponse;
+  }
+
+  public void setIncludeExceptionMessageInNotificationResponse(boolean includeExceptionMessageInNotificationResponse) {
+    this.includeExceptionMessageInNotificationResponse = includeExceptionMessageInNotificationResponse;
   }
 
   private TrustlyApiClientSettings() {
@@ -271,7 +271,7 @@ public class TrustlyApiClientSettings {
       String clientPasswordFileName
     ) {
 
-      String directory = System.getProperty("user.home");
+      String directory = TrustlyApiClientSettings.getUserHome();
 
       try {
         return this.withCredentialsFromDirectory(directory, clientUsernameFileName, clientPasswordFileName);
@@ -348,7 +348,7 @@ public class TrustlyApiClientSettings {
       clientPublicKeyFileName = (clientPublicKeyFileName == null) ? "trustly_client_public.pem" : clientPublicKeyFileName;
       clientPrivateKeyFileName = (clientPrivateKeyFileName == null) ? "trustly_client_private.pem" : clientPrivateKeyFileName;
 
-      String directory = System.getProperty("user.home");
+      String directory = TrustlyApiClientSettings.getUserHome();
       return this.withCertificatesFromDirectory(directory, clientPublicKeyFileName, clientPrivateKeyFileName);
     }
 
@@ -433,7 +433,7 @@ public class TrustlyApiClientSettings {
 
       trustlyPublicKeyFileName = (trustlyPublicKeyFileName == null) ? "trustly_public.pem" : trustlyPublicKeyFileName;
 
-      String directory = System.getProperty("user.home");
+      String directory = TrustlyApiClientSettings.getUserHome();
       return this.andTrustlyCertificateFromDirectory(directory, trustlyPublicKeyFileName);
     }
 
@@ -477,6 +477,10 @@ public class TrustlyApiClientSettings {
     }
   }
 
+  private static String getUserHome() {
+    return System.getProperty("user.home");
+  }
+
   private static PemObject readerToPemObject(InputStream is) throws IOException {
 
     try (InputStreamReader publicReader = new InputStreamReader(is)) {
@@ -486,33 +490,7 @@ public class TrustlyApiClientSettings {
     }
   }
 
-  private static AsymmetricKeyParameter privatePemObjectToBcKeyParameter(Object privateObject) {
-    AsymmetricKeyParameter bcPrivateKey;
-    if (privateObject instanceof AsymmetricCipherKeyPair) {
-      bcPrivateKey = ((AsymmetricCipherKeyPair) privateObject).getPrivate();
-    } else if (privateObject instanceof AsymmetricKeyParameter) {
-      bcPrivateKey = (AsymmetricKeyParameter) privateObject;
-    } else if (privateObject instanceof PEMEncryptedKeyPair) {
-
-      throw new IllegalArgumentException("Cannot handle encrypted private key pairs as of now");
-
-//            PEMDecryptorProvider decProv = new JcePEMDecryptorProviderBuilder().build(password.toCharArray());
-//            JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider("BC");
-//            KeyPair kp;
-//            if (privateObject instanceof PEMEncryptedKeyPair) {
-//              privateKey = converter.getKeyPair(((PEMEncryptedKeyPair) privateObject).decryptKeyPair(decProv)).getPrivate();
-//            }
-
-    } else {
-      throw new IllegalArgumentException(
-        "The given private cipher file must be either a Key Pair or a Key Parameter, it is: " + privateObject);
-    }
-    return bcPrivateKey;
-  }
-
   private static PublicKey streamToJavaPublicKey(InputStream is, String filename) throws IOException {
-
-    // TODO: Do not use the PEM reader, and instead directly just read the DER file, if it ends in ".der"
 
     byte[] content;
     if (filename != null && filename.toLowerCase(Locale.ROOT).endsWith(".der")) {
@@ -552,8 +530,6 @@ public class TrustlyApiClientSettings {
 
   private static PrivateKey streamToJavaPrivateKey(InputStream is, String filename) throws IOException {
 
-    // TODO: Do not use the PEM reader, and instead directly just read the DER file, if it ends in ".der"
-
     byte[] content;
     if (filename != null && filename.toLowerCase(Locale.ROOT).endsWith(".der")) {
 
@@ -587,20 +563,6 @@ public class TrustlyApiClientSettings {
       throw new IOException("Could not load the public key because of an invalid key spec", e);
     } catch (NoSuchProviderException e) {
       throw new IOException("Could not find the BouncyCastle key provider", e);
-    }
-  }
-
-  private static PrivateKey bcKeyParameterToJavaPrivateKey(AsymmetricKeyParameter bcPublicKey) throws IOException {
-
-    ECPublicKeyParameters ecPublicKeyParameters = (ECPublicKeyParameters) bcPublicKey;
-    ECParameterSpec ecParameterSpec = EC5Util.convertToSpec(ecPublicKeyParameters.getParameters());
-    ECPoint ecPoint = EC5Util.convertPoint(ecPublicKeyParameters.getQ());
-    ECPublicKeySpec ecPublicKeySpec = new ECPublicKeySpec(ecPoint, ecParameterSpec);
-
-    try {
-      return KeyFactory.getInstance("EC").generatePrivate(ecPublicKeySpec);
-    } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-      throw new IOException(e);
     }
   }
 }

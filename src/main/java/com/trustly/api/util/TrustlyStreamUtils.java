@@ -3,7 +3,9 @@ package com.trustly.api.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class TrustlyStreamUtils {
 
   public static String readerToString(Reader reader) throws IOException {

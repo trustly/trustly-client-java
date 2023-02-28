@@ -1,12 +1,8 @@
 package com.trustly.api.validation;
 
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Path;
-import jakarta.validation.Path.Node;
-import jakarta.validation.TraversableResolver;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
-import java.lang.annotation.ElementType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +22,7 @@ public class HibernateDataAnnotationsValidator implements AnnotationsValidator {
     try {
       Class.forName("org.hibernate.validator.HibernateValidator");
       return true;
-    } catch (Throwable e) {
+    } catch (Throwable ignored) {
       return false;
     }
   }
@@ -53,46 +49,4 @@ public class HibernateDataAnnotationsValidator implements AnnotationsValidator {
 
     return EMPTY_VALIDATION_RESULTS;
   }
-
-//    private <T> List<ValidationResult> TryValidateObjectRecursive(T obj, Set<Object> validatedObjects) {
-//        // We never validate null values, or the same value more than once.
-//        if (obj == null || validatedObjects.contains(obj)) {
-//            return EMPTY_VALIDATION_RESULTS;
-//        }
-//
-//        validatedObjects.add(obj);
-//        List<ValidationResult> list = new ArrayList<>();
-//        var result = Validator.TryValidateObject(obj, new ValidationContext(obj, null), list, true);
-//
-//        foreach(var property in obj.GetType().GetProperties().Where(this.IsSupportedProperty))
-//        {
-//            if (property.PropertyType == typeof(string) || property.PropertyType.IsValueType) {
-//                continue;
-//            }
-//
-//            var value = property.GetValue(obj, null);
-//            if (value is IEnumerable asEnumerable)
-//            {
-//                foreach(var v in asEnumerable)
-//                {
-//                    list.AddRange(this.WrapValidationResults(v, property, validatedObjects));
-//                }
-//            }
-//                else
-//            {
-//                list.AddRange(this.WrapValidationResults(value, property, validatedObjects));
-//            }
-//        }
-//
-//        return list;
-//    }
-
-//    private boolean IsSupportedProperty(PropertyInfo prop) {
-//        return prop.CanRead && prop.GetIndexParameters().Length == 0;
-//    }
-
-//    private List<ValidationResult> WrapValidationResults(object entry, PropertyInfo property, Set<Object> validatedObjects) {
-//        return this.TryValidateObjectRecursive(entry, validatedObjects)
-//                   .Select(vr = > new ValidationResult(vr.ErrorMessage, vr.MemberNames.Select(x = > property.Name + '.' + x)));
-//    }
 }
