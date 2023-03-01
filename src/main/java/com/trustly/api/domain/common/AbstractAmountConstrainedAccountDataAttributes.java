@@ -14,9 +14,8 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
 @AllArgsConstructor
-//@Jacksonized
 @JsonInclude(Include.NON_NULL)
-public abstract class AbstractDepositAndWithdrawDataAttributes extends AbstractDepositAndWithdrawAndSelectAccountDataAttributes {
+public abstract class AbstractAmountConstrainedAccountDataAttributes extends AbstractAccountDataAttributes {
 
   /**
    * The minimum amount the end-user is allowed to deposit in the currency specified by Currency.Only digits. Use dot (.) as decimal

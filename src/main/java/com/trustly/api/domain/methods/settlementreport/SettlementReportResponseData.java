@@ -12,9 +12,8 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
 @Value
-@SuperBuilder(toBuilder = true)
+@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-//@RequiredArgsConstructor
 @AllArgsConstructor
 @Jacksonized
 public class SettlementReportResponseData extends AbstractResponseResultData {

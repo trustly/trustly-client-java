@@ -8,7 +8,7 @@ import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
 @Value
-@Builder(toBuilder = true)
+@Builder
 @AllArgsConstructor
 @Jacksonized
 public class SettlementReportResponseDataEntry {

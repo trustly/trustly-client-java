@@ -47,7 +47,11 @@ public class AccountPayoutRequestDataAttributes extends AbstractRequestParamsDat
    * <p>
    * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master
    * processing account. It is also mandatory for E-wallets used directly in a merchant's checkout.
-   * </p>
+   * <p>
+   * Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding and aggregate traffic under a master processing
+   * account. It is also mandatory for E-wallets used directly in a merchant's checkout, whereby the purpose of a Trustly transaction is to
+   * pay for goods/services by placing funds on the payer's e-money account ("funding stage") following an immediate transfer into the
+   * e-money account of the payee ( "payment" stage).
    */
   @JsonProperty(value = "pspMerchant")
   String pspMerchant;
@@ -58,7 +62,11 @@ public class AccountPayoutRequestDataAttributes extends AbstractRequestParamsDat
    * <p>
    * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master
    * processing account. It is also mandatory for E-wallets used directly in a merchant's checkout.
-   * </p>
+   * <p>
+   * Mandatory attributes for Trustly Partners that are using Express Merchant Onboarding and aggregate traffic under a master processing
+   * account. It is also mandatory for E-wallets used directly in a merchant's checkout, whereby the purpose of a Trustly transaction is to
+   * pay for goods/services by placing funds on the payer's e-money account ("funding stage") following an immediate transfer into the
+   * e-money account of the payee ( "payment" stage).
    */
   @JsonProperty(value = "PSPMerchantURL")
   String pspMerchantUrl;
@@ -69,13 +77,21 @@ public class AccountPayoutRequestDataAttributes extends AbstractRequestParamsDat
    * <p>
    * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master
    * processing account. It is also mandatory for E-wallets used directly in a merchant's checkout.
-   * </p>
+   * <p>
+   * Mandatory attributes for Trustly Partners that are using Express Merchant Onboarding and aggregate traffic under a master processing
+   * account. It is also mandatory for E-wallets used directly in a merchant's checkout, whereby the purpose of a Trustly transaction is to
+   * pay for goods/services by placing funds on the payer's e-money account ("funding stage") following an immediate transfer into the
+   * e-money account of the payee ( "payment" stage).
    */
   @JsonProperty(value = "MerchantCategoryCode")
   String merchantCategoryCode;
 
   /**
    * Information about the Payer (ultimate debtor). This is required for some merchants and partners, see below.
+   * <p>
+   * SenderInformation is mandatory to send in Attributes{} for money transfer services (including remittance houses), e-wallets, prepaid
+   * cards, as well as for Trustly Partners that are using Express Merchant Onboarding and aggregate traffic under a master processing
+   * account (other cases may also apply).
    */
   @JsonProperty(value = "SenderInformation")
   RecipientOrSenderInformation senderInformation;

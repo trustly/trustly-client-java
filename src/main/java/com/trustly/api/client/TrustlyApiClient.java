@@ -62,9 +62,13 @@ import com.trustly.api.domain.notifications.PayoutConfirmationNotificationData;
 import com.trustly.api.domain.notifications.PendingNotificationData;
 import com.trustly.api.domain.notifications.UnknownNotificationData;
 import com.trustly.api.request.ApacheHttpClient3HttpRequester;
+import com.trustly.api.request.ApacheHttpClient3HttpRequesterLoader;
 import com.trustly.api.request.ApacheHttpClient4HttpRequester;
+import com.trustly.api.request.ApacheHttpClient4HttpRequesterLoader;
 import com.trustly.api.request.HttpRequester;
+import com.trustly.api.request.HttpRequesterLoader;
 import com.trustly.api.request.JavaUrlConnectionHttpRequester;
+import com.trustly.api.request.JavaUrlConnectionHttpRequesterLoader;
 import com.trustly.api.util.TrustlyStringUtils;
 import java.io.Closeable;
 import java.io.IOException;
@@ -81,18 +85,19 @@ public class TrustlyApiClient implements Closeable {
 
   private static final List<TrustlyApiClient> STATIC_REGISTERED_CLIENTS = new ArrayList<>();
 
-  private static final HttpRequester[] AVAILABLE_HTTP_REQUESTERS = new HttpRequester[]{
-    new ApacheHttpClient4HttpRequester(),
-    new ApacheHttpClient3HttpRequester(),
-    new JavaUrlConnectionHttpRequester()
+  private static final HttpRequesterLoader[] AVAILABLE_HTTP_REQUESTERS = new HttpRequesterLoader[]{
+    new ApacheHttpClient4HttpRequesterLoader(),
+    new ApacheHttpClient3HttpRequesterLoader(),
+    new JavaUrlConnectionHttpRequesterLoader()
   };
 
   private static HttpRequester getFirstAvailableHttpRequester() {
 
     HttpRequester foundHttpRequester = null;
-    for (HttpRequester requester : AVAILABLE_HTTP_REQUESTERS) {
-      if (requester.isAvailable()) {
-        foundHttpRequester = requester;
+    for (HttpRequesterLoader loader : AVAILABLE_HTTP_REQUESTERS) {
+
+      foundHttpRequester = loader.create();
+      if (foundHttpRequester != null) {
         break;
       }
     }
@@ -318,7 +323,7 @@ public class TrustlyApiClient implements Closeable {
   /**
    * Initiates a new order where the end-user can select and verify one of his/her bank accounts.
    * <p>
-   * You can find more information about how to display the Trustly URL here.
+   * You can find more information about how to display the Trustly URL <a href="https://eu.developers.trustly.com/doc/docs/service-presentation">here</a>.
    * <p>
    * When the account has been verified an account notification is immediately sent to the
    * {@link SelectAccountRequestData#setNotificationUrl}.
@@ -367,7 +372,7 @@ public class TrustlyApiClient implements Closeable {
   /**
    * Initiates a new withdrawal, returning the URL where the end-user can complete the withdrawal process.
    * <p>
-   * You can find more information about how to display the Trustly URL here.
+   * You can find more information about how to display the Trustly URL <a href="https://eu.developers.trustly.com/doc/docs/presentation-of-trustly-url">here</a>.
    * <p>
    * A typical withdrawal flow is:
    *

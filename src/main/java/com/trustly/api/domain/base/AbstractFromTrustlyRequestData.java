@@ -10,7 +10,7 @@ import lombok.experimental.NonFinal;
 import lombok.experimental.SuperBuilder;
 
 @Value
-@SuperBuilder(toBuilder = true)
+@SuperBuilder
 @NonFinal
 @AllArgsConstructor
 public class AbstractFromTrustlyRequestData<A extends AbstractRequestParamsDataAttributes>

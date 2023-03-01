@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.trustly.api.domain.base.AbstractToTrustlyRequestData;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
+import org.hibernate.validator.constraints.URL;
 
 @Data
 @SuperBuilder(toBuilder = true)
@@ -25,6 +27,8 @@ public class WithdrawRequestData extends AbstractToTrustlyRequestData<WithdrawRe
    * mark").
    */
   @JsonProperty(value = "NotificationURL")
+  @NotBlank
+  @URL
   String notificationUrl;
 
   /**
@@ -32,18 +36,21 @@ public class WithdrawRequestData extends AbstractToTrustlyRequestData<WithdrawRe
    * the merchant's own backoffice in order to simplify for the merchant's support department.
    */
   @JsonProperty(value = "EndUserID")
+  @NotBlank
   String endUserId;
 
   /**
    * Your unique ID for the withdrawal.
    */
   @JsonProperty(value = "MessageID")
+  @NotBlank
   String messageId;
 
   /**
    * The currency of the end-user's account in the merchant's system.
    */
   @JsonProperty(value = "Currency")
+  @NotBlank
   String currency;
 }
 

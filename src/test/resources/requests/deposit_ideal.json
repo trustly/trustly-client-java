@@ -10,7 +10,8 @@
     "Currency": "EUR",
     "FailURL": "https://yourpage.com/fail",
     "SuccessURL": "https://yourpage.com/success",
-    "ShopperStatement": "MyBrand.com"
+    "ShopperStatement": "MyBrand.com",
+    "MobilePhone": "0701234567"
   },
   "Username": "username",
   "Password": "password",

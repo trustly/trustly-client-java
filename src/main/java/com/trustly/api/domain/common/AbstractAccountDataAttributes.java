@@ -12,15 +12,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.validator.constraints.URL;
 
 @Data
 @SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
 @AllArgsConstructor
-//@Jacksonized
 @JsonInclude(Include.NON_NULL)
-public class AbstractDepositAndWithdrawAndSelectAccountDataAttributes extends AbstractRequestParamsDataAttributes {
+public class AbstractAccountDataAttributes extends AbstractRequestParamsDataAttributes {
 
   /**
    * The end-user's first name.
@@ -68,8 +68,16 @@ public class AbstractDepositAndWithdrawAndSelectAccountDataAttributes extends Ab
    * The email address of the end user.
    */
   @JsonProperty(value = "Email")
+  @NotBlank(groups = {DepositValidationGroup.class})
   @Email
   String email;
+
+  /**
+   * The mobile phone number of the end-user in international format.
+   */
+  @JsonProperty(value = "MobilePhone")
+  @NotBlank(groups = {DepositValidationGroup.class})
+  String mobilePhone;
 
   /**
    * The IP-address of the end-user.
@@ -84,6 +92,8 @@ public class AbstractDepositAndWithdrawAndSelectAccountDataAttributes extends Ab
    * <pre>{@code https://example.com/thank_you.html}</pre>
    */
   @JsonProperty("SuccessURL")
+  @NotBlank
+  @URL
   String successUrl;
 
   /**
@@ -93,6 +103,8 @@ public class AbstractDepositAndWithdrawAndSelectAccountDataAttributes extends Ab
    * <pre>{@code https://trustly.com/error.html}</pre>
    */
   @JsonProperty(value = "FailURL")
+  @NotBlank
+  @URL
   String failURL;
 
   /**
@@ -109,12 +121,6 @@ public class AbstractDepositAndWithdrawAndSelectAccountDataAttributes extends Ab
    */
   @JsonProperty(value = "URLTarget")
   String urlTarget;
-
-  /**
-   * The mobile phone number of the end-user in international format.
-   */
-  @JsonProperty(value = "MobilePhone")
-  String mobilePhone;
 
   /**
    * The end-user's social security number / personal number / birth number / etc. Useful for some banks for identifying transactions and

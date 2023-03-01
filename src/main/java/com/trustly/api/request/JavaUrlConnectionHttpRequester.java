@@ -13,11 +13,6 @@ import java.nio.charset.StandardCharsets;
 public class JavaUrlConnectionHttpRequester implements HttpRequester {
 
   @Override
-  public boolean isAvailable() {
-    return true;
-  }
-
-  @Override
   public String request(TrustlyApiClientSettings settings, String request) throws IOException {
 
     byte[] requestBytes = request.getBytes(StandardCharsets.UTF_8);

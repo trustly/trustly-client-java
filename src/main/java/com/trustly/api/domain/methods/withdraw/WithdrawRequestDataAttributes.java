@@ -3,7 +3,7 @@ package com.trustly.api.domain.methods.withdraw;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.trustly.api.domain.common.AbstractDepositAndWithdrawDataAttributes;
+import com.trustly.api.domain.common.AbstractAmountConstrainedAccountDataAttributes;
 import com.trustly.api.domain.common.RecipientOrSenderInformation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +19,7 @@ import lombok.extern.jackson.Jacksonized;
 @AllArgsConstructor
 @Jacksonized
 @JsonInclude(Include.NON_NULL)
-public class WithdrawRequestDataAttributes extends AbstractDepositAndWithdrawDataAttributes {
+public class WithdrawRequestDataAttributes extends AbstractAmountConstrainedAccountDataAttributes {
 
   /**
    * Sets a fixed withdrawal amount which cannot be changed by the end-user in the Trustly iframe. If this attribute is not sent, the
@@ -126,9 +126,9 @@ public class WithdrawRequestDataAttributes extends AbstractDepositAndWithdrawDat
   /**
    * Information about the Payer (ultimate debtor).
    * <p>
-   * Mandatory for certain types of merchants and partners. SenderInformation is mandatory to send in Attributes{} for money transfer
-   * services (including remittance houses), e-wallets, prepaid cards, as well as for Trustly Partners that are using Express Merchant
-   * Onboarding and aggregate traffic under a master processing account (other cases may also apply).
+   * SenderInformation is mandatory for money transfer services (including remittance houses), e-wallets, prepaid cards, as well as for
+   * Trustly Partners that are using Express Merchant Onboarding and aggregate traffic under a master processing account (other cases may
+   * also apply).
    */
   @JsonProperty(value = "SenderInformation")
   RecipientOrSenderInformation senderInformation;

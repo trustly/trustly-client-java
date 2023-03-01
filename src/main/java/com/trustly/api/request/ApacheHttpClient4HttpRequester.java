@@ -14,17 +14,6 @@ import org.apache.http.util.EntityUtils;
 
 public class ApacheHttpClient4HttpRequester implements HttpRequester {
 
-  @Override
-  public boolean isAvailable() {
-
-    try {
-      Class.forName("org.apache.http.client.HttpClient");
-      return true;
-    } catch (ClassNotFoundException e) {
-      return false;
-    }
-  }
-
   private CloseableHttpClient httpClient;
 
   @Override

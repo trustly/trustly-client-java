@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
  * username trustly_client_password.txt - your password trustly_client_public.pem - your public key trustly_client_public.pem - your private
  * key
  * <p>
- * If those files exist and is correct you are able to make requests to Trustlys test environment
+ * If those files exist and are correct you are able to make requests to Trustly's test environment
  */
 class RequestsTest {
 
@@ -52,7 +52,7 @@ class RequestsTest {
 
       DepositRequestData request = DepositRequestData.builder()
         .notificationUrl("https://fake.test.notification.trustly.com")
-        .endUserId("pontus.eliason@trustly.com")
+        .endUserId("john.doe@trustly.com")
         .messageId(UUID.randomUUID().toString())
         .attributes(
           DepositRequestDataAttributes.builder()
@@ -60,10 +60,13 @@ class RequestsTest {
             .amount("100.00")
             .firstname("John")
             .lastname("Doe")
-            .email("pontus.eliason@trustly.com")
+            .email("john.doe@trustly.com")
             .country("SE")
             .locale("sv_SE")
             .shopperStatement("Trustly Test Deposit")
+            .successUrl("https://google.com")
+            .failURL("https://google.com")
+            .mobilePhone("0701234567")
             .build()
         )
         .build();
@@ -261,6 +264,8 @@ class RequestsTest {
               .shopperStatement("MyBrand.com")
               .merchantCategoryCode("5499")
               .pspMerchantUrl("www.merchant.com")
+              .successUrl("https://google.com")
+              .failURL("https://google.com")
               .build()
           )
           .build()
@@ -279,6 +284,7 @@ class RequestsTest {
         .endUserId(UUID.randomUUID().toString())
         .messageId(UUID.randomUUID().toString())
         .notificationUrl("https://test.trustly.com/trustlynotification")
+        .currency("SEK")
         .attributes(
           WithdrawRequestDataAttributes.builder()
             .firstname("Jon")
@@ -292,6 +298,10 @@ class RequestsTest {
 
             .country("SE")
             .locale("en_US")
+
+            .successUrl("https://google.com")
+            .failURL("https://google.com")
+            .mobilePhone("0701234567")
 
             .build()
         )

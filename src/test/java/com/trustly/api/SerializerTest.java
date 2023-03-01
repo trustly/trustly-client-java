@@ -167,6 +167,10 @@ class SerializerTest {
             .firstname("John")
             .lastname("Doe")
             .nationalIdentificationNumber("790131-1234")
+            .successUrl("https://google.com")
+            .failURL("https://google.com")
+            .mobilePhone("0701234567")
+            .email("name@site.com")
             .build()
         )
         .build(),
@@ -208,6 +212,9 @@ class SerializerTest {
             .lastname("Doe")
             .nationalIdentificationNumber("790131-1234")
             .shopperStatement("Shopper Statement")
+            .successUrl("https://google.com")
+            .failURL("https://google.com")
+            .email("name@site.com")
             .build()
         )
         .build(),
@@ -247,6 +254,9 @@ class SerializerTest {
             .firstname("John")
             .lastname("Doe")
             .nationalIdentificationNumber("790131-1234")
+            .successUrl("https://google.com")
+            .failURL("https://google.com")
+            .mobilePhone("0701234567")
             .build()
         )
         .build(),

@@ -18,8 +18,7 @@ public class SelectAccountResponseData extends AbstractResponseResultData {
   /**
    * The globally unique OrderID the account selection order was assigned in our system.
    *
-   * <pre>
-   * <pre>{@code 7653345737}</pre></pre>
+   * <pre>{@code 7653345737}</pre>
    */
   @JsonProperty("orderid")
   String orderId;

@@ -3,7 +3,7 @@ package com.trustly.api.domain.methods.deposit;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.trustly.api.domain.common.AbstractDepositAndWithdrawDataAttributes;
+import com.trustly.api.domain.common.AbstractAmountConstrainedAccountDataAttributes;
 import com.trustly.api.domain.common.RecipientOrSenderInformation;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ import lombok.extern.jackson.Jacksonized;
 @AllArgsConstructor
 @Jacksonized
 @JsonInclude(Include.NON_NULL)
-public class DepositRequestDataAttributes extends AbstractDepositAndWithdrawDataAttributes {
+public class DepositRequestDataAttributes extends AbstractAmountConstrainedAccountDataAttributes {
 
   /**
    * iDeal.
@@ -167,7 +167,7 @@ public class DepositRequestDataAttributes extends AbstractDepositAndWithdrawData
    * <p>
    * Required for some merchants and partners.
    * <p>
-   * RecipientInformation{} is mandatory to send for money transfer services (including remittance houses), e-wallets, prepaid cards, as
+   * RecipientInformation is mandatory to send for money transfer services (including remittance houses), e-wallets, prepaid cards, as
    * well as for Trustly Partners that are using Express Merchant Onboarding and aggregate traffic under a master processing account (other
    * cases may also apply).
    */

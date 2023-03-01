@@ -3,7 +3,7 @@ package com.trustly.api.domain.methods.selectaccount;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.trustly.api.domain.common.AbstractDepositAndWithdrawAndSelectAccountDataAttributes;
+import com.trustly.api.domain.common.AbstractAccountDataAttributes;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,7 +18,7 @@ import lombok.extern.jackson.Jacksonized;
 @AllArgsConstructor
 @Jacksonized
 @JsonInclude(Include.NON_NULL)
-public class SelectAccountRequestDataAttributes extends AbstractDepositAndWithdrawAndSelectAccountDataAttributes {
+public class SelectAccountRequestDataAttributes extends AbstractAccountDataAttributes {
 
   /**
    * Only for Trustly Direct Debit. Request a direct debit mandate from the selected account. 1 or 0. See section "Direct Debit Mandates"

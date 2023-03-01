@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.trustly.api.domain.base.AbstractToTrustlyRequestData;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,6 +26,7 @@ public class RegisterAccountRequestData extends AbstractToTrustlyRequestData<Reg
    * merchant's own backoffice in order to simplify for the merchant's support department
    */
   @JsonProperty(value = "EndUserID")
+  @NotBlank
   String endUserId;
 
   /**
@@ -33,6 +35,7 @@ public class RegisterAccountRequestData extends AbstractToTrustlyRequestData<Reg
    * <pre>{@code SWEDEN}</pre>
    */
   @JsonProperty(value = "ClearingHouse")
+  @NotBlank
   String clearingHouse;
 
   /**
@@ -40,6 +43,7 @@ public class RegisterAccountRequestData extends AbstractToTrustlyRequestData<Reg
    * an empty string (""). For non-IBAN format, see table <a href="https://developers.trustly.com/emea/docs/registeraccount">here</a>
    */
   @JsonProperty(value = "BankNumber")
+  @NotBlank
   String bankNumber;
 
   /**
@@ -47,18 +51,21 @@ public class RegisterAccountRequestData extends AbstractToTrustlyRequestData<Reg
    * <a href="https://developers.trustly.com/emea/docs/registeraccount">here</a>
    */
   @JsonProperty(value = "AccountNumber")
+  @NotBlank
   String accountNumber;
 
   /**
    * First name of the account holder (or the name of the company/organization)
    */
   @JsonProperty(value = "Firstname")
+  @NotBlank
   String firstname;
 
   /**
    * Last name of the account holder (empty for organizations/companies)
    */
   @JsonProperty(value = "Lastname")
+  @NotBlank
   String lastname;
 }
 

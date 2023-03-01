@@ -9,7 +9,8 @@
     "MobilePhone": "+46709876543",
     "NationalIdentificationNumber": "197901311234",
     "DateOfBirth": "1979-01-31",
-    "SuccessURL": "https://your_success_page.com"
+    "SuccessURL": "https://your_success_page.com",
+    "FailURL": "https://your_fail_page.com"
   },
   "EndUserID": "12345",
   "MessageID": "your_unique_id",

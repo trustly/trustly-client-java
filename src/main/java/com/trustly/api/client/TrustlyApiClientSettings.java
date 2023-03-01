@@ -90,63 +90,28 @@ public class TrustlyApiClientSettings {
   }
 
   /**
-   * Creates settings instance, by default looking among environment variables, or using the given parameters.
+   * Creates settings instance for production, by default looking among environment variables or falling back on files in user home.
    *
-   * @param username       Username; If null, looks for env or in user home.
-   * @param password       Password; If null, looks for env or in user home.
-   * @param publicKeyPath  Public Key; If null, looks for env or in user home.
-   * @param privateKeyPath Private Key; If null, looks for env or in user home.
-   * @param envUsername    Name of username env variable
-   * @param envPassword    Name of password env variable
-   * @param envCertPublic  Name of public key env variable
-   * @param envCertPrivate Name of private key env variable
    * @return The complete settings instance to use with {@link TrustlyApiClient}.
    */
-  public static TrustlyApiClientSettings forDefaultProduction(
-    String username,
-    String password,
-    String publicKeyPath,
-    String privateKeyPath,
-
-    String envUsername,
-    String envPassword,
-    String envCertPublic,
-    String envCertPrivate
-  ) throws IOException {
-    return forDefaultCustom(URL_PRODUCTION,
-                            username, password, publicKeyPath, privateKeyPath,
-                            envUsername, envPassword, envCertPublic, envCertPrivate
+  public static TrustlyApiClientSettings forDefaultProduction() {
+    return forDefaultCustom(
+      URL_PRODUCTION,
+      null, null, null, null,
+      null, null, null, null
     );
   }
 
   /**
-   * Creates settings instance, by default looking among environment variables, or using the given parameters.
+   * Creates settings instance for test, by default looking among environment variables or falling back on files in user home.
    *
-   * @param username       Username; If null, looks for env or in user home.
-   * @param password       Password; If null, looks for env or in user home.
-   * @param publicKeyPath  Public Key; If null, looks for env or in user home.
-   * @param privateKeyPath Private Key; If null, looks for env or in user home.
-   * @param envUsername    Name of username env variable
-   * @param envPassword    Name of password env variable
-   * @param envCertPublic  Name of public key env variable
-   * @param envCertPrivate Name of private key env variable
    * @return The complete settings instance to use with {@link TrustlyApiClient}.
    */
-  public static TrustlyApiClientSettings forDefaultTest(
-    String username,
-    String password,
-    String publicKeyPath,
-    String privateKeyPath,
-
-    String envUsername,
-    String envPassword,
-    String envCertPublic,
-    String envCertPrivate
-  ) throws IOException {
+  public static TrustlyApiClientSettings forDefaultTest() {
     return forDefaultCustom(
       URL_TEST,
-      username, password, publicKeyPath, privateKeyPath,
-      envUsername, envPassword, envCertPublic, envCertPrivate
+      null, null, null, null,
+      null, null, null, null
     );
   }
 
@@ -162,7 +127,7 @@ public class TrustlyApiClientSettings {
    * @param envPassword    Name of password env variable
    * @param envCertPublic  Name of public key env variable
    * @param envCertPrivate Name of private key env variable
-   *                       @return The complete settings instance to use with {@link TrustlyApiClient}.
+   * @return The complete settings instance to use with {@link TrustlyApiClient}.
    */
   public static TrustlyApiClientSettings forDefaultCustom(
     String url,
@@ -175,7 +140,7 @@ public class TrustlyApiClientSettings {
     String envPassword,
     String envCertPublic,
     String envCertPrivate
-  ) throws IOException {
+  ) {
 
     envUsername = (envUsername == null) ? "CLIENT_USERNAME" : envUsername;
     envPassword = (envPassword == null) ? "CLIENT_PASSWORD" : envPassword;
@@ -321,7 +286,7 @@ public class TrustlyApiClientSettings {
       this.settings.password = password;
     }
 
-    public WithClientCertificates withCertificatesFromEnv(String envCertPublic, String envCertPrivate) throws IOException {
+    public WithClientCertificates withCertificatesFromEnv(String envCertPublic, String envCertPrivate) {
 
       envCertPublic = (envCertPublic == null) ? "CLIENT_CERT_PUBLIC" : envCertPublic;
       envCertPrivate = (envCertPrivate == null) ? "CLIENT_CERT_PRIVATE" : envCertPrivate;
@@ -333,6 +298,10 @@ public class TrustlyApiClientSettings {
         try (InputStream streamPrivate = new ByteArrayInputStream(StandardCharsets.UTF_8.encode(certPrivate).array())) {
           return this.withCertificatesFromStreams(streamPublic, streamPrivate);
         }
+      } catch (IOException ex) {
+        throw new IllegalArgumentException(
+          String.format("Could not read certificates given through env '%s' and '%s'", envCertPublic, envCertPrivate)
+        );
       }
     }
 

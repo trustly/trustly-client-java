@@ -16,17 +16,6 @@ public class HibernateDataAnnotationsValidator implements AnnotationsValidator {
 
   private Validator validator;
 
-  @Override
-  public boolean isAvailable() {
-
-    try {
-      Class.forName("org.hibernate.validator.HibernateValidator");
-      return true;
-    } catch (Throwable ignored) {
-      return false;
-    }
-  }
-
   public <T> List<ValidationResult> validate(T obj) {
 
     if (this.validator == null) {

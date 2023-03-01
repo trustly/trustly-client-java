@@ -12,17 +12,6 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 
 public class ApacheHttpClient3HttpRequester implements HttpRequester {
 
-  @Override
-  public boolean isAvailable() {
-
-    try {
-      Class.forName("org.apache.commons.httpclient.HttpClient");
-      return true;
-    } catch (ClassNotFoundException e) {
-      return false;
-    }
-  }
-
   private HttpClient httpClient;
 
   @Override

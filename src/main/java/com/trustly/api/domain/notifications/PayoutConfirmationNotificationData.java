@@ -35,7 +35,6 @@ import lombok.extern.jackson.Jacksonized;
 @Value
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-//@AllArgsConstructor
 @Jacksonized
 public class PayoutConfirmationNotificationData extends AbstractCreditDebitPendingPayoutNotificationData {
 

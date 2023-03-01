@@ -2,14 +2,15 @@ package com.trustly.api.client;
 
 import com.trustly.api.domain.exceptions.TrustlyValidationException;
 import com.trustly.api.validation.AnnotationsValidator;
-import com.trustly.api.validation.HibernateDataAnnotationsValidator;
+import com.trustly.api.validation.AnnotationsValidatorLoader;
+import com.trustly.api.validation.HibernateDataAnnotationsValidatorLoader;
 import com.trustly.api.validation.ValidationResult;
 import java.util.List;
 
 public class JsonRpcValidator {
 
-  private static final AnnotationsValidator[] ANNOTATIONS_VALIDATORS = new AnnotationsValidator[]{
-    new HibernateDataAnnotationsValidator()
+  private static final AnnotationsValidatorLoader[] ANNOTATIONS_VALIDATORS = new AnnotationsValidatorLoader[]{
+    new HibernateDataAnnotationsValidatorLoader()
   };
 
   private final AnnotationsValidator validator;
@@ -17,9 +18,11 @@ public class JsonRpcValidator {
   public JsonRpcValidator() {
 
     AnnotationsValidator foundValidator = null;
-    for (AnnotationsValidator possibleValidator : ANNOTATIONS_VALIDATORS) {
-      if (possibleValidator.isAvailable()) {
-        foundValidator = possibleValidator;
+    for (AnnotationsValidatorLoader loader : ANNOTATIONS_VALIDATORS) {
+
+      foundValidator = loader.create();
+      if (foundValidator != null) {
+        break;
       }
     }
 

@@ -9,7 +9,7 @@ import lombok.extern.jackson.Jacksonized;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
-@SuperBuilder(toBuilder = true)
+@SuperBuilder
 @AllArgsConstructor
 @Jacksonized
 public class AbstractNotificationRequestData<A extends AbstractRequestParamsDataAttributes>
