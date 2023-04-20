@@ -1,0 +1,20 @@
+{
+  "Attributes": {
+    "Country": "SE",
+    "Firstname": "Steve",
+    "IP": "83.140.44.184",
+    "Lastname": "Smith",
+    "Locale": "sv_SE",
+    "Email": "test@trustly.com",
+    "MobilePhone": "+46709876543",
+    "NationalIdentificationNumber": "197901311234",
+    "DateOfBirth": "1979-01-31",
+    "SuccessURL": "https://your_success_page.com",
+    "FailURL": "https://your_fail_page.com"
+  },
+  "EndUserID": "12345",
+  "MessageID": "your_unique_id",
+  "NotificationURL": "https://URL_to_your_notification_service",
+  "Password": "merchant_password",
+  "Username": "merchant_username"
+}

@@ -1,0 +1,18 @@
+{
+  "method": "debit",
+  "params": {
+    "signature": "K5+hjuMqbsH0Ku ... S16VbzRsw==",
+    "uuid": "258a2184-2842-b485-25ca-293525152425",
+    "data": {
+      "amount": "902.50",
+      "currency": "EUR",
+      "messageid": "77898765",
+      "orderid": "127675892",
+      "enduserid": "32123",
+      "notificationid": "456787654",
+      "timestamp": "2010-01-20 14:42:04.675645+01",
+      "attributes": {}
+    }
+  },
+  "version": "1.1"
+}

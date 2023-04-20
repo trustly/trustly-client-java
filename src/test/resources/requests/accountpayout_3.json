@@ -1,0 +1,23 @@
+{
+      "AccountID": "1234567890",
+      "Amount": "800.00",
+      "Attributes": {
+        "SenderInformation": {
+          "Address": "Street 1, 12345 Barcelona",
+          "CountryCode": "ES",
+          "Firstname": "merchant_name",
+          "Lastname": "",
+          "Partytype": "ORGANISATION"
+        },
+        "PSPMerchant": "merchant_name",
+        "PSPMerchantURL": "https://merchantURL.com/",
+        "MerchantCategoryCode": "1234",
+        "ShopperStatement": "merchant_name"
+      },
+      "Currency": "EUR",
+      "EndUserID": "123123",
+      "MessageID": "771463386074",
+      "NotificationURL": "https://mynotifications.com/listener/f346212d",
+      "Password": "*",
+      "Username": "your_username"
+    }

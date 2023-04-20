@@ -1,0 +1,22 @@
+{
+  "method": "account",
+  "params": {
+    "signature":"RI1PTmjTgr5Ig1p....AF7ejFUGxwKQ==",
+    "uuid": "258a2184-2842-b485-25ca-293525152425",
+    "data": {
+      "notificationid":"35673567",
+      "messageid":"453455465",
+      "orderid":"3473567567",
+      "accountid":"1234567890",
+      "verified":"1",
+      "attributes":
+      {
+        "clearinghouse":"SWEDEN",
+        "bank":"SEB",
+        "descriptor":"**** *084057",
+        "lastdigits":"084057"
+      }
+    }
+  },
+  "version": "1.1"
+}

@@ -1,0 +1,17 @@
+{
+  "version": "1.1",
+  "error": {
+    "code": 623,
+    "message": "ERROR_INVALID_PARAMETERS",
+    "error": {
+      "signature": "iE3I0bm4Y8KQ/0GQtJEz/dTYX3xPk2RoO4r3IvHQ2D/Bvw0rFJWLPrg5sLFetfeYCPFgfKcJboGz1S59cKIZdgYpNhJoWLDtHdWn1TpRRrkmZZbghQ9hC9BCusTbZC4/zumIN38bhmxTP2hgHOLdfuJvqzY3w/xPJWpejTH+P7kdhjpjoNlAA3Z7uQe+DyZlA+i+0qhaI/e+Dt0EkjSy90suNCRCeSB6wVDp2qXSXxRlRK+PmKCloNEe79Gesxi0cZPw/CBrSH1eBFS1HfHsHZBnaKOfzGbnoBI2NH79zwrnmOsifPFfHTIyv+oiNjEk5XBm4EqdHVS4mF1qgPdEqg==",
+      "data": {
+        "message": "ERROR_INVALID_PARAMETERS",
+        "code": 623
+      },
+      "uuid": "11111111-1111-1111-1111-111111111111",
+      "method": "AccountLedger"
+    },
+    "name": "JSONRPCError"
+  }
+}

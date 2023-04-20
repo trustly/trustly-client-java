@@ -5,106 +5,157 @@ Trustly Java Client
 
 This is an example implementation of the communication with the Trustly API using Java. It implements the standard Payments API which includes deposits, withdrawals and refunds.
 
-For full documentation on the Trustly API internals visit our developer website: http://trustly.com/developer. All information about software flows and call patterns can be found on that site. The documentation within this code will only cover the code itself, not how you use the Trustly API.
+For full documentation on the Trustly API internals visit our developer website: https://eu.developers.trustly.com. All information about software flows and call patterns can be found on that site. The documentation within this code will only cover the code itself, not how you use the Trustly API.
 
 This code is provided as-is, use it as inspiration, reference or drop it directly into your own project and use it.
 
 If you find a problem in the code or want to extend it, feel free to fork it and send us a pull request.
 
-The Java API is a Maven project built on Java 1.8. It requires the following third-party frameworks: Google Gson, Apache HttpClient and Bouncy Castle Crypto API.
+The Java API is a Maven project built on Java 1.8.
 
-Structure
-=========
-- `commons`
+It requires the following third-party frameworks:
+* Jackson FasterXML
+* Bouncy Castle Crypto API
 
-Contains exceptions, enums and deserializers used throughout the project.
+Additionally if you have one or more of these dependencies on your classpath the client functionality is extended:
+* Apache HttpClient 4 (will use it for request/response)
+* Apache Commons HttpClient 3 (Version 4 above takes precedence if both exist)
+* Hibernate Validator (will be used to validate the request payloads *before* being sent to the Trustly server)
 
-- `data`
+If no HttpClient is found, the code will fallback on using a basic `URLConnection` for its request/response.
 
-Everything under this package are data structures that serializes into json and deserializes from json.
+## Create Client
 
-- `requestbuilders`
+You can easily create an instance of the client, giving a settings object with different levels of granular options.
 
-Contains the builder classes for the requests. Use these to create the Trustly API requests.
+```Java
+var client = new TrustlyApiClient(TrustlyApiClientSettings.forDefaultTest());
+```
 
-- `security`
+This is a shorthand to two different, more elaborate setups.
 
-Contains classes for handling of keys and signatures.
+If there is an environment variable sent along to the application startup, it will load the username, password and certificates from the default environment variable names:
 
-Overview
-========
+* `CLIENT_USERNAME`
+* `CLIENT_PASSWORD`
+* `CLIENT_CERT_PUBLIC`
+* `CLIENT_CERT_PRIVATE`
 
-The code provides wrappers for calling the Trustly API. Create an instance of the API and initialize it with your merchant credentials and use the stubs in that class for calling the API. The API will default to communicate with https://trustly.com. A secondary init method exists for communication with https://test.trustly.com.
+These can of course be modified to something else, they are just the default names.
+The `CLIENT_CERT_PUBLIC` and `CLIENT_CERT_PRIVATE` are not the paths to the certificate, but the certificates themselves in UTF-8 charset.
 
-When processing an incoming notification the handleNotification() method of the API will help with parsing and verifying the message signature. Use prepareNotificationResponse() to build a proper response object.
+If an environment variable was found, it is virtually the same as create a client using this setup:
 
-The examples below represent a very basic usage of the calls. A minimum of error handling around this code would be to check for the following exceptions during processing.
+1.
+```Java
+var client = new TrustlyApiClient(TrustlyApiClientSettings
+                    .forTest()
+                    .withCredentialsFromEnv("CLIENT_USERNAME", "CLIENT_PASSWORD")
+                    .withCertificatesFromEnv("CLIENT_CERT_PUBLIC", "CLIENT_CERT_PRIVATE")
+                    .andTrustlyCertificate());
+```
 
-- `TrustlyConnectionException`
+Or if there is no environment variable set, it will look for files in the client's user home directory.
 
-Thrown when unable to communicate with the Trustly API. This can be due to the lack of Internet connection or other forms of service errors.
+The default file names are:
 
-- `TrustlyDataException`
+* `trustly_client_username.txt`
+* `trustly_client_password.txt`
+* `trustly_client_public.pem`
+* `trustly_client_private.pem`
 
-Thrown upon various problems with the API returned data. For instance when a responding message contains a different UUID than the sent message or when the response structure is incomplete.
+2.
+```Java
+var client = new TrustlyApiClient(TrustlyApiClientSettings
+                .forTest()
+                .withCredentialsFromUserHome("trustly_client_username.txt", "trustly_client_password.txt")
+                .withCertificatesFromUserHome("trustly_client_public.pem", "trustly_client_private.pem")
+                .andTrustlyCertificate());
+```
 
-- `TrustlySignatureException`
+Which can of course also be overridden and customized.
 
-Issued when the authenticity of messages cannot be verified. If ever this exception is caught the data in the communication should be voided as it can be a forgery.
+## Make a request
 
-To use the implementation, start with initializing the API. Then create your preferred type of request using any of the builder classes found under com.trustly.api.data.methods. Do not attempt to create the requests manually, instead use the builder classes. The constructor for each builder class contains the required fields of the given request, and then lets you add additional data if available for that specific request.
+A Request is done as simply as:
 
-Initializing the API
+```Java
+DepositRequestData request = DepositRequestData.builder()
+  .notificationUrl("https://fake.test.notification.trustly.com")
+  .endUserId("name@company.com")
+  .messageId(UUID.randomUUID().toString())
+  .attributes(
+    DepositRequestDataAttributes.builder()
+      .currency("EUR")
+      .amount("100.00")
+      .firstname("John")
+      .lastname("Doe")
+      .email("name@company.com")
+      .country("SE")
+      .locale("sv_SE")
+      .shopperStatement("Trustly Test Deposit")
+      .build()
+  )
+  .build();
 
-		SignedAPI api = new SignedAPI();
-    	api.init("path/to/private.pem", "keypass", "username", "password");
-    	api.init("path/to/private.pem", "keypass", "username", "password", true);
+DepositResponseData response = client.deposit(request);
+String redirectOrIFrameUrl = response.getUrl();
+```
 
+Where the request and response types are typesafe and easy to handle. If there ever are properties which are not represented in the model, they will be placed under the `any` dictionary properties on the respective object graph levels.
 
-Example deposit call
+## Handle notifications
 
-		Request deposit = new Deposit.Build("https://example.com/trustlynotification", "user@email.com", "abas421csd123zds1wd99", Currency.SEK, "Steve", "Smith", "steve@smith.com")
-                .locale("sv_SE")
-                .amount("54.12")
-                .mobilePhone("070-1234567")
-                .nationalIdentificationNumber("891212-4545")
-                .getRequest();
+There are two ways to insert the notifications into the client.
+All these will end up calling on events available on the client, these are:
 
-        Response response = api.sendRequest(deposit);
+* `OnAccount`
+* `OnCancel`
+* `OnCredit`
+* `OnDebit`
+* `OnPayoutConfirmation`
+* `OnPending`
+* `OnUnknown` (All properties will be placed in `any` dictionary property)
 
-        String iframeUrl = response.getResult().getData().get("url");
+You register to these with event listeners:
 
-Example refund call
+```Java
+client.addOnDebitListener(args ->
+{
+    System.out.println(String.format("%s was debited", args.getData().getAmount()));
+    args.RespondWithOk();
+};
+```
 
-		Request refund = new Refund.Build("123543567", "54.12", Currency.SEK)
-                .getRequest();
+---
 
-        Response response = api.sendRequest(refund);
+1. Giving your servlet request and response to `TrustlyApiClientExtensions.handleNotificationRequest`
 
-Example withdrawal call
+```Java
+@Controller
+public class Startup {
+  
+    @PostMapping('/trustly/notifications')
+    public void notificationHook(HttpServletRequest request, HttpServletResponse response) {
+      TrustlyApiClientExtensions.handleNotificationRequest(request, response);
+    }
+}
+```
 
-        Request withdraw = new Withdraw.Build("https://example.com/trustlynotification", "user@email.com", "41bj1h423b12bh323", Currency.PLN, "Steve", "Smith", "steve@smith.com", "1989-12-12")
-                .locale("sv_SE")
-                .nationalIdentificationNumber("891212-4545")
-                .clearingHouse("1234")
-                .accountNumber("56789012")
-                .getRequest();
+This will register an POST mapping that listens to HTTP POSTs on context path `/trustly/notifications`.
 
-        Response response = api.sendRequest(withdraw);
+It will automatically find all instantiated Trustly Api clients (clients are registered globally in a static list) and call all of them, if there are multiple ones, until one of them has reported the notification as done by calling `respondWithOk()` or `respondWithFailed()` on the event args.
+If no event listener on a client responds with `OK` nor `Failed` an exception will be thrown. If an unexpected exception is thrown, we will respond with a `Fail` with the exception message attached.
 
-        Assert.assertTrue(response.successfulResult());
+*NOTE*: For this to work you *MUST* keep a non-garbage-collected instantiation of the API Client in memory somewhere in your code.
+You cannot create an API Client, do a request, and then dispose of the client. It must be kept in memory to be able to receive the request's notification sent asynchronously from Trustly's server.
 
-Example of the notification process
+---
 
-        // A notification is sent to your web server.
+2. Or Manually, by calling on `client.handleNotification(String jsonBody, Callback onOK, Callback onFailed)`.
 
-        // Convert the incoming notification json to a Notification object.
-        NotificationHandler handler = new NotificationHandler();
-        Notification notification = handler.handleNotification(incomingNotificationJson);
+This will *not* automatically send an `OK` or `Failed` response back to the Trustly server.
 
-        // Process and verify the incoming notification data
+Instead you need to implement the `onOK` and `onFailed` callbacks, if you want to use the event args' callback methods.
 
-        Response notificationResponse = handler.prepareNotificationResponse(notification.getMethod(), notification.getUUID(), ResponseStatus.OK);
-
-        final String responseJson = handler.toJson(notificationResponse);
-        // Respond with responseJson as message body.
+If you will not use the event args' callback methods, then you do not need to supply these callback arguments, and can respond with a JsonRpc response manually.

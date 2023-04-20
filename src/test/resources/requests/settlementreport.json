@@ -1,0 +1,9 @@
+{
+  "Attributes": {
+    "APIVersion": "1.2"
+  },
+  "Currency": "EUR",
+  "Password": "password",
+  "SettlementDate": "2018-11-17",
+  "Username": "merchant1"
+}

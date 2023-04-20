@@ -1,0 +1,12 @@
+{
+  "result": {
+    "signature": "F7jhjuMqbsD4ju ... S16VbzdR1==",
+    "uuid": "11111111-1111-1111-1111-111111111111",
+    "method": "Withdraw",
+    "data": {
+      "orderid": "2190971587",
+      "url": "https://checkout.trustly.com/checkout?OrderID=1234567890&SessionID=..."
+    }
+  },
+  "version": "1.1"
+}

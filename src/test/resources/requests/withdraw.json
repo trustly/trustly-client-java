@@ -1,0 +1,25 @@
+{
+  "Username": "merchant_username",
+  "Password": "merchant_password",
+  "NotificationURL": "https://URL_to_your_notification_service",
+  "EndUserID": "12345",
+  "MessageID": "your_unique_withdrawal_id",
+  "Currency": "SEK",
+  "Attributes": {
+    "Country": "SE",
+    "Locale": "sv_SE",
+    "IP": "83.140.44.184",
+    "MobilePhone": "+46709876543",
+    "Firstname": "Steve",
+    "Lastname": "Smith",
+    "Email": "test@trustly.com",
+    "DateOfBirth": "1990-01-20",
+    "NationalIdentificationNumber": "790131-1234",
+    "SuccessURL": "https://yourpage.com/success",
+    "FailURL": "https://yourpage.com/fail",
+    "AddressCountry": "SE",
+    "AddressPostalCode": "SE-11253",
+    "AddressCity": "Stockholm",
+    "AddressLine1": "Main street 1"
+  }
+}

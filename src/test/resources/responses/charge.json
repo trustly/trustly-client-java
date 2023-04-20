@@ -1,0 +1,13 @@
+{
+  "result": {
+    "method": "Charge",
+    "uuid": "11111111-1111-1111-1111-111111111111",
+    "data": {
+      "result": "1",
+      "rejected": null,
+      "orderid": "1234512345"
+    },
+    "signature": "QBuLx ... JDGM/GVq5EBaPnGmvxA=="
+  },
+  "version": "1.1"
+}

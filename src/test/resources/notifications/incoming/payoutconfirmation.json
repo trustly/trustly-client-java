@@ -1,0 +1,17 @@
+{
+  "version": "1.1",
+  "method": "payoutconfirmation",
+  "params": {
+    "signature": "SZth3ylS1[...]5Jm2dnLKtzVq5IRNXBLvh3fO6i1ZCXQ==",
+    "data": {
+      "currency": "SEK",
+      "notificationid": "1716888077",
+      "orderid": "3236871181",
+      "enduserid": "user_534412",
+      "messageid": "483212",
+      "amount": "11",
+      "timestamp": "2019-03-27 10:04:01.446937+01"
+    },
+    "uuid": "42d7e0a2-03e2-49fc-bcf7-c109fb411514"
+  }
+}
