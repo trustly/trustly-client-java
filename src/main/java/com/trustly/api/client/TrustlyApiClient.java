@@ -65,6 +65,7 @@ import com.trustly.api.request.ApacheHttpClient3HttpRequester;
 import com.trustly.api.request.ApacheHttpClient3HttpRequesterLoader;
 import com.trustly.api.request.ApacheHttpClient4HttpRequester;
 import com.trustly.api.request.ApacheHttpClient4HttpRequesterLoader;
+import com.trustly.api.request.ApacheHttpClient5HttpRequesterLoader;
 import com.trustly.api.request.HttpRequester;
 import com.trustly.api.request.HttpRequesterLoader;
 import com.trustly.api.request.JavaUrlConnectionHttpRequester;
@@ -86,6 +87,7 @@ public class TrustlyApiClient implements Closeable {
   private static final List<TrustlyApiClient> STATIC_REGISTERED_CLIENTS = new ArrayList<>();
 
   private static final HttpRequesterLoader[] AVAILABLE_HTTP_REQUESTERS = new HttpRequesterLoader[]{
+    new ApacheHttpClient5HttpRequesterLoader(),
     new ApacheHttpClient4HttpRequesterLoader(),
     new ApacheHttpClient3HttpRequesterLoader(),
     new JavaUrlConnectionHttpRequesterLoader()
@@ -136,6 +138,10 @@ public class TrustlyApiClient implements Closeable {
 
   public TrustlyApiClient(TrustlyApiClientSettings settings, JsonRpcSigner signer) {
     this(settings, signer, TrustlyApiClient.getFirstAvailableHttpRequester());
+  }
+
+  public TrustlyApiClient(TrustlyApiClientSettings settings, HttpRequester httpRequester) {
+    this(settings, new DefaultJsonRpcSigner(new Serializer(), settings), httpRequester);
   }
 
   public TrustlyApiClient(TrustlyApiClientSettings settings, JsonRpcSigner signer, HttpRequester httpRequester) {
