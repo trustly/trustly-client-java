@@ -41,6 +41,8 @@ import com.trustly.api.domain.methods.deposit.DepositRequestData;
 import com.trustly.api.domain.methods.deposit.DepositResponseData;
 import com.trustly.api.domain.methods.getwithdrawals.GetWithdrawalsRequestData;
 import com.trustly.api.domain.methods.getwithdrawals.GetWithdrawalsResponseData;
+import com.trustly.api.domain.methods.merchantsettlement.MerchantSettlementRequestData;
+import com.trustly.api.domain.methods.merchantsettlement.MerchantSettlementResponseData;
 import com.trustly.api.domain.methods.refund.RefundRequestData;
 import com.trustly.api.domain.methods.refund.RefundResponseData;
 import com.trustly.api.domain.methods.registeraccount.RegisterAccountRequestData;
@@ -61,14 +63,11 @@ import com.trustly.api.domain.notifications.DebitNotificationData;
 import com.trustly.api.domain.notifications.PayoutConfirmationNotificationData;
 import com.trustly.api.domain.notifications.PendingNotificationData;
 import com.trustly.api.domain.notifications.UnknownNotificationData;
-import com.trustly.api.request.ApacheHttpClient3HttpRequester;
 import com.trustly.api.request.ApacheHttpClient3HttpRequesterLoader;
-import com.trustly.api.request.ApacheHttpClient4HttpRequester;
 import com.trustly.api.request.ApacheHttpClient4HttpRequesterLoader;
 import com.trustly.api.request.ApacheHttpClient5HttpRequesterLoader;
 import com.trustly.api.request.HttpRequester;
 import com.trustly.api.request.HttpRequesterLoader;
-import com.trustly.api.request.JavaUrlConnectionHttpRequester;
 import com.trustly.api.request.JavaUrlConnectionHttpRequesterLoader;
 import com.trustly.api.util.TrustlyStringUtils;
 import java.io.Closeable;
@@ -369,6 +368,10 @@ public class TrustlyApiClient implements Closeable {
     return this.sendRequest(request, RegisterAccountPayoutResponseData.class, "RegisterAccountPayout", null);
   }
 
+  public MerchantSettlementResponseData merchantSettlement(MerchantSettlementRequestData request) throws TrustlyRequestException {
+    return this.sendRequest(request, MerchantSettlementResponseData.class, "MerchantSettlement", null);
+  }
+
   public SettlementReportResponseData settlementReport(SettlementReportRequestData request) throws TrustlyRequestException {
     return this.sendRequest(
       request, SettlementReportResponseData.class, "ViewAutomaticSettlementDetailsCSV", null
@@ -423,7 +426,7 @@ public class TrustlyApiClient implements Closeable {
    *   <li>If the Withdrawal is approved, Trustly will process the withdrawal.</li>
    *   <li>
    *     (Optional) A {@link NotificationRequest}&lt;{@link PayoutConfirmationNotificationData}&gt; is sent to the merchant when the transfer has been confirmed.
-   *     Note: this notification is not enabled by default. Please speak to your Trustly contact if you want to have it enabled.
+   *     <small>Note: this notification is not enabled by default. Please speak to your Trustly contact if you want to have it enabled.</small>
    *   </li>
    *   <li>If the withdrawal fails, Trustly will send a {@link NotificationRequest}&lt;{@link CreditNotificationData}&gt; notification and a {@link NotificationRequest}&lt;{@link CancelNotificationData}&gt;
    *   (see more details <a href="https://eu.developers.trustly.com/doc/docs/withdraw#failed-withdrawals">here</a>).</li>
@@ -441,7 +444,7 @@ public class TrustlyApiClient implements Closeable {
    * This method should only be used if there is no existing {@code addOnXyzListener} method for the notification you want.
    */
   public <D extends IFromTrustlyRequestData> void addNotificationListener(String method, Class<D> dataClass,
-    NotificationEvent<D> listener) {
+                                                                          NotificationEvent<D> listener) {
 
     NotificationMeta<D> meta = (NotificationMeta<D>) this.onNotification.computeIfAbsent(method, k -> new NotificationMeta<>(dataClass));
     if (!meta.getDataClass().equals(dataClass)) {
@@ -653,7 +656,7 @@ public class TrustlyApiClient implements Closeable {
       }
 
       throw new TrustlyErrorResponseException(String.format("Received an error response from the Trustly API: %s", message), null,
-                                              rpcResponse.getError()
+        rpcResponse.getError()
       );
     }
   }
@@ -675,13 +678,12 @@ public class TrustlyApiClient implements Closeable {
    * handling of an incoming notification.
    *
    * @param jsonString The incoming notification as a JSON string
-   * @param onOK The callback which will be executed if a listener calls {@link NotificationArgs#respondWithOk()}.
-   * @param onFailed The callback which will be executed if a listener calls {@link NotificationArgs#respondWithFailed(String)}.
-   *
-   * @throws IOException If the JSON string could not be deserialized or the response could not be sent.
+   * @param onOK       The callback which will be executed if a listener calls {@link NotificationArgs#respondWithOk()}.
+   * @param onFailed   The callback which will be executed if a listener calls {@link NotificationArgs#respondWithFailed(String)}.
+   * @throws IOException                            If the JSON string could not be deserialized or the response could not be sent.
    * @throws TrustlyNoNotificationListenerException If there was no listener for the notification, nor one for unknown ones.
-   * @throws TrustlyValidationException If the response data could not be properly validated.
-   * @throws TrustlySignatureException If the signature of the response could not be properly verified.
+   * @throws TrustlyValidationException             If the response data could not be properly validated.
+   * @throws TrustlySignatureException              If the signature of the response could not be properly verified.
    */
   public void handleNotification(
     String jsonString,

@@ -13,6 +13,8 @@ import com.trustly.api.domain.methods.charge.ChargeRequestDataAttributes;
 import com.trustly.api.domain.methods.deposit.DepositRequestData;
 import com.trustly.api.domain.methods.deposit.DepositRequestDataAttributes;
 import com.trustly.api.domain.methods.deposit.DepositResponseData;
+import com.trustly.api.domain.methods.merchantsettlement.MerchantSettlementRequestData;
+import com.trustly.api.domain.methods.merchantsettlement.MerchantSettlementResponseData;
 import com.trustly.api.domain.methods.refund.RefundRequestData;
 import com.trustly.api.domain.methods.refund.RefundRequestDataAttributes;
 import com.trustly.api.domain.methods.registeraccount.RegisterAccountRequestData;
@@ -362,6 +364,33 @@ class RequestsTest {
       );
 
       Assertions.assertNotNull(registerAccountPayoutResponse);
+    }
+  }
+
+  @Test
+  void testMerchantSettlement() throws Exception {
+
+    try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
+
+      String uniqueMessageId = UUID.randomUUID().toString();
+
+      MerchantSettlementResponseData response = client.merchantSettlement(
+        MerchantSettlementRequestData.builder()
+          .endUserId("123123")
+          .clearingHouse("SWEDEN")
+          .bankNumber("6112")
+          .accountNumber("69706212")
+          .firstname("Steve")
+          .lastname("Smith")
+          .notificationUrl("https://test.trustly.com/trustlynotification")
+          .messageId(uniqueMessageId)
+          .amount("99.99")
+          .currency("SEK")
+          .attributes(null)
+          .build()
+      );
+
+      Assertions.assertNotNull(response);
     }
   }
 }
