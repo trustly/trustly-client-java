@@ -41,6 +41,8 @@ import com.trustly.api.domain.methods.deposit.DepositRequestData;
 import com.trustly.api.domain.methods.deposit.DepositResponseData;
 import com.trustly.api.domain.methods.getwithdrawals.GetWithdrawalsRequestData;
 import com.trustly.api.domain.methods.getwithdrawals.GetWithdrawalsResponseData;
+import com.trustly.api.domain.methods.merchantsettlement.MerchantSettlementRequestData;
+import com.trustly.api.domain.methods.merchantsettlement.MerchantSettlementResponseData;
 import com.trustly.api.domain.methods.refund.RefundRequestData;
 import com.trustly.api.domain.methods.refund.RefundResponseData;
 import com.trustly.api.domain.methods.registeraccount.RegisterAccountRequestData;
@@ -61,14 +63,11 @@ import com.trustly.api.domain.notifications.DebitNotificationData;
 import com.trustly.api.domain.notifications.PayoutConfirmationNotificationData;
 import com.trustly.api.domain.notifications.PendingNotificationData;
 import com.trustly.api.domain.notifications.UnknownNotificationData;
-import com.trustly.api.request.ApacheHttpClient3HttpRequester;
 import com.trustly.api.request.ApacheHttpClient3HttpRequesterLoader;
-import com.trustly.api.request.ApacheHttpClient4HttpRequester;
 import com.trustly.api.request.ApacheHttpClient4HttpRequesterLoader;
 import com.trustly.api.request.ApacheHttpClient5HttpRequesterLoader;
 import com.trustly.api.request.HttpRequester;
 import com.trustly.api.request.HttpRequesterLoader;
-import com.trustly.api.request.JavaUrlConnectionHttpRequester;
 import com.trustly.api.request.JavaUrlConnectionHttpRequesterLoader;
 import com.trustly.api.util.TrustlyStringUtils;
 import java.io.Closeable;
@@ -367,6 +366,15 @@ public class TrustlyApiClient implements Closeable {
 
   public RegisterAccountPayoutResponseData registerAccountPayout(RegisterAccountPayoutRequestData request) throws TrustlyRequestException {
     return this.sendRequest(request, RegisterAccountPayoutResponseData.class, "RegisterAccountPayout", null);
+  }
+
+  /**
+   * Initiate a settlement of funds, which will always be sent to the last settlement account for that specific currency.
+   * <p>
+   * The first settlement is required to be done through Trustly Back Office as the receiving bank account needs to be registered before a settlement can be processed.
+   */
+  public MerchantSettlementResponseData registerMerchantSettlement(MerchantSettlementRequestData request) throws TrustlyRequestException {
+    return this.sendRequest(request, MerchantSettlementResponseData.class, "MerchantSettlement", null);
   }
 
   public SettlementReportResponseData settlementReport(SettlementReportRequestData request) throws TrustlyRequestException {

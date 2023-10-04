@@ -13,6 +13,8 @@ import com.trustly.api.domain.methods.charge.ChargeRequestDataAttributes;
 import com.trustly.api.domain.methods.deposit.DepositRequestData;
 import com.trustly.api.domain.methods.deposit.DepositRequestDataAttributes;
 import com.trustly.api.domain.methods.deposit.DepositResponseData;
+import com.trustly.api.domain.methods.merchantsettlement.MerchantSettlementRequestData;
+import com.trustly.api.domain.methods.merchantsettlement.MerchantSettlementResponseData;
 import com.trustly.api.domain.methods.refund.RefundRequestData;
 import com.trustly.api.domain.methods.refund.RefundRequestDataAttributes;
 import com.trustly.api.domain.methods.registeraccount.RegisterAccountRequestData;
@@ -362,6 +364,26 @@ class RequestsTest {
       );
 
       Assertions.assertNotNull(registerAccountPayoutResponse);
+    }
+  }
+
+  @Test
+  void testMerchantSettlement() throws Exception {
+
+    try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
+
+      String uniqueMessageId = UUID.randomUUID().toString();
+
+      MerchantSettlementResponseData merchantSettlementResponse = client.registerMerchantSettlement(
+        MerchantSettlementRequestData.builder()
+          .messageId(uniqueMessageId)
+          .amount("4.99")
+          .currency("EUR")
+          .build()
+      );
+
+      Assertions.assertNotNull(merchantSettlementResponse);
+      Assertions.assertNotEquals(0, merchantSettlementResponse.getReference());
     }
   }
 }
