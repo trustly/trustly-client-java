@@ -173,4 +173,12 @@ public class DepositRequestDataAttributes extends AbstractAmountConstrainedAccou
    */
   @JsonProperty(value = "RecipientInformation")
   private RecipientOrSenderInformation recipientInformation;
+
+  /**
+   * Trustly will send a KYC notification to the merchant’s NotificationURL if the attribute "RequestKYC" : "1" is sent in a Deposit API call. 
+   * The KYC notification should be expected after theplayerhas performedonesuccessful login 
+   * to their bank and alwaysbeforeadeposit transfer is initiated.
+   */
+  @JsonProperty(value = "RequestKYC")
+  private String requestKyc;
 }
