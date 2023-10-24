@@ -130,7 +130,7 @@ public class DepositRequestDataAttributes extends AbstractAmountConstrainedAccou
    * processing account. It is also mandatory for E-wallets used directly in a merchant's checkout.
    * </p>
    */
-  @JsonProperty("pspMerchant")
+  @JsonProperty("PSPMerchant")
   private String pspMerchant;
 
   /**
@@ -176,8 +176,8 @@ public class DepositRequestDataAttributes extends AbstractAmountConstrainedAccou
 
   /**
    * Trustly will send a KYC notification to the merchant’s NotificationURL if the attribute "RequestKYC" : "1" is sent in a Deposit API call. 
-   * The KYC notification should be expected after the player has performe done successful login 
-   * to their bank and always before a deposit transfer is initiated.
+   * The KYC notification should be expected after the end user has performed a successful login to their bank, and always before a deposit 
+   * transfer is initiated.
    */
   @JsonProperty(value = "RequestKYC")
   private String requestKyc;
