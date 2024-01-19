@@ -50,6 +50,7 @@ public class RegisterAccountPayoutRequestDataAttributes extends AbstractRequestP
    * processing account. It is also mandatory for E-wallets used directly in a merchant's checkout.
    * </p>
    */
+  @JsonProperty(value = "PSPMerchant")
   String pspMerchant;
 
   /**
