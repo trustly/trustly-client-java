@@ -129,7 +129,9 @@ client.addOnDebitListener(args ->
 
 ---
 
-1. Giving your servlet request and response to `TrustlyApiClientExtensions.handleNotificationRequest`
+1. Giving your servlet request and response to `TrustlyApiClientJakartaExtensions.handleNotificationRequest`
+
+(or `TrustlyApiClientJavaxExtensions` if you are using an older Java version)
 
 ```Java
 @Controller
@@ -137,7 +139,7 @@ public class Startup {
   
     @PostMapping('/trustly/notifications')
     public void notificationHook(HttpServletRequest request, HttpServletResponse response) {
-      TrustlyApiClientExtensions.handleNotificationRequest(request, response);
+      TrustlyApiClientJakartaExtensions.handleNotificationRequest(request, response);
     }
 }
 ```
