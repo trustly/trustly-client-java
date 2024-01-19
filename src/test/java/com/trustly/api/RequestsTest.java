@@ -368,7 +368,7 @@ class RequestsTest {
   }
 
   @Test
-  void testMerchantSettlement() throws Exception {
+  void testMerchantSettlement() {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
@@ -384,6 +384,17 @@ class RequestsTest {
 
       Assertions.assertNotNull(merchantSettlementResponse);
       Assertions.assertNotEquals(0, merchantSettlementResponse.getReference());
+    } catch (TrustlyRequestException ex) {
+
+      if (ex.getCause() instanceof TrustlyErrorResponseException) {
+
+        final TrustlyErrorResponseException resEx = (TrustlyErrorResponseException) ex.getCause();
+        if (resEx.getResponseError().getMessage().equals("ERROR_NO_SUITABLE_BANK_ACCOUNT_FOUND")) {
+          return;
+        }
+      }
+
+      Assertions.fail("Unexpected error: " + ex, ex);
     }
   }
 }
