@@ -2,14 +2,14 @@ package com.trustly.api.domain.exceptions;
 
 public class TrustlyRejectionException extends AbstractTrustlyApiException {
 
-  private final String reason;
+  private final Object reason;
 
-  public TrustlyRejectionException(String message, String reason) {
+  public TrustlyRejectionException(String message, Object reason) {
     super(message);
     this.reason = reason;
   }
 
-  public String getReason() {
+  public Object getReason() {
     return reason;
   }
 }

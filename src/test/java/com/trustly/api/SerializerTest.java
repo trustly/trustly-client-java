@@ -1,6 +1,5 @@
 package com.trustly.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.trustly.api.client.DefaultJsonRpcSigner;
 import com.trustly.api.client.JsonRpcFactory;
@@ -9,19 +8,21 @@ import com.trustly.api.client.JsonRpcValidator;
 import com.trustly.api.client.Serializer;
 import com.trustly.api.client.TrustlyApiClient;
 import com.trustly.api.client.TrustlyApiClientSettings;
-import com.trustly.api.domain.base.JsonRpcRequest;
-import com.trustly.api.domain.base.JsonRpcResponse;
-import com.trustly.api.domain.base.NotificationResponse;
+import com.trustly.api.domain.Models.DepositRequest;
+import com.trustly.api.domain.Models.GeneralNotificationResponseData;
+import com.trustly.api.domain.Models.RegisterAccountResponse;
+import com.trustly.api.domain.Models.SelectAccountRequest;
 import com.trustly.api.domain.exceptions.TrustlyValidationException;
-import com.trustly.api.domain.methods.deposit.DepositRequestData;
-import com.trustly.api.domain.methods.deposit.DepositRequestDataAttributes;
-import com.trustly.api.domain.methods.registeraccount.RegisterAccountResponseData;
-import com.trustly.api.domain.methods.selectaccount.SelectAccountRequestData;
-import com.trustly.api.domain.methods.selectaccount.SelectAccountRequestDataAttributes;
-import java.io.InputStream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
+import java.io.InputStream;
+import java.util.Map;
+import java.util.UUID;
+
+@Execution(ExecutionMode.CONCURRENT)
 class SerializerTest {
 
   @Test
@@ -29,14 +30,14 @@ class SerializerTest {
     Serializer serializer = new Serializer();
     JsonRpcFactory factory = new JsonRpcFactory();
 
-    DepositRequestData request = new DepositRequestData();
+    DepositRequest.Params.Data request = new DepositRequest.Params.Data();
     request.setUsername("merchant_username");
     request.setPassword("merchant_password");
     request.setNotificationUrl("URL_to_your_notification_service");
     request.setEndUserId("12345");
     request.setMessageId("your_unique_deposit_id");
 
-    DepositRequestDataAttributes attributes = new DepositRequestDataAttributes();
+    DepositRequest.Params.Data.Attributes attributes = new DepositRequest.Params.Data.Attributes();
     attributes.setLocale("sv_SE");
     attributes.setCurrency("SEK");
     attributes.setIp("123.123.123.123");
@@ -44,22 +45,28 @@ class SerializerTest {
     attributes.setFirstname("John");
     attributes.setLastname("Doe");
     attributes.setNationalIdentificationNumber("790131-1234");
+    attributes.setCountry("SE");
+    attributes.setEmail("test@trustly.com");
+    attributes.setSuccessUrl("http://www.google.com/q?success");
+    attributes.setFailUrl("http://www.google.com/q?fail");
+    attributes.setShopperStatement("Shop");
+//    attributes.setUrlScheme("scheme");
 
     request.setAttributes(attributes);
 
-    JsonRpcRequest<DepositRequestData> jsonRpc = factory.create(request, "Deposit");
+    var jsonRpc = factory.create(request, "Deposit", UUID.randomUUID().toString());
 
     String serialized = serializer.serializeData(jsonRpc.getParams().getData());
-    String expected = "AttributesCurrencySEKFirstnameJohnIP123.123.123.123LastnameDoeLocalesv_SEMobilePhone+46709876543NationalIdentificationNumber790131-1234EndUserID12345MessageIDyour_unique_deposit_idNotificationURLURL_to_your_notification_servicePasswordmerchant_passwordUsernamemerchant_username";
+    String expected = "AttributesCountrySECurrencySEKEmailtest@trustly.comFailURLhttp://www.google.com/q?failFirstnameJohnIP123.123.123.123LastnameDoeLocalesv_SEMobilePhone+46709876543NationalIdentificationNumber790131-1234ShopperStatementShopSuccessURLhttp://www.google.com/q?successEndUserID12345MessageIDyour_unique_deposit_idNotificationURLURL_to_your_notification_servicePasswordmerchant_passwordUsernamemerchant_username";
 
     Assertions.assertEquals(expected, serialized);
   }
 
   @Test
-  void serializeResponseWithNonNullAnyMapAsPojo() throws Exception {
+  void serializeResponseWithNonNullAnyMapAsPojo() {
 
-    RegisterAccountResponseData data = RegisterAccountResponseData.builder()
-      .accountId("123456789")
+    RegisterAccountResponse.Result.Data data = RegisterAccountResponse.Result.Data.builder()
+      .accountID("123456789")
       .bank("BankA")
       .clearingHouse("SWEDEN")
       .build();
@@ -67,36 +74,36 @@ class SerializerTest {
     Serializer serializer = new Serializer();
     String serialized = serializer.serializeData(data);
 
-    Assertions.assertEquals("accountid123456789bankBankAclearinghouseSWEDENdescriptor", serialized);
+    Assertions.assertEquals("accountid123456789bankBankAclearinghouseSWEDEN", serialized);
   }
 
   @Test
-  void serializeResponseWithNonEmptyAnyMapAsPOJO() throws Exception {
+  void serializeResponseWithNonEmptyAnyMapAsPOJO() {
 
-    RegisterAccountResponseData data = RegisterAccountResponseData.builder()
-      .accountId("123456789")
+    RegisterAccountResponse.Result.Data data = RegisterAccountResponse.Result.Data.builder()
+      .accountID("123456789")
       .bank("BankA")
       .clearingHouse("SWEDEN")
-      .any("key", "value")
+      .additionalProperty("key", "value")
       .build();
 
     Serializer serializer = new Serializer();
     String serialized = serializer.serializeData(data);
 
-    Assertions.assertEquals("accountid123456789bankBankAclearinghouseSWEDENdescriptorkeyvalue", serialized);
+    Assertions.assertEquals("accountid123456789bankBankAclearinghouseSWEDENkeyvalue", serialized);
   }
 
   @Test
-  void serializeResponseWithNonEmptyAnyMapAsNode() throws Exception {
+  void serializeResponseWithNonEmptyAnyMapAsNode() {
 
-    RegisterAccountResponseData data = RegisterAccountResponseData.builder()
-      .accountId("123456789")
+    RegisterAccountResponse.Result.Data data = RegisterAccountResponse.Result.Data.builder()
+      .accountID("123456789")
       .bank("BankA")
       .clearingHouse("SWEDEN")
-      .any("key", "value")
+      .additionalProperty("key", "value")
       .build();
 
-    ObjectNode dataNode = new ObjectMapper().valueToTree(data);
+    ObjectNode dataNode = TrustlyApiClient.DEFAULT_OBJECT_MAPPER.valueToTree(data);
     dataNode.remove("descriptor");
 
     Serializer serializer = new Serializer();
@@ -123,23 +130,23 @@ class SerializerTest {
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
       JsonRpcSigner signer = new DefaultJsonRpcSigner(serializer, settings);
 
-      JsonRpcResponse<NotificationResponse> rpcResponse = client.createResponsePackage(
+      var rpcResponse = client.createResponsePackage(
         "account",
         "e76ffbe5-e0f9-4402-8689-f868ed2021f8",
-        NotificationResponse.builder()
-          .status("OK")
+        GeneralNotificationResponseData.builder()
+          .status(GeneralNotificationResponseData.Status.OK)
           .build()
       );
 
-      String serialized = serializer.serializeData(rpcResponse.getData());
+      String serialized = serializer.serializeData(rpcResponse.getResult().getData());
 
       Assertions.assertEquals("statusOK", serialized);
 
-      JsonRpcResponse<NotificationResponse> signedResponse = signer.sign(rpcResponse);
+      var signedResponse = signer.sign(rpcResponse);
 
       Assertions.assertEquals(
         "J28IN0yXZN3dlV2ikg4nQKwnP98kso8lzpmuwBcfbXr8i3XeEyydRM4jRwsOOeF0ilGuXyr1Kyb3+1j4mVtgU0SwjVgBHWrYPMegNeykY3meto/aoATH0mvop4Ex1OKO7w/S/ktR2J0J5Npn/EuiKGiVy5GztHYTh9hWmZBCElYPZf4Rsd1CJQJAPlZeAuRcrb5dnbiGJvTEaL/7VLcPT27oqAUefSNb/zNt5yL+wH6BihlkpZ/mtE61lX5OpC46iql6hpsrlOBD3BroYfcwgk1t3YdcNOhVWrmkrlVptGQ/oy6T/LSIKbkG/tJsuV8sl6w1Z31IesK6MZDfSJbcXw==",
-        signedResponse.getSignature()
+        signedResponse.getResult().getSignature()
       );
     }
   }
@@ -150,15 +157,15 @@ class SerializerTest {
     JsonRpcFactory factory = new JsonRpcFactory();
     JsonRpcValidator validator = new JsonRpcValidator();
 
-    JsonRpcRequest<DepositRequestData> jsonRpc = factory.create(
-      DepositRequestData.builder()
+    var jsonRpc = factory.create(
+      DepositRequest.Params.Data.builder()
         .username("merchant_username")
         .password("merchant_password")
         .notificationUrl("https://someurl.fake")
         .endUserId("12345")
         .messageId("your_unique_deposit_id")
         .attributes(
-          DepositRequestDataAttributes.builder()
+          DepositRequest.Params.Data.Attributes.builder()
             .country("SE")
             .locale("sv_SE")
             .currency("SEK")
@@ -168,14 +175,17 @@ class SerializerTest {
             .lastname("Doe")
             .nationalIdentificationNumber("790131-1234")
             .successUrl("https://google.com")
-            .failURL("https://google.com")
+            .failUrl("https://google.com")
             .mobilePhone("0701234567")
             .email("name@site.com")
             .build()
         )
         .build(),
-      "Deposit"
+      "Deposit",
+      UUID.randomUUID().toString()
     );
+
+    jsonRpc.getParams().setSignature("<none>");
 
     try {
       validator.validate(jsonRpc);
@@ -195,15 +205,15 @@ class SerializerTest {
     JsonRpcFactory factory = new JsonRpcFactory();
     JsonRpcValidator validator = new JsonRpcValidator();
 
-    JsonRpcRequest<DepositRequestData> jsonRpc = factory.create(
-      DepositRequestData.builder()
+    var jsonRpc = factory.create(
+      DepositRequest.Params.Data.builder()
         .username("merchant_username")
         .password("merchant_password")
         .notificationUrl("https://someurl.fake")
         .endUserId("12345")
         .messageId("your_unique_deposit_id")
         .attributes(
-          DepositRequestDataAttributes.builder()
+          DepositRequest.Params.Data.Attributes.builder()
             .country("SE")
             .locale("sv_SE")
             .currency("SEK")
@@ -213,13 +223,16 @@ class SerializerTest {
             .nationalIdentificationNumber("790131-1234")
             .shopperStatement("Shopper Statement")
             .successUrl("https://google.com")
-            .failURL("https://google.com")
+            .failUrl("https://google.com")
             .email("name@site.com")
             .build()
         )
         .build(),
-      "Deposit"
+      "Deposit",
+      UUID.randomUUID().toString()
     );
+
+    jsonRpc.getParams().setSignature("<none>");
 
     Assertions.assertThrows(
       TrustlyValidationException.class,
@@ -238,15 +251,15 @@ class SerializerTest {
     JsonRpcFactory factory = new JsonRpcFactory();
     JsonRpcValidator validator = new JsonRpcValidator();
 
-    JsonRpcRequest<SelectAccountRequestData> jsonRpc = factory.create(
-      SelectAccountRequestData.builder()
+    var jsonRpc = factory.create(
+      SelectAccountRequest.Params.Data.builder()
         .username("merchant_username")
         .password("merchant_password")
         .notificationUrl("https://someurl.fake")
         .endUserId("12345")
         .messageId("your_unique_deposit_id")
         .attributes(
-          SelectAccountRequestDataAttributes.builder()
+          SelectAccountRequest.Params.Data.Attributes.builder()
             .country("SE")
             .locale("sv_SE")
             .ip("123.123.123.123")
@@ -255,13 +268,16 @@ class SerializerTest {
             .lastname("Doe")
             .nationalIdentificationNumber("790131-1234")
             .successUrl("https://google.com")
-            .failURL("https://google.com")
+            .failUrl("https://google.com")
             .mobilePhone("0701234567")
             .build()
         )
         .build(),
-      "SelectAccount"
+      "SelectAccount",
+      UUID.randomUUID().toString()
     );
+
+    jsonRpc.getParams().setSignature("<none>");
 
     // ShopperStatement is NOT specified -- but we should NOT throw exception, since that validation group is not specified.
     validator.validate(jsonRpc);

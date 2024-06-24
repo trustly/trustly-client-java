@@ -3,5 +3,5 @@
   "Password": "*******",
   "FromDate": "2014-01-01",
   "ToDate": "2014-01-31",
-  "Currency": null
+  "Currency": "SEK"
 }

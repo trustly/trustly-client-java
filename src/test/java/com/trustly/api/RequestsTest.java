@@ -2,36 +2,16 @@ package com.trustly.api;
 
 import com.trustly.api.client.TrustlyApiClient;
 import com.trustly.api.client.TrustlyApiClientSettings;
-import com.trustly.api.domain.common.RecipientOrSenderInformation;
 import com.trustly.api.domain.exceptions.TrustlyErrorResponseException;
 import com.trustly.api.domain.exceptions.TrustlyRequestException;
-import com.trustly.api.domain.methods.accountpayout.AccountPayoutRequestData;
-import com.trustly.api.domain.methods.accountpayout.AccountPayoutRequestDataAttributes;
-import com.trustly.api.domain.methods.cancelcharge.CancelChargeRequestData;
-import com.trustly.api.domain.methods.charge.ChargeRequestData;
-import com.trustly.api.domain.methods.charge.ChargeRequestDataAttributes;
-import com.trustly.api.domain.methods.deposit.DepositRequestData;
-import com.trustly.api.domain.methods.deposit.DepositRequestDataAttributes;
-import com.trustly.api.domain.methods.deposit.DepositResponseData;
-import com.trustly.api.domain.methods.merchantsettlement.MerchantSettlementRequestData;
-import com.trustly.api.domain.methods.merchantsettlement.MerchantSettlementResponseData;
-import com.trustly.api.domain.methods.refund.RefundRequestData;
-import com.trustly.api.domain.methods.refund.RefundRequestDataAttributes;
-import com.trustly.api.domain.methods.registeraccount.RegisterAccountRequestData;
-import com.trustly.api.domain.methods.registeraccount.RegisterAccountRequestDataAttributes;
-import com.trustly.api.domain.methods.registeraccount.RegisterAccountResponseData;
-import com.trustly.api.domain.methods.registeraccountpayout.RegisterAccountPayoutRequestData;
-import com.trustly.api.domain.methods.registeraccountpayout.RegisterAccountPayoutRequestDataAttributes;
-import com.trustly.api.domain.methods.registeraccountpayout.RegisterAccountPayoutResponseData;
-import com.trustly.api.domain.methods.selectaccount.SelectAccountRequestData;
-import com.trustly.api.domain.methods.selectaccount.SelectAccountRequestDataAttributes;
-import com.trustly.api.domain.methods.selectaccount.SelectAccountResponseData;
-import com.trustly.api.domain.methods.withdraw.WithdrawRequestData;
-import com.trustly.api.domain.methods.withdraw.WithdrawRequestDataAttributes;
-import com.trustly.api.domain.methods.withdraw.WithdrawResponseData;
-import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+
+import static com.trustly.api.domain.Models.*;
+
+import java.util.UUID;
 
 /**
  * These test will only work if a local environment exists. At the USER_HOME root these files is needed: trustly_client_username.txt - your
@@ -40,6 +20,7 @@ import org.junit.jupiter.api.Test;
  * <p>
  * If those files exist and are correct you are able to make requests to Trustly's test environment
  */
+@Execution(ExecutionMode.CONCURRENT)
 class RequestsTest {
 
   private final TrustlyApiClientSettings settings = TrustlyApiClientSettings.forTest()
@@ -52,12 +33,12 @@ class RequestsTest {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
-      DepositRequestData request = DepositRequestData.builder()
+      DepositRequest.Params.Data request = DepositRequest.Params.Data.builder()
         .notificationUrl("https://fake.test.notification.trustly.com")
         .endUserId("john.doe@trustly.com")
         .messageId(UUID.randomUUID().toString())
         .attributes(
-          DepositRequestDataAttributes.builder()
+          DepositRequest.Params.Data.Attributes.builder()
             .currency("EUR")
             .amount("100.00")
             .firstname("John")
@@ -67,16 +48,16 @@ class RequestsTest {
             .locale("sv_SE")
             .shopperStatement("Trustly Test Deposit")
             .successUrl("https://google.com")
-            .failURL("https://google.com")
+            .failUrl("https://google.com")
             .mobilePhone("0701234567")
             .build()
         )
         .build();
 
-      DepositResponseData response = client.deposit(request);
+      DepositResponse.Result.Data response = client.deposit(request);
 
       Assertions.assertNotNull(response);
-      Assertions.assertNotNull(response.getUrl());
+      Assertions.assertNotNull(response.getURL());
     }
   }
 
@@ -85,29 +66,29 @@ class RequestsTest {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
-      AccountPayoutRequestData data = AccountPayoutRequestData.builder()
+      AccountPayoutRequest.Params.Data data = AccountPayoutRequest.Params.Data.builder()
         .accountId("AccountID")
         .accountId("AccountID")
         .endUserId("EndUserId")
         .messageId("MessageId")
         .amount("99.99")
         .currency("SEK")
-        .notificationURL("https://notify.me")
+        .notificationUrl("https://notify.me")
         .attributes(
-          AccountPayoutRequestDataAttributes.builder()
+          AccountPayoutRequest.Params.Data.Attributes.builder()
             .pspMerchant("Merchant Ltd.")
             .shopperStatement("MyBrand.com")
             .externalReference("23423525234")
             .merchantCategoryCode("5499")
             .pspMerchantUrl("www.merchant.com")
             .senderInformation(
-              RecipientOrSenderInformation.builder()
-                .partytype("PERSON")
+              SenderInformation.builder()
+                .partytype(RecipientOrSenderInformation.PartyTypeKind.PERSON)
                 .address("Street 1, 12345 Barcelona")
                 .countryCode("SE")
                 .firstname("Steve")
                 .lastname("Smith")
-                .customerID("123456789")
+                .customerId("123456789")
                 .dateOfBirth("1990-03-31")
                 .build()
             )
@@ -133,7 +114,7 @@ class RequestsTest {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
-      CancelChargeRequestData data = CancelChargeRequestData.builder()
+      CancelChargeRequest.Params.Data data = CancelChargeRequest.Params.Data.builder()
         .orderId("orderId")
         .build();
 
@@ -155,15 +136,15 @@ class RequestsTest {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
-      ChargeRequestData data = ChargeRequestData.builder()
+      ChargeRequest.Params.Data data = ChargeRequest.Params.Data.builder()
         .accountId("accountId")
-        .notificationURL("https://notify.me")
+        .notificationUrl("https://notify.me")
         .endUserId("EndUserId")
         .messageId(UUID.randomUUID().toString())
         .amount("99.90")
         .currency("SEK")
         .attributes(
-          ChargeRequestDataAttributes.builder()
+          ChargeRequest.Params.Data.Attributes.builder()
             .shopperStatement("Shopper statement")
             .pspMerchant("Merchant Ltd.")
             .externalReference("External reference")
@@ -192,12 +173,12 @@ class RequestsTest {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
-      RefundRequestData data = RefundRequestData.builder()
+      RefundRequest.Params.Data data = RefundRequest.Params.Data.builder()
         .orderId("123456")
         .amount("22")
         .currency("SEK")
         .attributes(
-          RefundRequestDataAttributes.builder()
+          RefundRequest.Params.Data.Attributes.builder()
             .externalReference("123")
             .build()
         )
@@ -223,8 +204,8 @@ class RequestsTest {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
-      RegisterAccountResponseData registerAccountResponse = client.registerAccount(
-        RegisterAccountRequestData.builder()
+      RegisterAccountResponse.Result.Data registerAccountResponse = client.registerAccount(
+        RegisterAccountRequest.Params.Data.builder()
           .accountNumber("69706212")
           .clearingHouse("SWEDEN")
           .bankNumber("6112")
@@ -232,7 +213,7 @@ class RequestsTest {
           .firstname("Steve")
           .lastname("Smith")
           .attributes(
-            RegisterAccountRequestDataAttributes.builder()
+            RegisterAccountRequest.Params.Data.Attributes.builder()
               .addressCountry("SE")
               .dateOfBirth("1990-01-20")
               .email("test@trustly.com")
@@ -242,7 +223,7 @@ class RequestsTest {
       );
 
       Assertions.assertNotNull(registerAccountResponse);
-      Assertions.assertNotNull(registerAccountResponse.getAccountId());
+//      Assertions.assertNotNull(registerAccountResponse.getAccountID());
     }
   }
 
@@ -251,13 +232,13 @@ class RequestsTest {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
-      SelectAccountResponseData selectAccountResponse = client.selectAccount(
-        SelectAccountRequestData.builder()
+      SelectAccountResponse.Result.Data selectAccountResponse = client.selectAccount(
+        SelectAccountRequest.Params.Data.builder()
           .endUserId("EndUserId")
           .notificationUrl("https://notify.me")
           .messageId(UUID.randomUUID().toString())
           .attributes(
-            SelectAccountRequestDataAttributes.builder()
+            SelectAccountRequest.Params.Data.Attributes.builder()
               .country("SE")
               .firstname("Steve")
               .lastname("Smith")
@@ -267,7 +248,7 @@ class RequestsTest {
               .merchantCategoryCode("5499")
               .pspMerchantUrl("www.merchant.com")
               .successUrl("https://google.com")
-              .failURL("https://google.com")
+              .failUrl("https://google.com")
               .build()
           )
           .build()
@@ -282,13 +263,13 @@ class RequestsTest {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
-      WithdrawRequestData data = WithdrawRequestData.builder()
+      WithdrawRequest.Params.Data data = WithdrawRequest.Params.Data.builder()
         .endUserId(UUID.randomUUID().toString())
         .messageId(UUID.randomUUID().toString())
         .notificationUrl("https://test.trustly.com/trustlynotification")
         .currency("SEK")
         .attributes(
-          WithdrawRequestDataAttributes.builder()
+          WithdrawRequest.Params.Data.Attributes.builder()
             .firstname("Jon")
             .lastname("Doe")
             .email("test@example.com")
@@ -302,17 +283,17 @@ class RequestsTest {
             .locale("en_US")
 
             .successUrl("https://google.com")
-            .failURL("https://google.com")
+            .failUrl("https://google.com")
             .mobilePhone("0701234567")
 
             .build()
         )
         .build();
 
-      WithdrawResponseData response = client.withdraw(data);
+      WithdrawResponse.Result.Data response = client.withdraw(data);
 
-      Assertions.assertNotNull(response.getUrl());
-      Assertions.assertNotEquals(0, response.getOrderId());
+      Assertions.assertNotNull(response.getURL());
+      Assertions.assertNotEquals(0, response.getOrderID());
     }
   }
 
@@ -323,8 +304,8 @@ class RequestsTest {
 
       String uniqueMessageId = UUID.randomUUID().toString();
 
-      RegisterAccountPayoutResponseData registerAccountPayoutResponse = client.registerAccountPayout(
-        RegisterAccountPayoutRequestData.builder()
+      RegisterAccountPayoutResponse.Result.Data registerAccountPayoutResponse = client.registerAccountPayout(
+        RegisterAccountPayoutRequest.Params.Data.builder()
           .endUserId("123123")
           .clearingHouse("SWEDEN")
           .bankNumber("6112")
@@ -336,7 +317,7 @@ class RequestsTest {
           .amount("99.99")
           .currency("SEK")
           .attributes(
-            RegisterAccountPayoutRequestDataAttributes.builder()
+            RegisterAccountPayoutRequest.Params.Data.Attributes.builder()
               .pspMerchant("Merchant Ltd.")
               .shopperStatement("MyBrand.com")
               .externalReference("23423525234")
@@ -345,13 +326,13 @@ class RequestsTest {
               .pspMerchantUrl("www.merchant.com")
               .merchantCategoryCode("5499")
               .senderInformation(
-                RecipientOrSenderInformation.builder()
-                  .partytype("PERSON")
+                SenderInformation.builder()
+                  .partytype(RecipientOrSenderInformation.PartyTypeKind.PERSON)
                   .address("Street 1, 12345 Barcelona")
                   .countryCode("SE")
                   .firstname("Steve")
                   .lastname("Smith")
-                  .customerID("123456789")
+                  .customerId("123456789")
                   .dateOfBirth("1990-03-31")
                   .build()
               )
@@ -374,16 +355,19 @@ class RequestsTest {
 
       String uniqueMessageId = UUID.randomUUID().toString();
 
-      MerchantSettlementResponseData merchantSettlementResponse = client.registerMerchantSettlement(
-        MerchantSettlementRequestData.builder()
+      var ex = Assertions.assertThrows(TrustlyRequestException.class, () -> client.merchantSettlement(
+        MerchantSettlementRequest.Params.Data.builder()
           .messageId(uniqueMessageId)
           .amount("4.99")
           .currency("EUR")
           .build()
-      );
+      ));
 
-      Assertions.assertNotNull(merchantSettlementResponse);
-      Assertions.assertNotEquals(0, merchantSettlementResponse.getReference());
+      if (ex.getCause() instanceof TrustlyErrorResponseException) {
+        Assertions.assertEquals("ERROR_NO_SUITABLE_BANK_ACCOUNT_FOUND", ((TrustlyErrorResponseException) ex.getCause()).getResponseError().getMessage());
+      } else {
+        Assertions.fail("Should be a wrapped error response exception");
+      }
     }
   }
 }

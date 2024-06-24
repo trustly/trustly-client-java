@@ -20,6 +20,7 @@
     "AddressCountry": "SE",
     "AddressPostalCode": "SE-11253",
     "AddressCity": "Stockholm",
-    "AddressLine1": "Main street 1"
+    "AddressLine1": "Main street 1",
+    "ShopperStatement": "Shop!"
   }
 }

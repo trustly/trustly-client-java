@@ -1,17 +1,17 @@
 package com.trustly.api.domain.exceptions;
 
-import com.trustly.api.domain.base.ResponseError;
+import static com.trustly.api.domain.Models.*;
 
 public class TrustlyErrorResponseException extends AbstractTrustlyApiException {
 
-  private final transient ResponseError responseError;
+  private final transient JsonRpcError responseError;
 
-  public TrustlyErrorResponseException(String message, Exception cause, ResponseError responseError) {
+  public TrustlyErrorResponseException(String message, Exception cause, JsonRpcError responseError) {
     super(message + " - " + responseError, cause);
     this.responseError = responseError;
   }
 
-  public ResponseError getResponseError() {
+  public JsonRpcError getResponseError() {
     return responseError;
   }
 }

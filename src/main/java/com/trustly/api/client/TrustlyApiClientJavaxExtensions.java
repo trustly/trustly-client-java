@@ -55,6 +55,7 @@ public final class TrustlyApiClientJavaxExtensions {
    * @throws TrustlySignatureException If the signature of the response could not be properly verified.
    */
   public static void handleNotificationRequest(
+    TrustlyApiClient client,
     javax.servlet.http.HttpServletRequest request,
     javax.servlet.http.HttpServletResponse response
   ) throws
@@ -64,10 +65,11 @@ public final class TrustlyApiClientJavaxExtensions {
     TrustlyValidationException,
     TrustlySignatureException {
 
-    TrustlyApiClientExtensions.handleNotificationRequest(request.getInputStream(), new JavaxNotificationResponder(response));
+    TrustlyApiClientExtensions.handleNotificationRequest(client, request.getInputStream(), new JavaxNotificationResponder(response));
   }
 
   public static void handleNotificationRequest(
+    TrustlyApiClient client,
     InputStream incoming,
     javax.servlet.http.HttpServletResponse response
   ) throws
@@ -77,6 +79,6 @@ public final class TrustlyApiClientJavaxExtensions {
     TrustlyValidationException,
     TrustlySignatureException {
 
-    TrustlyApiClientExtensions.handleNotificationRequest(incoming, new JavaxNotificationResponder(response));
+    TrustlyApiClientExtensions.handleNotificationRequest(client, incoming, new JavaxNotificationResponder(response));
   }
 }

@@ -3,48 +3,23 @@ package com.trustly.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trustly.api.client.TrustlyApiClient;
 import com.trustly.api.client.TrustlyApiClientSettings;
-import com.trustly.api.domain.base.IResponseResultData;
-import com.trustly.api.domain.base.IToTrustlyRequestParams;
 import com.trustly.api.domain.exceptions.TrustlyErrorResponseException;
 import com.trustly.api.domain.exceptions.TrustlyRequestException;
-import com.trustly.api.domain.methods.accountledger.AccountLedgerRequestData;
-import com.trustly.api.domain.methods.accountledger.AccountLedgerResponseData;
-import com.trustly.api.domain.methods.accountpayout.AccountPayoutRequestData;
-import com.trustly.api.domain.methods.accountpayout.AccountPayoutResponseData;
-import com.trustly.api.domain.methods.approvewithdrawal.ApproveWithdrawalRequestData;
-import com.trustly.api.domain.methods.approvewithdrawal.ApproveWithdrawalResponseData;
-import com.trustly.api.domain.methods.balance.BalanceRequestData;
-import com.trustly.api.domain.methods.balance.BalanceResponseData;
-import com.trustly.api.domain.methods.cancelcharge.CancelChargeRequestData;
-import com.trustly.api.domain.methods.cancelcharge.CancelChargeResponseData;
-import com.trustly.api.domain.methods.charge.ChargeRequestData;
-import com.trustly.api.domain.methods.charge.ChargeResponseData;
-import com.trustly.api.domain.methods.denywithdrawal.DenyWithdrawalRequestData;
-import com.trustly.api.domain.methods.denywithdrawal.DenyWithdrawalResponseData;
-import com.trustly.api.domain.methods.deposit.DepositRequestData;
-import com.trustly.api.domain.methods.deposit.DepositResponseData;
-import com.trustly.api.domain.methods.getwithdrawals.GetWithdrawalsRequestData;
-import com.trustly.api.domain.methods.getwithdrawals.GetWithdrawalsResponseData;
-import com.trustly.api.domain.methods.refund.RefundRequestData;
-import com.trustly.api.domain.methods.refund.RefundResponseData;
-import com.trustly.api.domain.methods.registeraccount.RegisterAccountRequestData;
-import com.trustly.api.domain.methods.registeraccount.RegisterAccountResponseData;
-import com.trustly.api.domain.methods.selectaccount.SelectAccountRequestData;
-import com.trustly.api.domain.methods.selectaccount.SelectAccountResponseData;
-import com.trustly.api.domain.methods.settlementreport.SettlementReportRequestData;
-import com.trustly.api.domain.methods.settlementreport.SettlementReportResponseData;
-import com.trustly.api.domain.methods.withdraw.WithdrawRequestData;
-import com.trustly.api.domain.methods.withdraw.WithdrawResponseData;
 import com.trustly.api.request.HttpRequester;
 import com.trustly.api.util.TrustlyStreamUtils;
-import java.io.IOException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
+import static com.trustly.api.domain.Models.*;
+
+@Execution(ExecutionMode.CONCURRENT)
 class TestExamplePayloads {
 
   private final TrustlyApiClientSettings settings = TrustlyApiClientSettings.forTest()
@@ -62,7 +37,7 @@ class TestExamplePayloads {
     try {
 
       this.doRequestResponse(
-        WithdrawRequestData.class, WithdrawResponseData.class,
+        WithdrawRequest.Params.Data.class, WithdrawResponse.class,
         "Withdraw",
         "/requests/withdraw.json", "/responses/error_invalid_parameters.json"
       );
@@ -81,140 +56,145 @@ class TestExamplePayloads {
   void testRequestAndResponsePayload() throws Exception {
 
     this.doRequestResponse(
-      AccountLedgerRequestData.class, AccountLedgerResponseData.class,
+      AccountLedgerRequest.Params.Data.class, AccountLedgerResponse.class,
       "AccountLedger",
       "/requests/accountledger.json", "/responses/accountledger.json"
     );
 
     // Same request, but this time we will respond with an Invalid Parameters error.
     Assertions.assertThrows(TrustlyRequestException.class, () -> this.doRequestResponse(
-      AccountLedgerRequestData.class, AccountLedgerResponseData.class,
+      AccountLedgerRequest.Params.Data.class, AccountLedgerResponse.class,
       "AccountLedger",
       "/requests/accountledger.json", "/responses/error_invalid_parameters.json"
     ));
 
     this.doRequestResponse(
-      AccountPayoutRequestData.class, AccountPayoutResponseData.class,
+      AccountPayoutRequest.Params.Data.class, AccountPayoutResponse.class,
       "AccountPayout",
       "/requests/accountpayout_1.json", "/responses/accountpayout.json"
     );
     this.doRequestResponse(
-      AccountPayoutRequestData.class, AccountPayoutResponseData.class,
+      AccountPayoutRequest.Params.Data.class, AccountPayoutResponse.class,
       "AccountPayout",
       "/requests/accountpayout_2.json", "/responses/accountpayout.json"
     );
     this.doRequestResponse(
-      AccountPayoutRequestData.class, AccountPayoutResponseData.class,
+      AccountPayoutRequest.Params.Data.class, AccountPayoutResponse.class,
       "AccountPayout",
       "/requests/accountpayout_3.json", "/responses/accountpayout.json"
     );
 
     this.doRequestResponse(
-      ApproveWithdrawalRequestData.class, ApproveWithdrawalResponseData.class,
+      ApproveWithdrawalRequest.Params.Data.class, ApproveWithdrawalResponse.class,
       "ApproveWithdrawal",
       "/requests/approvewithdrawal.json", "/responses/approvewithdrawal.json"
     );
 
     this.doRequestResponse(
-      BalanceRequestData.class, BalanceResponseData.class,
+      BalanceRequest.Params.Data.class, BalanceResponse.class,
       "Balance",
       "/requests/balance.json", "/responses/balance.json"
     );
 
     Assertions.assertThrows(TrustlyRequestException.class, () -> this.doRequestResponse(
-      CancelChargeRequestData.class, CancelChargeResponseData.class,
+      CancelChargeRequest.Params.Data.class, CancelChargeResponse.class,
       "CancelCharge",
       "/requests/cancelcharge.json", "/responses/cancelcharge_fail.json"
     ));
     this.doRequestResponse(
-      CancelChargeRequestData.class, CancelChargeResponseData.class,
+      CancelChargeRequest.Params.Data.class, CancelChargeResponse.class,
       "CancelCharge",
       "/requests/cancelcharge.json", "/responses/cancelcharge_ok.json"
     );
 
     this.doRequestResponse(
-      ChargeRequestData.class, ChargeResponseData.class,
+      ChargeRequest.Params.Data.class, ChargeResponse.class,
       "Charge",
       "/requests/charge_1.json", "/responses/charge.json"
     );
     this.doRequestResponse(
-      ChargeRequestData.class, ChargeResponseData.class,
+      ChargeRequest.Params.Data.class, ChargeResponse.class,
       "Charge",
       "/requests/charge_2.json", "/responses/charge.json"
     );
 
     this.doRequestResponse(
-      DenyWithdrawalRequestData.class, DenyWithdrawalResponseData.class,
+      DenyWithdrawalRequest.Params.Data.class, DenyWithdrawalResponse.class,
       "DenyWithdrawal",
       "/requests/denywithdrawal.json", "/responses/denywithdrawal.json"
     );
 
     this.doRequestResponse(
-      DepositRequestData.class, DepositResponseData.class,
+      DepositRequest.Params.Data.class, DepositResponse.class,
       "Deposit",
       "/requests/deposit_1.json", "/responses/deposit.json"
     );
     this.doRequestResponse(
-      DepositRequestData.class, DepositResponseData.class,
+      DepositRequest.Params.Data.class, DepositResponse.class,
       "Deposit",
       "/requests/deposit_2.json", "/responses/deposit.json"
     );
     this.doRequestResponse(
-      DepositRequestData.class, DepositResponseData.class,
+      DepositRequest.Params.Data.class, DepositResponse.class,
       "Deposit",
       "/requests/deposit_3.json", "/responses/deposit.json"
     );
     this.doRequestResponse(
-      DepositRequestData.class, DepositResponseData.class,
+      DepositRequest.Params.Data.class, DepositResponse.class,
       "Deposit",
       "/requests/deposit_ideal.json", "/responses/deposit.json"
     );
 
     this.doRequestResponse(
-      GetWithdrawalsRequestData.class, GetWithdrawalsResponseData.class,
+      GetWithdrawalsRequest.Params.Data.class, GetWithdrawalsResponse.class,
       "GetWithdrawals",
       "/requests/getwithdrawals.json", "/responses/getwithdrawals.json"
     );
 
     this.doRequestResponse(
-      RefundRequestData.class, RefundResponseData.class,
+      RefundRequest.Params.Data.class, RefundResponse.class,
       "Refund",
       "/requests/refund.json", "/responses/refund.json"
     );
 
     this.doRequestResponse(
-      RegisterAccountRequestData.class, RegisterAccountResponseData.class,
+      RegisterAccountRequest.Params.Data.class, RegisterAccountResponse.class,
       "RegisterAccount",
       "/requests/registeraccount.json", "/responses/registeraccount.json"
     );
     this.doRequestResponse(
-      RegisterAccountRequestData.class, RegisterAccountResponseData.class,
+      RegisterAccountRequest.Params.Data.class, RegisterAccountResponse.class,
       "RegisterAccount",
       "/requests/registeraccount_2.json", "/responses/registeraccount.json"
     );
 
     this.doRequestResponse(
-      SelectAccountRequestData.class, SelectAccountResponseData.class,
+      SelectAccountRequest.Params.Data.class, SelectAccountResponse.class,
       "SelectAccount",
       "/requests/selectaccount.json", "/responses/selectaccount.json"
     );
 
     this.doRequestResponse(
-      SettlementReportRequestData.class, SettlementReportResponseData.class,
+      SettlementReportRequest.Params.Data.class, SettlementReportResponse.class,
       "ViewAutomaticSettlementDetailsCSV",
       "/requests/settlementreport.json", "/responses/settlementreport.json"
     );
 
     this.doRequestResponse(
-      WithdrawRequestData.class, WithdrawResponseData.class,
+      WithdrawRequest.Params.Data.class, WithdrawResponse.class,
       "Withdraw",
       "/requests/withdraw.json", "/responses/withdraw.json"
     );
   }
 
-  private <T extends IToTrustlyRequestParams, R extends IResponseResultData> void doRequestResponse(
-    Class<T> requestClass,
-    Class<R> responseClass,
+  private <
+    TResData,
+    TResResult extends ResponseResult<TResData>,
+    TRes extends JsonRpcResponse<TResResult>
+    >
+  void doRequestResponse(
+    Class<? extends AbstractRequestData> requestDataClass,
+    Class<TRes> responseDataClass,
     String method,
     String requestClassPath,
     String responseClassPath
@@ -232,8 +212,12 @@ class TestExamplePayloads {
       try (TrustlyApiClient client = new TrustlyApiClient(settings, new NoOpJsonRpcSigner(), fakeHttpRequester)) {
         try (InputStream requestStream = TestExamplePayloads.class.getResourceAsStream(requestClassPath)) {
 
-          T requestData = new ObjectMapper().readValue(requestStream, requestClass);
-          client.sendRequest(requestData, responseClass, method, requestUuid);
+          Assertions.assertNotNull(client.sendRequest(
+            TrustlyApiClient.DEFAULT_OBJECT_MAPPER.readValue(requestStream, requestDataClass),
+            responseDataClass,
+            method,
+            requestUuid
+          ));
         }
       }
     }

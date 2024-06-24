@@ -11,10 +11,10 @@ public class TrustlyStringUtils {
       return true;
     }
 
-    if (value.equals("")) {
+    if (value.isEmpty()) {
       return true;
     }
 
-    return value.trim().equals("");
+    return value.trim().isEmpty();
   }
 }

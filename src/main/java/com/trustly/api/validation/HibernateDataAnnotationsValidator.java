@@ -1,6 +1,5 @@
 package com.trustly.api.validation;
 
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import java.util.ArrayList;
@@ -28,8 +27,10 @@ public class HibernateDataAnnotationsValidator implements AnnotationsValidator {
     }
 
     List<String> errorMessages = new ArrayList<>();
-    for (ConstraintViolation<T> validation : this.validator.validate(obj)) {
-      errorMessages.add(validation.getPropertyPath() + ": " + validation.getMessage());
+    if (obj != null) {
+      for (var validation : this.validator.validate(obj)) {
+        errorMessages.add(validation.getPropertyPath() + ": " + validation.getMessage());
+      }
     }
 
     if (!errorMessages.isEmpty()) {

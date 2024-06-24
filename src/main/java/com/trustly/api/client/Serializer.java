@@ -2,10 +2,8 @@ package com.trustly.api.client;
 
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.ValueNode;
-import com.trustly.api.domain.base.IData;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -13,16 +11,10 @@ import java.util.List;
 
 public class Serializer {
 
-  private final ObjectMapper objectMapper = new ObjectMapper();
+  public <D> String serializeData(D data) {
 
-  public <D extends IData> String serializeData(D data) {
-
-    JsonNode jsonObject = this.objectMapper.valueToTree(data);
-
-    StringBuilder sb = new StringBuilder();
-    this.serializeNode(jsonObject, sb);
-
-    return sb.toString();
+    JsonNode jsonObject = TrustlyApiClient.DEFAULT_OBJECT_MAPPER.valueToTree(data);
+    return this.serializeNode(jsonObject);
   }
 
   public String serializeNode(TreeNode node) {

@@ -1,21 +1,19 @@
 package com.trustly.api.client;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.trustly.api.domain.base.IRequest;
-import com.trustly.api.domain.base.IRequestParams;
-import com.trustly.api.domain.base.IRequestParamsData;
-import com.trustly.api.domain.base.IResponseResultData;
-import com.trustly.api.domain.base.JsonRpcRequest;
-import com.trustly.api.domain.base.JsonRpcResponse;
 import com.trustly.api.domain.exceptions.TrustlySignatureException;
+
+import static com.trustly.api.domain.Models.*;
 
 public interface JsonRpcSigner {
 
-  <T extends IRequestParamsData> JsonRpcRequest<T> sign(JsonRpcRequest<T> request);
+  <D extends AbstractRequestData, P extends JsonRpcRequestParams<D>> JsonRpcRequest<P> sign(JsonRpcRequest<P> request);
 
-  <T extends IResponseResultData> JsonRpcResponse<T> sign(JsonRpcResponse<T> response);
+  <D, T extends ResponseResult<D>> JsonRpcResponse<T> sign(JsonRpcResponse<T> response);
 
-  <D extends IRequestParamsData, P extends IRequestParams<D>> void verify(IRequest<P> request) throws TrustlySignatureException;
+//  <D, P extends JsonRpcNotificationParams<D>> void verify(JsonRpcNotification<P> request) throws TrustlySignatureException;
 
-  <T extends IResponseResultData> void verify(JsonRpcResponse<T> response, JsonNode nodeResponse) throws TrustlySignatureException;
+  void verify(String method, String uuid, JsonNode dataNode, String expectedSignature) throws TrustlySignatureException;
+
+  <D, T extends ResponseResult<D>> void verify(JsonRpcResponse<T> response, JsonNode nodeResponse) throws TrustlySignatureException;
 }

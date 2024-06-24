@@ -1,6 +1,6 @@
 package com.trustly.api.client;
 
-import com.trustly.api.domain.base.IRequestParamsData;
+import com.trustly.api.domain.Models;
 import com.trustly.api.domain.exceptions.TrustlyValidationException;
 import jakarta.validation.Valid;
 import java.io.IOException;
@@ -8,18 +8,11 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class NotificationArgs<D extends IRequestParamsData> {
+public class NotificationArgs<D, TAckData extends Models.NotificationResponseDataBase<?>> {
 
   @FunctionalInterface
-  public interface NotificationOkHandler {
-
-    void handle(String method, String uuid) throws IOException, TrustlyValidationException;
-  }
-
-  @FunctionalInterface
-  public interface NotificationFailHandler {
-
-    void handle(String method, String uuid, String message) throws IOException, TrustlyValidationException;
+  public interface NotificationHandler<TAckData extends Models.NotificationResponseDataBase<?>> {
+    void handle(String method, String uuid, TAckData result) throws IOException, TrustlyValidationException;
   }
 
   @Getter
@@ -29,14 +22,9 @@ public class NotificationArgs<D extends IRequestParamsData> {
   private final String method;
   private final String uuid;
 
-  private final NotificationOkHandler onOK;
-  private final NotificationFailHandler onFailed;
+  private final NotificationHandler<TAckData> onOK;
 
-  public void respondWithOk() throws TrustlyValidationException, IOException {
-    this.onOK.handle(this.method, this.uuid);
-  }
-
-  public void respondWithFailed(String message) throws TrustlyValidationException, IOException {
-    this.onFailed.handle(this.method, this.uuid, message);
+  public void respondWith(TAckData result) throws TrustlyValidationException, IOException {
+    this.onOK.handle(this.method, this.uuid, result);
   }
 }

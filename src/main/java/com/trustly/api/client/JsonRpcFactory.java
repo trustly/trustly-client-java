@@ -1,27 +1,19 @@
 package com.trustly.api.client;
 
-import com.trustly.api.domain.base.IRequestParamsData;
-import com.trustly.api.domain.base.JsonRpcRequest;
-import com.trustly.api.domain.base.RequestParams;
+import static com.trustly.api.domain.Models.*;
+
+import java.util.Objects;
 import java.util.UUID;
 
 public class JsonRpcFactory {
 
-  public <D extends IRequestParamsData> JsonRpcRequest<D> create(D requestData, String method) {
-    return this.create(requestData, method, null);
-  }
+  public <TReqData extends AbstractRequestData> JsonRpcRequest<JsonRpcRequestParams<TReqData>> create(TReqData requestData, String method, String uuid) {
 
-  public <D extends IRequestParamsData> JsonRpcRequest<D> create(D requestData, String method, String uuid) {
-
-    if (uuid == null) {
-      uuid = UUID.randomUUID().toString();
-    }
-
-    return JsonRpcRequest.<D>builder()
+    return JsonRpcRequest.<JsonRpcRequestParams<TReqData>>builder()
       .method(method)
       .params(
-        RequestParams.<D>builder()
-          .uuid(uuid)
+        JsonRpcRequestParams.<TReqData>builder()
+          .uuid(Objects.requireNonNullElseGet(uuid, () -> UUID.randomUUID().toString()))
           .data(requestData)
           .build()
       )

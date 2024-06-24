@@ -1,15 +1,10 @@
 package com.trustly.api.client;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.trustly.api.domain.base.IData;
-import com.trustly.api.domain.base.IRequest;
-import com.trustly.api.domain.base.IRequestParams;
-import com.trustly.api.domain.base.IRequestParamsData;
-import com.trustly.api.domain.base.IResponseResultData;
-import com.trustly.api.domain.base.JsonRpcRequest;
-import com.trustly.api.domain.base.JsonRpcResponse;
 import com.trustly.api.domain.exceptions.TrustlySignatureException;
 import com.trustly.api.util.TrustlyStringUtils;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -18,7 +13,8 @@ import java.security.Security;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.util.Base64;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
+import static com.trustly.api.domain.Models.*;
 
 public class DefaultJsonRpcSigner implements JsonRpcSigner {
 
@@ -37,32 +33,38 @@ public class DefaultJsonRpcSigner implements JsonRpcSigner {
   }
 
   @Override
-  public <T extends IRequestParamsData> JsonRpcRequest<T> sign(JsonRpcRequest<T> request) {
+  public <TReqData extends AbstractRequestData, TReqParam extends JsonRpcRequestParams<TReqData>> JsonRpcRequest<TReqParam> sign(JsonRpcRequest<TReqParam> request) {
 
     String signature = this.createSignature(request.getMethod(), request.getParams().getUuid(), request.getParams().getData());
+    request.getParams().setSignature(signature);
 
-    return request.toBuilder()
-      .params(
-        request.getParams().withSignature(signature)
-      )
-      .build();
+    return request;
   }
 
   @Override
-  public <T extends IResponseResultData> JsonRpcResponse<T> sign(JsonRpcResponse<T> response) {
+  public <TResData, TResParams extends ResponseResult<TResData>> JsonRpcResponse<TResParams> sign(JsonRpcResponse<TResParams> response) {
 
-    String signature = this.createSignature(response.getMethod(), response.getUUID(), response.getData());
+    String signature = this.createSignature(response.getResult().getMethod(), response.getResult().getUUID(), response.getResult().getData());
+    response.getResult().setSignature(signature);
 
-    return response.toBuilder()
-      .result(
-        response.getResult().toBuilder()
-          .signature(signature)
-          .build()
-      )
-      .build();
+    return response;
   }
 
-  private <T extends IData> String createSignature(String method, String uuid, T data) {
+  @Override
+  public <D, T extends ResponseResult<D>> void verify(JsonRpcResponse<T> response, JsonNode nodeResponse) throws TrustlySignatureException {
+
+    JsonNode dataNode = null;
+    if (nodeResponse != null) {
+      dataNode = nodeResponse.at("/result/data");
+      if (dataNode.isMissingNode()) {
+        dataNode = nodeResponse.at("/error/data");
+      }
+    }
+
+    this.verify(response.getResult().getMethod(), response.getResult().getUUID(), dataNode, response.getResult().getSignature());
+  }
+
+  private <TData> String createSignature(String method, String uuid, TData data) {
     String serializedData = this.serializer.serializeData(data);
     String plainText = this.createPlaintext(serializedData, method, uuid);
 
@@ -94,31 +96,7 @@ public class DefaultJsonRpcSigner implements JsonRpcSigner {
     return Base64.getEncoder().encodeToString(signedBytes);
   }
 
-  @Override
-  public <D extends IRequestParamsData, P extends IRequestParams<D>> void verify(IRequest<P> request) throws TrustlySignatureException {
-
-    String uuid = (request.getParams() == null) ? null : request.getParams().getUuid();
-    String signature = (request.getParams() == null) ? null : request.getParams().getSignature();
-    D data = (request.getParams() == null) ? null : request.getParams().getData();
-
-    this.verify(request.getMethod(), uuid, signature, data, null);
-  }
-
-  @Override
-  public <T extends IResponseResultData> void verify(JsonRpcResponse<T> response, JsonNode nodeResponse) throws TrustlySignatureException {
-
-    JsonNode dataNode = null;
-    if (nodeResponse != null) {
-      dataNode = nodeResponse.at("/result/data");
-      if (dataNode.isMissingNode()) {
-        dataNode = nodeResponse.at("/error/data");
-      }
-    }
-
-    this.verify(response.getMethod(), response.getUUID(), response.getSignature(), response.getData(), dataNode);
-  }
-
-  private void verify(String method, String uuid, String expectedSignature, IData data, JsonNode dataNode)
+  public void verify(String method, String uuid, JsonNode dataNode, String expectedSignature)
     throws TrustlySignatureException {
 
     if (TrustlyStringUtils.isBlank(expectedSignature)) {
@@ -128,14 +106,12 @@ public class DefaultJsonRpcSigner implements JsonRpcSigner {
     // If possible, we will serialize based on the actual data node instead of the data object.
     // This way we can differentiate between a field that has as null value and was not given at all.
     // This can happen with values given back from the Trustly remote server.
-    String serializedResponseData = (dataNode != null && !dataNode.isMissingNode() && !dataNode.isNull())
-      ? this.serializer.serializeNode(dataNode)
-      : this.serializer.serializeData(data);
+    var serializedResponseData = this.serializer.serializeNode(dataNode);
 
-    String responsePlainText = this.createPlaintext(serializedResponseData, method, uuid);
+    var responsePlainText = this.createPlaintext(serializedResponseData, method, uuid);
 
-    byte[] responseBytes = responsePlainText.getBytes(StandardCharsets.UTF_8);
-    byte[] expectedSignatureBytes = Base64.getDecoder().decode(expectedSignature);
+    var responseBytes = responsePlainText.getBytes(StandardCharsets.UTF_8);
+    var expectedSignatureBytes = Base64.getDecoder().decode(expectedSignature);
 
     try {
 
@@ -143,7 +119,7 @@ public class DefaultJsonRpcSigner implements JsonRpcSigner {
         Security.addProvider(new BouncyCastleProvider());
       }
 
-      Signature signer = Signature.getInstance(SHA1_WITH_RSA, BouncyCastleProvider.PROVIDER_NAME);
+      var signer = Signature.getInstance(SHA1_WITH_RSA, BouncyCastleProvider.PROVIDER_NAME);
       signer.initVerify(this.settings.getTrustlyPublicKey());
       signer.update(responseBytes);
 
