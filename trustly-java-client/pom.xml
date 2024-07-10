@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.trustly.api</groupId>
+    <artifactId>trustly-java</artifactId>
+    <version>${revision}</version>
+  </parent>
+
+  <artifactId>trustly-java-client</artifactId>
+  <version>${revision}</version>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>com.trustly.api</groupId>
+      <artifactId>trustly-java-models</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.trustly.api</groupId>
+      <artifactId>trustly-java-util</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+
+    <!-- Required dependencies, for now -->
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>2.0.6</version>
+    </dependency>
+
+    <!-- Provided dependencies; good to haves -->
+    <dependency>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <version>3.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>4.5.14</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents.client5</groupId>
+      <artifactId>httpclient5</artifactId>
+      <version>5.2.1</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>7.0.5.Final</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>4.0.1</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>5.0.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+        <version>1.5.0</version>
+        <configuration>
+          <updatePomFile>true</updatePomFile>
+          <flattenMode>resolveCiFriendliesOnly</flattenMode>
+        </configuration>
+        <executions>
+          <execution>
+            <id>flatten</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>flatten</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>flatten.clean</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jarsigner-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>sign</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+            <configuration>
+
+              <keystore>NONE</keystore> <!-- Use NONE to indicate HSM usage -->
+              <storepass>NONE</storepass>
+              <storetype>PKCS11</storetype> <!-- SafeNet HSM typically uses PKCS11 -->
+              <sigalg>SHA256withRSA</sigalg>
+              <provider>sun.security.pkcs11.SunPKCS11</provider>
+
+<!--              <keystore>${env.HOME}/.keystore</keystore> &lt;!&ndash; Adjust this path to your keystore location &ndash;&gt;-->
+<!--              <storepass>changeit</storepass> &lt;!&ndash; Password for the keystore &ndash;&gt;-->
+
+              <alias>TrustlySign</alias> <!-- Alias of the certificate -->
+<!--              <keypass>changeit</keypass> &lt;!&ndash; Password for the key if different from the keystore password &ndash;&gt;-->
+              <tsa>http://timestamp.digicert.com</tsa> <!-- Timestamp server (optional but recommended) -->
+
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+<!--      jarsigner -keystore NONE -storepass NONE -storetype PKCS11 -sigalg SHA256withRSA -providerClass sun.security.pkcs11.SunPKCS11 -->
+<!--      -providerArg <path to pkcs11properties.cfg> -signedjar <path to signed file output> <unsigned file path> <keypair alias> -tsa http://timestamp.digicert.com-->
+
+<!--      <plugin>-->
+<!--        <groupId>org.apache.maven.plugins</groupId>-->
+<!--        <artifactId>maven-gpg-plugin</artifactId>-->
+<!--        <version>1.6</version>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <id>sign-artifacts</id>-->
+<!--            <phase>verify</phase>-->
+<!--            <goals>-->
+<!--              <goal>sign</goal>-->
+<!--            </goals>-->
+<!--            <configuration>-->
+<!--              <gpgArguments>-->
+<!--                <arg>&#45;&#45;pinentry-mode</arg>-->
+<!--                <arg>loopback</arg>-->
+<!--              </gpgArguments>-->
+<!--            </configuration>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--      </plugin>-->
+
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>${maven.release.version}</version>
+          <configuration>
+            <autoVersionSubmodules>true</autoVersionSubmodules>
+            <tagNameFormat>ProjectName-@{project.version}</tagNameFormat>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+</project>
