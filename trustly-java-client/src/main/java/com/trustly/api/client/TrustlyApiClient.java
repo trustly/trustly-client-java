@@ -7,7 +7,6 @@ import com.trustly.api.Serializer;
 import com.trustly.api.TrustlyApiClientSettings;
 import com.trustly.api.client.NotificationArgs.NotificationHandler;
 import com.trustly.api.domain.Models;
-import com.trustly.api.domain.notifications.UnknownData;
 import com.trustly.api.domain.notifications.UnknownNotification;
 import com.trustly.api.domain.notifications.UnknownNotificationAckData;
 import com.trustly.api.domain.notifications.UnknownNotificationResponse;
@@ -270,35 +269,35 @@ public class TrustlyApiClient implements Closeable {
     meta.getListeners().add(listener);
   }
 
-  public void addOnAccountListener(NotificationEvent<AccountDefaultNotification.Params.Data, GeneralNotificationResponseData> listener) {
-    this.addNotificationListener("account", AccountDefaultNotification.class, AccountDefaultNotificationResponse.class, listener);
+  public void addOnAccountListener(NotificationEvent<AccountNotification.Params.Data, AckData> listener) {
+    this.addNotificationListener("account", AccountNotification.class, AccountNotificationResponse.class, listener);
   }
 
-  public void addOnCancelListener(NotificationEvent<CancelNotification.Params.Data, GeneralNotificationResponseData> listener) {
+  public void addOnCancelListener(NotificationEvent<CancelNotification.Params.Data, AckData> listener) {
     this.addNotificationListener("cancel", CancelNotification.class, CancelNotificationResponse.class, listener);
   }
 
-  public void addOnCreditListener(NotificationEvent<CreditDefaultNotification.Params.Data, GeneralNotificationResponseData> listener) {
-    this.addNotificationListener("credit", CreditDefaultNotification.class, CreditDefaultNotificationResponse.class, listener);
+  public void addOnCreditListener(NotificationEvent<CreditNotification.Params.Data, AckData> listener) {
+    this.addNotificationListener("credit", CreditNotification.class, CreditNotificationResponse.class, listener);
   }
 
-  public void addOnDebitListener(NotificationEvent<DebitDefaultNotification.Params.Data, DebitNotificationResponseData> listener) {
-    this.addNotificationListener("debit", DebitDefaultNotification.class, DebitDefaultNotificationResponse.class, listener);
+  public void addOnDebitListener(NotificationEvent<DebitNotification.Params.Data, DebitNotificationResponseData> listener) {
+    this.addNotificationListener("debit", DebitNotification.class, DebitNotificationResponse.class, listener);
   }
 
-  public void addOnPayoutConfirmation(NotificationEvent<PayoutConfirmationNotification.Params.Data, GeneralNotificationResponseData> listener) {
+  public void addOnPayoutConfirmation(NotificationEvent<PayoutConfirmationNotification.Params.Data, AckData> listener) {
     this.addNotificationListener("payoutconfirmation", PayoutConfirmationNotification.class, PayoutConfirmationNotificationResponse.class, listener);
   }
 
-  public void addOnPending(NotificationEvent<PendingDefaultNotification.Params.Data, GeneralNotificationResponseData> listener) {
-    this.addNotificationListener("pending", PendingDefaultNotification.class, PendingDefaultNotificationResponse.class, listener);
+  public void addOnPending(NotificationEvent<PendingNotification.Params.Data, AckData> listener) {
+    this.addNotificationListener("pending", PendingNotification.class, PendingNotificationResponse.class, listener);
   }
 
   public void addOnKYC(NotificationEvent<KYCNotification.Params.Data, KYCNotificationResponse.Result.Data> listener) {
     this.addNotificationListener("kyc", KYCNotification.class, KYCNotificationResponse.class, listener);
   }
 
-  public void addOnUnknownNotification(NotificationEvent<UnknownData, UnknownNotificationAckData> listener) {
+  public void addOnUnknownNotification(NotificationEvent<UnknownNotification.Params.Data, UnknownNotificationAckData> listener) {
     this.addNotificationListener("", UnknownNotification.class, UnknownNotificationResponse.class, listener);
   }
 
@@ -527,7 +526,6 @@ public class TrustlyApiClient implements Closeable {
 
   private <
     TCallback extends JsonRpcNotification<? extends JsonRpcNotificationParams<TCallbackData>>,
-//    TCallbackParams extends ,
     TCallbackData,
 
     TMeta extends NotificationMeta<TCallback, TCallbackData, TAckData, TAckStatus>,

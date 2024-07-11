@@ -62,13 +62,17 @@ class NotificationsTest {
   }
 
   static Stream<Arguments> testNotificationsWithoutSignatureVerification() {
+
+    var generalOk = AckData.builder().status(AckData.Status.OK).build();
+    var debitOk = DebitNotificationResponseData.builder().status(DebitNotificationResponseData.Status.OK).build();
+
     return Stream.of(
-      Arguments.of(new Scenario<>("account", AccountDefaultNotification.class, AccountDefaultNotificationResponse.class, GeneralNotificationResponseData::new)),
-      Arguments.of(new Scenario<>("cancel", CancelNotification.class, CancelNotificationResponse.class, GeneralNotificationResponseData::new)),
-      Arguments.of(new Scenario<>("credit", CreditDefaultNotification.class, CreditDefaultNotificationResponse.class, GeneralNotificationResponseData::new)),
-      Arguments.of(new Scenario<>("debit", DebitDefaultNotification.class, DebitDefaultNotificationResponse.class, DebitNotificationResponseData::new)),
-      Arguments.of(new Scenario<>("payoutconfirmation", PayoutConfirmationNotification.class, PayoutConfirmationNotificationResponse.class, GeneralNotificationResponseData::new)),
-      Arguments.of(new Scenario<>("pending", PendingDefaultNotification.class, PendingDefaultNotificationResponse.class, GeneralNotificationResponseData::new))
+      Arguments.of(new Scenario<>("account", AccountNotification.class, AccountNotificationResponse.class, () -> generalOk)),
+      Arguments.of(new Scenario<>("cancel", CancelNotification.class, CancelNotificationResponse.class, () -> generalOk)),
+      Arguments.of(new Scenario<>("credit", CreditNotification.class, CreditNotificationResponse.class, () -> generalOk)),
+      Arguments.of(new Scenario<>("debit", DebitNotification.class, DebitNotificationResponse.class, () -> debitOk)),
+      Arguments.of(new Scenario<>("payoutconfirmation", PayoutConfirmationNotification.class, PayoutConfirmationNotificationResponse.class, () -> generalOk)),
+      Arguments.of(new Scenario<>("pending", PendingNotification.class, PendingNotificationResponse.class, () -> generalOk))
     );
   }
 
@@ -144,6 +148,7 @@ class NotificationsTest {
 
         @Override
         public void setStatus(int httpStatus) {
+          Assertions.assertEquals(200, httpStatus, "Http 200 was expected, an error must have occurred");
           status.set(httpStatus);
         }
 
@@ -172,7 +177,7 @@ class NotificationsTest {
       client.addOnCancelListener(args -> {
 
         receivedNotificationDataCounter.incrementAndGet();
-        args.respondWith(GeneralNotificationResponseData.builder().status(GeneralNotificationResponseData.Status.OK).build());
+        args.respondWith(AckData.builder().status(AckData.Status.OK).build());
       });
 
       final InputStream is = this.getClass().getResourceAsStream("/notifications/incoming/cancel.json");

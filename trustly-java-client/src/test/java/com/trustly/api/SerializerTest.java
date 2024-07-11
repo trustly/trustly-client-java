@@ -5,7 +5,7 @@ import com.trustly.api.client.JsonRpcFactory;
 import com.trustly.api.client.JsonRpcValidator;
 import com.trustly.api.client.TrustlyApiClient;
 import com.trustly.api.domain.Models.DepositRequest;
-import com.trustly.api.domain.Models.GeneralNotificationResponseData;
+import com.trustly.api.domain.Models.AckData;
 import com.trustly.api.domain.Models.RegisterAccountResponse;
 import com.trustly.api.domain.Models.SelectAccountRequest;
 import com.trustly.api.exceptions.TrustlyValidationException;
@@ -127,8 +127,8 @@ class SerializerTest {
       var rpcResponse = client.createResponsePackage(
         "account",
         "e76ffbe5-e0f9-4402-8689-f868ed2021f8",
-        GeneralNotificationResponseData.builder()
-          .status(GeneralNotificationResponseData.Status.OK)
+        AckData.builder()
+          .status(AckData.Status.OK)
           .build()
       );
 

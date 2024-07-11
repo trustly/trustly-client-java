@@ -3,6 +3,7 @@ package com.trustly.api;
 import com.trustly.api.client.TrustlyApiClient;
 import com.trustly.api.exceptions.TrustlyErrorResponseException;
 import com.trustly.api.exceptions.TrustlyRequestException;
+import com.trustly.api.exceptions.TrustlyValidationException;
 import com.trustly.api.request.HttpRequester;
 import com.trustly.api.util.TrustlyStreamUtils;
 import org.junit.jupiter.api.Assertions;

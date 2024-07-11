@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.Singular;
 
-@Generated(value = "omnigen", date = "2024-07-10T09:27:47.923Z")
+@Generated(value = "omnigen", date = "2024-07-11T08:31:54.066Z")
 @SuppressWarnings("unused")
 public class Models {
   @Getter
@@ -261,7 +261,6 @@ public class Models {
     private String currency;
     /**
      * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-     * <p>
      * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
      */
     @JsonProperty(value = "enduserid")
@@ -363,7 +362,6 @@ public class Models {
     private String currency;
     /**
      * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-     * <p>
      * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
      */
     @JsonProperty(value = "enduserid", required = true)
@@ -504,7 +502,7 @@ public class Models {
   @RequiredArgsConstructor
   @Setter
   @SuperBuilder
-  public abstract static class AbstractPendingNotificationData implements IAbstractPendingNotificationData {
+  public abstract static class AbstractPendingNotificationData extends AbstractNotificationRequestData {
     /**
      * {@code 98.02}
      */
@@ -513,6 +511,7 @@ public class Models {
     @NotNull
     private double amount;
     @JsonProperty(value = "attributes")
+    @Valid
     private AnyAttributes attributes;
     /**
      * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
@@ -584,6 +583,7 @@ public class Models {
   @SuperBuilder
   public static class AbstractRequestData<T> {
     @JsonProperty(value = "Attributes")
+    @Valid
     private T attributes;
     @JsonProperty(value = "Password", required = true)
     @JsonInclude
@@ -610,65 +610,6 @@ public class Models {
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
       return this.additionalProperties;
-    }
-  }
-
-  @Getter
-  @Jacksonized
-  @Setter
-  @SuperBuilder
-  public static class AccountDefaultNotification extends JsonRpcNotification<AccountDefaultNotification.Params> {
-    public AccountDefaultNotification() {
-      super("account");
-    }
-
-    @Getter
-    @Jacksonized
-    @RequiredArgsConstructor
-    @Setter
-    @SuperBuilder
-    public static class Params extends JsonRpcNotificationParams<Params.Data> {
-      @Getter
-      @Jacksonized
-      @RequiredArgsConstructor
-      @Setter
-      @SuperBuilder
-      public static class Data extends AbstractAccountNotificationData<Data.Attributes> {
-        @Getter
-        @Jacksonized
-        @RequiredArgsConstructor
-        @Setter
-        @SuperBuilder
-        public static class Attributes extends AbstractAccountNotificationDataAttributes implements IAdditionalProperties {
-          @Singular
-          @JsonAnySetter
-          private Map<String, Object> additionalProperties;
-          public void addAdditionalProperty(String key, Object value) {
-            this.additionalProperties.put(key, value);
-          }
-
-          @JsonAnyGetter
-          public Map<String, Object> getAdditionalProperties() {
-            return this.additionalProperties;
-          }
-        }
-      }
-    }
-  }
-
-  @Getter
-  @Jacksonized
-  @RequiredArgsConstructor
-  @Setter
-  @SuperBuilder
-  public static class AccountDefaultNotificationResponse extends JsonRpcResponse<AccountDefaultNotificationResponse.Result> {
-    @Getter
-    @Jacksonized
-    @RequiredArgsConstructor
-    @Setter
-    @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
-
     }
   }
 
@@ -828,142 +769,144 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Params extends JsonRpcNotificationParams<Params.Data> {
-      @Getter
-      @Jacksonized
-      @RequiredArgsConstructor
-      @Setter
-      @SuperBuilder
-      public static class Data extends AbstractAccountNotificationData<Data.Attributes> {
-        @Getter
-        @Jacksonized
-        @RequiredArgsConstructor
-        @Setter
-        @SuperBuilder
-        public static class Attributes extends AbstractAccountNotificationDataAttributes implements IAdditionalProperties {
-          @JsonProperty(value = "accountholders")
-          private List<String> accountholders;
-          /**
-           * Name of the account
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>Salary account</li>
-           * </ul>
-           */
-          @JsonProperty(value = "accountname")
-          private String accountname;
-          /**
-           * The account number, identifying the end-user's account in the bank. Can be either IBAN or country-specific format, see examples or read more at https://developers.trustly.com/emea/docs/registeraccount
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>6112</li>
-           *   <li>391124057</li>
-           *   <li>AUSTRIA: ^AT[0-9]{18}$</li>
-           *   <li>BELGIUM: ^BE[0-9]{14}$</li>
-           *   <li>BULGARIA: ^BG[0-9]{2}[A-Z]{4}[0-9]{4}[0-9]{2}[A-Z0-9]{8}$</li>
-           *   <li>CROATIA: ^HR[0-9]{2}[0-9]{7}[0-9]{10}$</li>
-           *   <li>CYPRUS: ^CY[0-9]{10}[0-9A-Z]{16}$</li>
-           *   <li>CZECH_REPUBLIC: ^CZ[0-9]{22}$</li>
-           *   <li>DENMARK: ^DK[0-9]{16}$</li>
-           *   <li>ESTONIA: ^EE[0-9]{18}$</li>
-           *   <li>FINLAND: ^FI[0-9]{16}$</li>
-           *   <li>FRANCE: ^FR[0-9]{12}[0-9A-Z]{11}[0-9]{2}$</li>
-           *   <li>GERMANY: ^DE[0-9]{20}$</li>
-           *   <li>GREECE: ^GR[0-9]{25}$</li>
-           *   <li>HUNGARY: ^HU[0-9]{26}$</li>
-           *   <li>IRELAND: ^IE[0-9]{2}[A-Z]{4}[0-9]{14}$</li>
-           *   <li>ITALY: ^IT[0-9]{2}[A-Z][0-9]{10}[0-9A-Z]{12}$</li>
-           *   <li>LATVIA: ^LV[0-9]{2}[A-Z]{4}[0-9A-Z]{13}$</li>
-           *   <li>LITHUANIA: ^LT[0-9]{18}$</li>
-           *   <li>LUXEMBOURG: ^LU[0-9]{18}$</li>
-           *   <li>MALTA: ^MT[0-9]{2}[A-Z]{4}[0-9]{5}[0-9A-Z]{18}$</li>
-           *   <li>NETHERLANDS: ^NL[0-9]{2}[A-Z]{4}[0-9]{10}$</li>
-           *   <li>NORWAY: ^NO[0-9]{13}$</li>
-           *   <li>POLAND: ^PL[0-9]{26}$</li>
-           *   <li>PORTUGAL: ^PT[0-9]{23}$</li>
-           *   <li>ROMANIA: ^RO[0-9]{2}[A-Z]{4}[0-9A-Z]{16}$</li>
-           *   <li>SLOVAKIA: ^SK[0-9]{22}$</li>
-           *   <li>SLOVENIA: ^SI56[0-9]{15}$</li>
-           *   <li>SPAIN: ^ES[0-9]{22}$</li>
-           *   <li>SWEDEN:* [0-9]{1,15}$</li>
-           *   <li>UNITED_KINGDOM: ^[0-9]{8}$</li>
-           * </ul>
-           */
-          @JsonProperty(value = "accountnumber")
-          private String accountnumber;
-          @JsonProperty(value = "accountsource")
-          private MandateAccountSource accountsource;
-          @Singular
-          @JsonAnySetter
-          private Map<String, Object> additionalProperties;
-          /**
-           * The bank number identifying the end-user's bank in the given clearing house. For bank accounts in IBAN format you should just provide an empty string (""). For non-IBAN format, see examples. The BankNumber for Swedish bank accounts should be the local "clearing number", and the AccountNumber parameter should contain the rest of the account number. Most Swedish banks have a 4-digit clearing number, but a 5-digit clearing number is used for Swedbank accounts when the clearing number starts with "8". Nordea accounts where the account number is the same as the person's national identification number always has "3300" as the clearing number.
-           * <p>
-           * IBAN for Swedish bank accounts is supported upon request. When making API calls with Swedish IBAN, ensure to include the Clearinghouse attribute as "IBAN" instead of "SWEDEN". See more at https://developers.trustly.com/emea/docs/registeraccount
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>Sweden: ^[0-9]{4,5}$</li>
-           *   <li>United Kingdom: ^[0-9]{6}$</li>
-           * </ul>
-           */
-          @JsonProperty(value = "bankcode")
-          private String bankcode;
-          /**
-           * The branch identifier
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>6160</li>
-           *   <li>6000</li>
-           *   <li>bg</li>
-           *   <li>123123</li>
-           *   <li>HANDSESS</li>
-           * </ul>
-           */
-          @JsonProperty(value = "bankidentifier")
-          private String bankidentifier;
-          /**
-           * The ISO 3166-1-alpha-2 code of the end-user's country. This will be used for pre-selecting the country for the end-user in the iframe.
-           * Note: This will only have an effect for new end-users. If an end-user has done a previous order (with the same EndUserID), the country that was last used will be pre-selected.
-           */
-          @JsonProperty(value = "country")
-          private String country;
-          /**
-           * Whether the direct debit mandate is active or not, 1 for active, 0 for non-active.
-           */
-          @JsonProperty(value = "directdebitmandate")
-          private NumberBoolean directDebitMandate;
-          public void addAdditionalProperty(String key, Object value) {
-            this.additionalProperties.put(key, value);
-          }
+    public static class Params extends JsonRpcNotificationParams<AccountMandateNotificationData> {
 
-          @JsonAnyGetter
-          public Map<String, Object> getAdditionalProperties() {
-            return this.additionalProperties;
-          }
+    }
+  }
 
-          public enum MandateAccountSource {
-            /**
-             * Account details from AIS
-             */
-            AIS("AIS"),
-            /**
-             * Manually inputed account number
-             */
-            MANUAL_ENTRY("MANUAL_ENTRY"),
-            /**
-             * AccountID provided when creating the order
-             */
-            ACCOUNT_ID("ACCOUNT_ID"),
-            /**
-             * If the scheme notifies about a change of account, this only aplies to BACS.
-             */
-            REGISTRATION_SCHEME("REGISTRATION_SCHEME");
-            @JsonValue
-            private final String value;
-            MandateAccountSource(String value) {
-              this.value = value;
-            }
-          }
+  @Getter
+  @Jacksonized
+  @RequiredArgsConstructor
+  @Setter
+  @SuperBuilder
+  public static class AccountMandateNotificationData extends AbstractAccountNotificationData<AccountMandateNotificationData.Attributes> {
+    @Getter
+    @Jacksonized
+    @RequiredArgsConstructor
+    @Setter
+    @SuperBuilder
+    public static class Attributes extends AbstractAccountNotificationDataAttributes implements IAdditionalProperties {
+      @JsonProperty(value = "accountholders")
+      private List<String> accountholders;
+      /**
+       * Name of the account
+       * <h2>Examples</h2>
+       * <ul>
+       *   <li>Salary account</li>
+       * </ul>
+       */
+      @JsonProperty(value = "accountname")
+      private String accountname;
+      /**
+       * The account number, identifying the end-user's account in the bank. Can be either IBAN or country-specific format, see examples or read more at https://developers.trustly.com/emea/docs/registeraccount
+       * <h2>Examples</h2>
+       * <ul>
+       *   <li>6112</li>
+       *   <li>391124057</li>
+       *   <li>AUSTRIA: ^AT[0-9]{18}$</li>
+       *   <li>BELGIUM: ^BE[0-9]{14}$</li>
+       *   <li>BULGARIA: ^BG[0-9]{2}[A-Z]{4}[0-9]{4}[0-9]{2}[A-Z0-9]{8}$</li>
+       *   <li>CROATIA: ^HR[0-9]{2}[0-9]{7}[0-9]{10}$</li>
+       *   <li>CYPRUS: ^CY[0-9]{10}[0-9A-Z]{16}$</li>
+       *   <li>CZECH_REPUBLIC: ^CZ[0-9]{22}$</li>
+       *   <li>DENMARK: ^DK[0-9]{16}$</li>
+       *   <li>ESTONIA: ^EE[0-9]{18}$</li>
+       *   <li>FINLAND: ^FI[0-9]{16}$</li>
+       *   <li>FRANCE: ^FR[0-9]{12}[0-9A-Z]{11}[0-9]{2}$</li>
+       *   <li>GERMANY: ^DE[0-9]{20}$</li>
+       *   <li>GREECE: ^GR[0-9]{25}$</li>
+       *   <li>HUNGARY: ^HU[0-9]{26}$</li>
+       *   <li>IRELAND: ^IE[0-9]{2}[A-Z]{4}[0-9]{14}$</li>
+       *   <li>ITALY: ^IT[0-9]{2}[A-Z][0-9]{10}[0-9A-Z]{12}$</li>
+       *   <li>LATVIA: ^LV[0-9]{2}[A-Z]{4}[0-9A-Z]{13}$</li>
+       *   <li>LITHUANIA: ^LT[0-9]{18}$</li>
+       *   <li>LUXEMBOURG: ^LU[0-9]{18}$</li>
+       *   <li>MALTA: ^MT[0-9]{2}[A-Z]{4}[0-9]{5}[0-9A-Z]{18}$</li>
+       *   <li>NETHERLANDS: ^NL[0-9]{2}[A-Z]{4}[0-9]{10}$</li>
+       *   <li>NORWAY: ^NO[0-9]{13}$</li>
+       *   <li>POLAND: ^PL[0-9]{26}$</li>
+       *   <li>PORTUGAL: ^PT[0-9]{23}$</li>
+       *   <li>ROMANIA: ^RO[0-9]{2}[A-Z]{4}[0-9A-Z]{16}$</li>
+       *   <li>SLOVAKIA: ^SK[0-9]{22}$</li>
+       *   <li>SLOVENIA: ^SI56[0-9]{15}$</li>
+       *   <li>SPAIN: ^ES[0-9]{22}$</li>
+       *   <li>SWEDEN:* [0-9]{1,15}$</li>
+       *   <li>UNITED_KINGDOM: ^[0-9]{8}$</li>
+       * </ul>
+       */
+      @JsonProperty(value = "accountnumber")
+      private String accountnumber;
+      @JsonProperty(value = "accountsource")
+      private MandateAccountSource accountsource;
+      @Singular
+      @JsonAnySetter
+      private Map<String, Object> additionalProperties;
+      /**
+       * The bank number identifying the end-user's bank in the given clearing house. For bank accounts in IBAN format you should just provide an empty string (""). For non-IBAN format, see examples. The BankNumber for Swedish bank accounts should be the local "clearing number", and the AccountNumber parameter should contain the rest of the account number. Most Swedish banks have a 4-digit clearing number, but a 5-digit clearing number is used for Swedbank accounts when the clearing number starts with "8". Nordea accounts where the account number is the same as the person's national identification number always has "3300" as the clearing number.
+       * <p>
+       * IBAN for Swedish bank accounts is supported upon request. When making API calls with Swedish IBAN, ensure to include the Clearinghouse attribute as "IBAN" instead of "SWEDEN". See more at https://developers.trustly.com/emea/docs/registeraccount
+       * <h2>Examples</h2>
+       * <ul>
+       *   <li>Sweden: ^[0-9]{4,5}$</li>
+       *   <li>United Kingdom: ^[0-9]{6}$</li>
+       * </ul>
+       */
+      @JsonProperty(value = "bankcode")
+      private String bankcode;
+      /**
+       * The branch identifier
+       * <h2>Examples</h2>
+       * <ul>
+       *   <li>6160</li>
+       *   <li>6000</li>
+       *   <li>bg</li>
+       *   <li>123123</li>
+       *   <li>HANDSESS</li>
+       * </ul>
+       */
+      @JsonProperty(value = "bankidentifier")
+      private String bankidentifier;
+      /**
+       * The ISO 3166-1-alpha-2 code of the end-user's country. This will be used for pre-selecting the country for the end-user in the iframe.
+       * Note: This will only have an effect for new end-users. If an end-user has done a previous order (with the same EndUserID), the country that was last used will be pre-selected.
+       */
+      @JsonProperty(value = "country")
+      private String country;
+      /**
+       * Whether the direct debit mandate is active or not, 1 for active, 0 for non-active.
+       */
+      @JsonProperty(value = "directdebitmandate")
+      private NumberBoolean directDebitMandate;
+      public void addAdditionalProperty(String key, Object value) {
+        this.additionalProperties.put(key, value);
+      }
+
+      @JsonAnyGetter
+      public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+      }
+
+      public enum MandateAccountSource {
+        /**
+         * Account details from AIS
+         */
+        AIS("AIS"),
+        /**
+         * Manually inputed account number
+         */
+        MANUAL_ENTRY("MANUAL_ENTRY"),
+        /**
+         * AccountID provided when creating the order
+         */
+        ACCOUNT_ID("ACCOUNT_ID"),
+        /**
+         * If the scheme notifies about a change of account, this only aplies to BACS.
+         */
+        REGISTRATION_SCHEME("REGISTRATION_SCHEME");
+        @JsonValue
+        private final String value;
+        MandateAccountSource(String value) {
+          this.value = value;
         }
       }
     }
@@ -980,7 +923,97 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
+    public static class Result extends ResponseResult<AckData> {
+
+    }
+  }
+
+  @Getter
+  @Jacksonized
+  @Setter
+  @SuperBuilder
+  public static class AccountNotification extends JsonRpcNotification<AccountNotification.Params> {
+    public AccountNotification() {
+      super("account");
+    }
+
+    @Getter
+    @Jacksonized
+    @RequiredArgsConstructor
+    @Setter
+    @SuperBuilder
+    public static class Params extends JsonRpcNotificationParams<Params.Data> {
+      @Getter
+      @Jacksonized
+      @Setter
+      @SuperBuilder
+      public static class Data {
+        @JsonValue
+        private final JsonNode _raw;
+        @Valid
+        private AccountDefaultNotificationData _accountDefaultNotificationData;
+        @Valid
+        private AccountMandateNotificationData _accountMandateNotificationData;
+        @JsonCreator
+        public Data(JsonNode raw) {
+          this._raw = raw;
+        }
+
+        public AccountDefaultNotificationData getAccountDefaultNotificationData(ObjectMapper transformer) throws JsonProcessingException {
+          if (this._accountDefaultNotificationData != null) {
+            return this._accountDefaultNotificationData;
+          }
+          return this._accountDefaultNotificationData = transformer.treeToValue(this._raw, AccountDefaultNotificationData.class);
+        }
+
+        public AccountMandateNotificationData getAccountMandateNotificationData(ObjectMapper transformer) throws JsonProcessingException {
+          if (this._accountMandateNotificationData != null) {
+            return this._accountMandateNotificationData;
+          }
+          return this._accountMandateNotificationData = transformer.treeToValue(this._raw, AccountMandateNotificationData.class);
+        }
+
+        @Getter
+        @Jacksonized
+        @RequiredArgsConstructor
+        @Setter
+        @SuperBuilder
+        public static class AccountDefaultNotificationData extends AbstractAccountNotificationData<AccountDefaultNotificationData.Attributes> {
+          @Getter
+          @Jacksonized
+          @RequiredArgsConstructor
+          @Setter
+          @SuperBuilder
+          public static class Attributes extends AbstractAccountNotificationDataAttributes implements IAdditionalProperties {
+            @Singular
+            @JsonAnySetter
+            private Map<String, Object> additionalProperties;
+            public void addAdditionalProperty(String key, Object value) {
+              this.additionalProperties.put(key, value);
+            }
+
+            @JsonAnyGetter
+            public Map<String, Object> getAdditionalProperties() {
+              return this.additionalProperties;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @Getter
+  @Jacksonized
+  @RequiredArgsConstructor
+  @Setter
+  @SuperBuilder
+  public static class AccountNotificationResponse extends JsonRpcResponse<AccountNotificationResponse.Result> {
+    @Getter
+    @Jacksonized
+    @RequiredArgsConstructor
+    @Setter
+    @SuperBuilder
+    public static class Result extends ResponseResult<AckData> {
 
     }
   }
@@ -1101,6 +1134,7 @@ public class Models {
            * Information about the Payer (ultimate debtor). This is required for some merchants and partners. SenderInformation is mandatory to send in Attributes{} for money transfer services (including remittance houses), e-wallets, prepaid cards, as well as for Trustly Partners that are using Express Merchant Onboarding and aggregate traffic under a master processing account (other cases may also apply).
            */
           @JsonProperty(value = "SenderInformation")
+          @Valid
           private SenderInformation senderInformation;
           /**
            * The text to show on the end-user's bank statement after Trustly's own 10 digit reference (which always will be displayed first). The reference must let the end user identify the merchant based on this value. So the ShopperStatement should contain either your brand name, website name, or company name.
@@ -1148,6 +1182,34 @@ public class Models {
         @JsonInclude
         @NotNull
         private StringBoolean result;
+      }
+    }
+  }
+
+  @Getter
+  @Jacksonized
+  @RequiredArgsConstructor
+  @Setter
+  @SuperBuilder
+  public static class AckData extends NotificationResponseDataBase<AckData.Status> implements IAdditionalProperties {
+    @Singular
+    @JsonAnySetter
+    private Map<String, Object> additionalProperties;
+    public void addAdditionalProperty(String key, Object value) {
+      this.additionalProperties.put(key, value);
+    }
+
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+      return this.additionalProperties;
+    }
+
+    public enum Status {
+      OK("OK");
+      @JsonValue
+      private final String value;
+      Status(String value) {
+        this.value = value;
       }
     }
   }
@@ -1342,7 +1404,9 @@ public class Models {
       public static class Data {
         @JsonValue
         private final JsonNode _raw;
+        @Valid
         private ResponseDataWithReject _responseDataWithReject;
+        @Valid
         private ResponseDataWithResult _responseDataWithResult;
         @JsonCreator
         public Data(JsonNode raw) {
@@ -1423,6 +1487,9 @@ public class Models {
            */
           @JsonProperty(value = "details")
           private String details;
+          /**
+           * <p>From CancelDirectCreditNotificationDataAttributes</p>
+           */
           @JsonProperty(value = "reason")
           private DirectCreditCancelReason reason;
           public void addAdditionalProperty(String key, Object value) {
@@ -1469,7 +1536,7 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
+    public static class Result extends ResponseResult<AckData> {
 
     }
   }
@@ -1588,6 +1655,9 @@ public class Models {
            */
           @JsonProperty(value = "details")
           private String details;
+          /**
+           * <p>From CancelDirectDebitNotificationDataAttributes</p>
+           */
           @JsonProperty(value = "reason")
           private DirectDebitCancelReason reason;
           public void addAdditionalProperty(String key, Object value) {
@@ -1638,7 +1708,7 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
+    public static class Result extends ResponseResult<AckData> {
 
     }
   }
@@ -1763,7 +1833,7 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
+    public static class Result extends ResponseResult<AckData> {
 
     }
   }
@@ -1788,13 +1858,13 @@ public class Models {
       @RequiredArgsConstructor
       @Setter
       @SuperBuilder
-      public static class Data extends AbstractCancelNotificationData<Data.MandateCancelNotificationDataAttributes> {
+      public static class Data extends AbstractCancelNotificationData<Data.Attributes> {
         @Getter
         @Jacksonized
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
-        public static class MandateCancelNotificationDataAttributes extends AbstractRequestDataAttributes {
+        public static class Attributes extends AbstractRequestDataAttributes {
           /**
            * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
            * <h2>Examples</h2>
@@ -1824,6 +1894,9 @@ public class Models {
            */
           @JsonProperty(value = "merchantreference")
           private String merchantreference;
+          /**
+           * <p>From CancelMandateNotificationDataAttributes</p>
+           */
           @JsonProperty(value = "reason")
           private CancelReason reason;
           public enum CancelReason {
@@ -1865,7 +1938,7 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
+    public static class Result extends ResponseResult<AckData> {
 
     }
   }
@@ -1893,13 +1966,13 @@ public class Models {
       public static class Data extends AbstractCancelNotificationData<Data.NotificationDataAttributes> {
         /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * <p>
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
         @JsonProperty(value = "enduserid")
         private String endUserID;
         /**
          * Flag indicating that this is for Direct Debit refund. Note that this flag is not sent unless it's for a refund. Only value will be 1.
+         * <p>From CancelRefundDirectDebitNotificationData</p>
          */
         @JsonProperty(value = "refund")
         private String refund;
@@ -1921,6 +1994,8 @@ public class Models {
         public static class NotificationDataAttributes extends AbstractRequestDataAttributes {
           /**
            * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
+           * <p>From CancelMandateNotificationDataAttributes</p>
+           * <p>
            * <h2>Examples</h2>
            * <ul>
            *   <li>1234567890</li>
@@ -1945,6 +2020,8 @@ public class Models {
            * [BACS]: The unique mandate reference. 6 - 10 characters consisting of A-Z and 0-9. Can not begin with DDIC and neither consists of the same characters, eg. AAAAAAA.
            * [Bankgiro]: The unique mandate reference. This must be numeric and unique for the payer, eg nationalId or similar can be used. Format needs to follow regexp [1-9][0-9]{5-15}
            * [SEPA-DD]: The unique mandate reference. This must be unique for the end-user for you as a merchant. Format needs to follow regexp [0-9,a-z,A-Z]{10-35}
+           * <p>From CancelMandateNotificationDataAttributes</p>
+           * <p>
            * <h2>Examples</h2>
            * <ul>
            *   <li>123ABC0123</li>
@@ -1952,27 +2029,30 @@ public class Models {
            */
           @JsonProperty(value = "merchantreference")
           private String merchantreference;
+          /**
+           * <p>From CancelMandateNotificationDataAttributes</p>
+           */
           @JsonProperty(value = "reason")
           private CancelReason reason;
           public enum CancelReason {
             /**
              * The mandate already exists
-             * From MandateCancelNotificationDataAttributesCancelReason
+             * From CancelMandateNotificationDataAttributesCancelReason
              */
             MANDATE_ALREADY_EXISTS("MANDATE_ALREADY_EXISTS"),
             /**
              * Either when the consumer cancels in the journey or if you call cancel mandate method.
-             * From MandateCancelNotificationDataAttributesCancelReason
+             * From CancelMandateNotificationDataAttributesCancelReason
              */
             CANCELLED("CANCELLED"),
             /**
              * If the underlying scheme reports failure or cancellation of the mandate
-             * From MandateCancelNotificationDataAttributesCancelReason
+             * From CancelMandateNotificationDataAttributesCancelReason
              */
             FAILED("FAILED"),
             /**
              * If the provided accountId was incorrect
-             * From MandateCancelNotificationDataAttributesCancelReason
+             * From CancelMandateNotificationDataAttributesCancelReason
              */
             INVALID_ACCOUNT_ID("INVALID_ACCOUNT_ID"),
             /**
@@ -2027,7 +2107,7 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
+    public static class Result extends ResponseResult<AckData> {
 
     }
   }
@@ -2074,6 +2154,9 @@ public class Models {
            */
           @JsonProperty(value = "details")
           private String details;
+          /**
+           * <p>From CancelRefundDirectDebitNotificationDataAttributes</p>
+           */
           @JsonProperty(value = "reason")
           private RefundDirectDebitCancelReason reason;
           public void addAdditionalProperty(String key, Object value) {
@@ -2116,7 +2199,7 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
+    public static class Result extends ResponseResult<AckData> {
 
     }
   }
@@ -2204,7 +2287,7 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
+    public static class Result extends ResponseResult<AckData> {
 
     }
   }
@@ -2284,7 +2367,6 @@ public class Models {
         private String currency;
         /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * <p>
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
         @JsonProperty(value = "EndUserID", required = true)
@@ -2550,7 +2632,6 @@ public class Models {
          */
         @JsonProperty(value = "Lastname", required = true)
         @JsonInclude
-        @NotNull
         private String lastname;
         @Getter
         @Jacksonized
@@ -2732,55 +2813,6 @@ public class Models {
   @Jacksonized
   @Setter
   @SuperBuilder
-  public static class CreditDefaultNotification extends JsonRpcNotification<CreditDefaultNotification.Params> {
-    public CreditDefaultNotification() {
-      super("credit");
-    }
-
-    @Getter
-    @Jacksonized
-    @RequiredArgsConstructor
-    @Setter
-    @SuperBuilder
-    public static class Params extends JsonRpcNotificationParams<Params.Data> {
-      @Getter
-      @Jacksonized
-      @RequiredArgsConstructor
-      @Setter
-      @SuperBuilder
-      public static class Data extends AbstractCreditNotificationData<Data.Attributes> {
-        @Getter
-        @Jacksonized
-        @RequiredArgsConstructor
-        @Setter
-        @SuperBuilder
-        public static class Attributes extends AbstractCreditNotificationDataAttributes {
-
-        }
-      }
-    }
-  }
-
-  @Getter
-  @Jacksonized
-  @RequiredArgsConstructor
-  @Setter
-  @SuperBuilder
-  public static class CreditDefaultNotificationResponse extends JsonRpcResponse<CreditDefaultNotificationResponse.Result> {
-    @Getter
-    @Jacksonized
-    @RequiredArgsConstructor
-    @Setter
-    @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
-
-    }
-  }
-
-  @Getter
-  @Jacksonized
-  @Setter
-  @SuperBuilder
   public static class CreditDirectCreditNotification extends JsonRpcNotification<CreditDirectCreditNotification.Params> {
     public CreditDirectCreditNotification() {
       super("credit");
@@ -2839,7 +2871,7 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
+    public static class Result extends ResponseResult<AckData> {
 
     }
   }
@@ -2916,7 +2948,114 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
+    public static class Result extends ResponseResult<AckData> {
+
+    }
+  }
+
+  @Getter
+  @Jacksonized
+  @Setter
+  @SuperBuilder
+  public static class CreditNotification extends JsonRpcNotification<CreditNotification.Params> {
+    public CreditNotification() {
+      super("credit");
+    }
+
+    @Getter
+    @Jacksonized
+    @RequiredArgsConstructor
+    @Setter
+    @SuperBuilder
+    public static class Params extends JsonRpcNotificationParams<Params.Data> {
+      @Getter
+      @Jacksonized
+      @RequiredArgsConstructor
+      @Setter
+      @SuperBuilder
+      public static class Data extends AbstractCreditNotificationData<Data.Attributes> {
+        /**
+         * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
+         * <p>From CreditDirectDebitNotificationData</p>
+         * <p>
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>1234567890</li>
+         *   <li>7653385737</li>
+         * </ul>
+         */
+        @JsonProperty(value = "accountid")
+        private String accountID;
+        /**
+         * Flag indicating that this is for Direct Debit refund. Note that this flag is not sent unless it's for a refund. Only value will be 1.
+         * <p>From CreditRefundDirectDebitNotificationData</p>
+         */
+        @JsonProperty(value = "refund")
+        private String refund;
+        @Getter
+        @Jacksonized
+        @RequiredArgsConstructor
+        @Setter
+        @SuperBuilder
+        public static class Attributes extends AbstractCreditNotificationDataAttributes {
+          /**
+           * Description of reason. If Direct Debit Mandate, then  this applies when reason is <code>FAILED: BACS ADDACS_1(INSTRUCTION CANCELLED BY PAYER)</code>. See https://eu.developers.trustly.com/doc/reference/mdd#description-of-details-eg-failure-details
+           * <p>From CreditRefundDirectDebitNotificationDataAttributes</p>
+           */
+          @JsonProperty(value = "details")
+          private String details;
+          /**
+           * Payment reference, from the bank, of the payment that occurred based on the Payment request. Only available if status is PAID.
+           * <p>From CreditSwishNotificationDataAttributes</p>
+           * <p>
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>467123476</li>
+           * </ul>
+           */
+          @JsonProperty(value = "payerAlias")
+          private String payerAlias;
+          /**
+           * <p>From CreditRefundDirectDebitNotificationDataAttributes</p>
+           */
+          @JsonProperty(value = "reason")
+          private CreditRefundDirectDebitCancelReason reason;
+          /**
+           * Payment reference, from the bank, of the payment that occurred based on the Payment request. Only available if status is PAID.
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>1E2FC19E5E5E4E18916609B7F8911C12</li>
+           *   <li>TRLY80494-1001</li>
+           * </ul>
+           */
+          @JsonProperty(value = "reference")
+          private String reference;
+          /**
+           * Statement that appear on the end users bank account
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>TRLY80494-1001</li>
+           * </ul>
+           */
+          @JsonProperty(value = "statement")
+          private String statement;
+        }
+      }
+    }
+  }
+
+  @Getter
+  @Jacksonized
+  @RequiredArgsConstructor
+  @Setter
+  @SuperBuilder
+  public static class CreditNotificationResponse extends JsonRpcResponse<CreditNotificationResponse.Result> {
+    @Getter
+    @Jacksonized
+    @RequiredArgsConstructor
+    @Setter
+    @SuperBuilder
+    public static class Result extends ResponseResult<AckData> {
 
     }
   }
@@ -2960,6 +3099,9 @@ public class Models {
            */
           @JsonProperty(value = "details")
           private String details;
+          /**
+           * <p>From CreditRefundDirectDebitNotificationDataAttributes</p>
+           */
           @JsonProperty(value = "reason")
           private CreditRefundDirectDebitCancelReason reason;
           /**
@@ -2981,53 +3123,6 @@ public class Models {
            */
           @JsonProperty(value = "statement")
           private String statement;
-          public enum CreditRefundDirectDebitCancelReason {
-            /**
-             * The request was declined
-             */
-            DECLINED("DECLINED"),
-            /**
-             * The request was cancelled
-             */
-            CANCELED("CANCELED"),
-            /**
-             * There was an error during the request
-             */
-            ERROR("ERROR"),
-            /**
-             * Direct Debit Mandate: Either when the consumer cancels in the journey or if you call cancel mandate method, or the payment was canceled from the api.
-             */
-            CANCELLED("CANCELLED"),
-            /**
-             * Direct Debit Mandate: If the underlying scheme reports failure or cancellation of the mandate
-             */
-            FAILED("FAILED"),
-            /**
-             * Direct Debit Mandate: If the mandate already exist
-             */
-            MANDATE_ALREADY_EXISTS("MANDATE_ALREADY_EXISTS"),
-            /**
-             * Direct Debit Mandate: If the provided accountId was incorrect
-             */
-            INVALID_ACCOUNT_ID("INVALID_ACCOUNT_ID"),
-            /**
-             * The mandate is invalid for some reason.
-             */
-            ERROR_MANDATE_INVALID("ERROR_MANDATE_INVALID"),
-            /**
-             * Ie. missing funds or being canceled by the end-user.
-             */
-            ERROR_CHARGE_NOT_APPROVED("ERROR_CHARGE_NOT_APPROVED"),
-            /**
-             * The specified account is not valid, eg sending funds to it is not possible.
-             */
-            INVALID_ACCOUNT("INVALID_ACCOUNT");
-            @JsonValue
-            private final String value;
-            CreditRefundDirectDebitCancelReason(String value) {
-              this.value = value;
-            }
-          }
         }
       }
     }
@@ -3044,7 +3139,7 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
+    public static class Result extends ResponseResult<AckData> {
 
     }
   }
@@ -3111,49 +3206,7 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
-
-    }
-  }
-
-  @Getter
-  @Jacksonized
-  @Setter
-  @SuperBuilder
-  public static class DebitDefaultNotification extends JsonRpcNotification<DebitDefaultNotification.Params> {
-    public DebitDefaultNotification() {
-      super("debit");
-    }
-
-    @Getter
-    @Jacksonized
-    @RequiredArgsConstructor
-    @Setter
-    @SuperBuilder
-    public static class Params extends JsonRpcNotificationParams<Params.Data> {
-      @Getter
-      @Jacksonized
-      @RequiredArgsConstructor
-      @Setter
-      @SuperBuilder
-      public static class Data extends AbstractDebitNotificationData<AnyAttributes> {
-
-      }
-    }
-  }
-
-  @Getter
-  @Jacksonized
-  @RequiredArgsConstructor
-  @Setter
-  @SuperBuilder
-  public static class DebitDefaultNotificationResponse extends JsonRpcResponse<DebitDefaultNotificationResponse.Result> {
-    @Getter
-    @Jacksonized
-    @RequiredArgsConstructor
-    @Setter
-    @SuperBuilder
-    public static class Result extends ResponseResult<DebitNotificationResponseData> {
+    public static class Result extends ResponseResult<AckData> {
 
     }
   }
@@ -3193,6 +3246,9 @@ public class Models {
            */
           @JsonProperty(value = "details")
           private String details;
+          /**
+           * <p>From DebitDirectCreditNotificationDataAttributes</p>
+           */
           @JsonProperty(value = "reason")
           private DirectCreditDebitNotificationReason reason;
           /**
@@ -3281,7 +3337,7 @@ public class Models {
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
-        public static class Attributes extends AbstractRequestDataAttributes implements IAdditionalProperties {
+        public static class Attributes extends AbstractRequestDataAttributes {
           @Singular
           @JsonAnySetter
           private Map<String, Object> additionalProperties;
@@ -3354,6 +3410,129 @@ public class Models {
   @Setter
   @SuperBuilder
   public static class DebitDirectDebitNotificationResponse extends JsonRpcResponse<DebitDirectDebitNotificationResponse.Result> {
+    @Getter
+    @Jacksonized
+    @RequiredArgsConstructor
+    @Setter
+    @SuperBuilder
+    public static class Result extends ResponseResult<DebitNotificationResponseData> {
+
+    }
+  }
+
+  @Getter
+  @Jacksonized
+  @Setter
+  @SuperBuilder
+  public static class DebitNotification extends JsonRpcNotification<DebitNotification.Params> {
+    public DebitNotification() {
+      super("debit");
+    }
+
+    @Getter
+    @Jacksonized
+    @RequiredArgsConstructor
+    @Setter
+    @SuperBuilder
+    public static class Params extends JsonRpcNotificationParams<Params.Data> {
+      @Getter
+      @Jacksonized
+      @RequiredArgsConstructor
+      @Setter
+      @SuperBuilder
+      public static class Data extends AbstractDebitNotificationData<Data.DirectDebitNotificationDataAttributes> {
+        /**
+         * Flag indicating that this is for Direct Debit refund. Note that this flag is not sent unless it's for a refund. Only value will be 1.
+         * <p>From DebitRefundDirectDebitNotificationData</p>
+         */
+        @JsonProperty(value = "refund")
+        private String refund;
+        @Getter
+        @Jacksonized
+        @RequiredArgsConstructor
+        @Setter
+        @SuperBuilder
+        public static class DirectDebitNotificationDataAttributes extends AbstractRequestDataAttributes implements IAdditionalProperties {
+          @Singular
+          @JsonAnySetter
+          private Map<String, Object> additionalProperties;
+          /**
+           * Description of reason. If Direct Debit Mandate, then  this applies when reason is <code>FAILED: BACS ADDACS_1(INSTRUCTION CANCELLED BY PAYER)</code>. See https://eu.developers.trustly.com/doc/reference/mdd#description-of-details-eg-failure-details
+           */
+          @JsonProperty(value = "details")
+          private String details;
+          /**
+           * <p>From DebitDirectCreditNotificationDataAttributes</p>
+           */
+          @JsonProperty(value = "reason")
+          private Reason reason;
+          /**
+           * Payment reference, from the bank, of the payment that occurred based on the Payment request. Only available if status is PAID.
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>1E2FC19E5E5E4E18916609B7F8911C12</li>
+           *   <li>TRLY80494-1001</li>
+           * </ul>
+           */
+          @JsonProperty(value = "reference")
+          private String reference;
+          /**
+           * Statement that appear on the end users bank account
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>TRLY80494-1001</li>
+           * </ul>
+           */
+          @JsonProperty(value = "statement")
+          private String statement;
+          public void addAdditionalProperty(String key, Object value) {
+            this.additionalProperties.put(key, value);
+          }
+
+          @JsonAnyGetter
+          public Map<String, Object> getAdditionalProperties() {
+            return this.additionalProperties;
+          }
+
+          public enum Reason {
+            /**
+             * All other failures
+             * From DirectCreditDebitNotificationReason
+             * From DebitDirectDebitNotificationReason
+             */
+            FAILED("FAILED"),
+            /**
+             * The mandate is invalid for some reason.
+             * From DebitDirectDebitNotificationReason
+             */
+            ERROR_MANDATE_INVALID("ERROR_MANDATE_INVALID"),
+            /**
+             * Ie. missing funds or being canceled by the end-user.
+             * From DebitDirectDebitNotificationReason
+             */
+            ERROR_CHARGE_NOT_APPROVED("ERROR_CHARGE_NOT_APPROVED"),
+            /**
+             * If the payment was canceled from the api
+             * From DebitDirectDebitNotificationReason
+             */
+            CANCELLED("CANCELLED");
+            @JsonValue
+            private final String value;
+            Reason(String value) {
+              this.value = value;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @Getter
+  @Jacksonized
+  @RequiredArgsConstructor
+  @Setter
+  @SuperBuilder
+  public static class DebitNotificationResponse extends JsonRpcResponse<DebitNotificationResponse.Result> {
     @Getter
     @Jacksonized
     @RequiredArgsConstructor
@@ -3564,7 +3743,6 @@ public class Models {
         private Map<String, Object> additionalProperties;
         /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * <p>
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
         @JsonProperty(value = "EndUserID", required = true)
@@ -3703,7 +3881,6 @@ public class Models {
            */
           @JsonProperty(value = "Lastname", required = true)
           @JsonInclude
-          @NotNull
           private String lastname;
           /**
            * The end-users localization preference in the format language[_territory]. Language is the ISO 639-1 code and territory the ISO 3166-1-alpha-2 code.
@@ -3765,6 +3942,7 @@ public class Models {
            * Information about the Payee (ultimate creditor). The burden of identifying who the Payee for any given transaction is lies with the Trustly customer. Required for some merchants and partners. RecipientInformation is mandatory to send for money transfer services (including remittance houses), e-wallets, prepaid cards, as well as for Trustly Partners that are using Express Merchant Onboarding and aggregate traffic under a master processing account (other cases may also apply).
            */
           @JsonProperty(value = "RecipientInformation")
+          @Valid
           private RecipientInformation recipientInformation;
           /**
            * In addition to the deposit, request a direct debit mandate from the account used for the deposit. 1 enables, 0 disables. The default is disabled. If this attribute is set, additional account notifications might be sent. You can read more about Trustly Direct Debit here,  under section 2.1
@@ -4037,7 +4215,6 @@ public class Models {
         private String currency;
         /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * <p>
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
         @JsonProperty(value = "EndUserID", required = true)
@@ -4157,7 +4334,6 @@ public class Models {
       public static class Data extends AbstractRequestData<Data.Attributes> {
         /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * <p>
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
         @JsonProperty(value = "EndUserID", required = true)
@@ -4317,6 +4493,7 @@ public class Models {
            * If the payment plan is known in advance, this information is displayed when approving the mandate.
            */
           @JsonProperty(value = "PaymentSchedule")
+          @Valid
           private DirectDebitPaymentSchedule paymentSchedule;
           /**
            * When rendering the Trustly Checkout in a native app you are required to pass your application's url as an attribute to the order initiation request. By doing so, Trustly can redirect users back to your app after using external identification apps such as Mobile BankID: Please visit documentation site for more information. It must not be included for transactions that are not originating from an app.
@@ -4868,34 +5045,6 @@ public class Models {
 
   @Getter
   @Jacksonized
-  @RequiredArgsConstructor
-  @Setter
-  @SuperBuilder
-  public static class GeneralNotificationResponseData extends NotificationResponseDataBase<GeneralNotificationResponseData.Status> implements IAdditionalProperties {
-    @Singular
-    @JsonAnySetter
-    private Map<String, Object> additionalProperties;
-    public void addAdditionalProperty(String key, Object value) {
-      this.additionalProperties.put(key, value);
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-      return this.additionalProperties;
-    }
-
-    public enum Status {
-      OK("OK");
-      @JsonValue
-      private final String value;
-      Status(String value) {
-        this.value = value;
-      }
-    }
-  }
-
-  @Getter
-  @Jacksonized
   @Setter
   @SuperBuilder
   public static class GetWithdrawalsRequest extends JsonRpcRequest<GetWithdrawalsRequest.Params> {
@@ -5056,7 +5205,6 @@ public class Models {
       public static class Data extends AbstractRequestData<Data.Attributes> {
         /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * <p>
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
         @JsonProperty(value = "EndUserID", required = true)
@@ -5316,6 +5464,7 @@ public class Models {
     @JsonProperty(value = "error", required = true)
     @JsonInclude
     @NotNull
+    @Valid
     private ErrorUnknownError error;
     public String getVersion() {
       return "1.1";
@@ -5341,6 +5490,7 @@ public class Models {
   public static class JsonRpcNotification<TParams> {
     @NotNull
     private final String method;
+    @Valid
     private TParams params;
     public JsonRpcNotification(@JsonProperty(value = "method", required = true) String method) {
       this.method = method;
@@ -5363,11 +5513,18 @@ public class Models {
     @JsonProperty(value = "data", required = true)
     @JsonInclude
     @NotNull
+    @Valid
     private T data;
+    /**
+     * <p>The signature that the Trustly server generated, which you can verify against with our public key</p>
+     */
     @JsonProperty(value = "signature", required = true)
     @JsonInclude
     @NotNull
     private String signature;
+    /**
+     * <p>The unique identifier for this request</p>
+     */
     @JsonProperty(value = "uuid", required = true)
     @JsonInclude
     @NotNull
@@ -5384,6 +5541,7 @@ public class Models {
   public static class JsonRpcRequest<TParams> {
     @NotNull
     private final String method;
+    @Valid
     private TParams params;
     public JsonRpcRequest(@JsonProperty(value = "method", required = true) String method) {
       this.method = method;
@@ -5406,11 +5564,18 @@ public class Models {
     @JsonProperty(value = "Data", required = true)
     @JsonInclude
     @NotNull
+    @Valid
     private T data;
+    /**
+     * <p>The signature which validates your request to the Trustly server</p>
+     */
     @JsonProperty(value = "Signature", required = true)
     @JsonInclude
     @NotNull
     private String signature;
+    /**
+     * <p>The unique identifier for this request</p>
+     */
     @JsonProperty(value = "UUID", required = true)
     @JsonInclude
     @NotNull
@@ -5427,6 +5592,7 @@ public class Models {
   @SuperBuilder
   public static class JsonRpcResponse<T> {
     @JsonProperty(value = "result")
+    @Valid
     private T result;
     public String getVersion() {
       return "1.1";
@@ -5643,7 +5809,6 @@ public class Models {
      */
     @JsonProperty(value = "lastname", required = true)
     @JsonInclude
-    @NotNull
     private String lastname;
     /**
      * An ID that uniquely identifies the account holder. Only present in markets where SSN is applicable. Note: The format of this field will for some countries look different than the example.
@@ -5824,6 +5989,7 @@ public class Models {
     @JsonProperty(value = "status", required = true)
     @JsonInclude
     @NotNull
+    @Valid
     private T status;
   }
 
@@ -5856,6 +6022,7 @@ public class Models {
         @NotNull
         private double amount;
         @JsonProperty(value = "attributes")
+        @Valid
         private AnyAttributes attributes;
         /**
          * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
@@ -5879,7 +6046,6 @@ public class Models {
         private String currency;
         /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * <p>
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
         @JsonProperty(value = "enduserid", required = true)
@@ -5942,7 +6108,7 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
+    public static class Result extends ResponseResult<AckData> {
 
     }
   }
@@ -5976,6 +6142,7 @@ public class Models {
         @NotNull
         private double amount;
         @JsonProperty(value = "attributes")
+        @Valid
         private AnyAttributes attributes;
         /**
          * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
@@ -5999,7 +6166,6 @@ public class Models {
         private String currency;
         /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * <p>
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
         @JsonProperty(value = "enduserid", required = true)
@@ -6080,125 +6246,7 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
-
-    }
-  }
-
-  @Getter
-  @Jacksonized
-  @Setter
-  @SuperBuilder
-  public static class PendingDefaultNotification extends JsonRpcNotification<PendingDefaultNotification.Params> {
-    public PendingDefaultNotification() {
-      super("pending");
-    }
-
-    @Getter
-    @Jacksonized
-    @RequiredArgsConstructor
-    @Setter
-    @SuperBuilder
-    public static class Params extends JsonRpcNotificationParams<Params.Data> {
-      @Getter
-      @Jacksonized
-      @RequiredArgsConstructor
-      @Setter
-      @SuperBuilder
-      public static class Data extends AbstractNotificationRequestData implements IAbstractPendingNotificationData {
-        /**
-         * {@code 98.02}
-         */
-        @JsonProperty(value = "amount", required = true)
-        @JsonInclude
-        @NotNull
-        private double amount;
-        @JsonProperty(value = "attributes")
-        private AnyAttributes attributes;
-        /**
-         * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>BGN</li>
-         *   <li>CZK</li>
-         *   <li>DKK</li>
-         *   <li>EUR</li>
-         *   <li>GBP</li>
-         *   <li>HRK</li>
-         *   <li>HUF</li>
-         *   <li>NOK</li>
-         *   <li>PLN</li>
-         *   <li>RON</li>
-         *   <li>SEK</li>
-         * </ul>
-         */
-        @JsonProperty(value = "currency", required = true)
-        @JsonInclude
-        private String currency;
-        /**
-         * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * <p>
-         * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
-         */
-        @JsonProperty(value = "enduserid")
-        private String endUserID;
-        /**
-         * Your unique ID of the transaction.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>12345678</li>
-         * </ul>
-         */
-        @JsonProperty(value = "messageid", required = true)
-        @JsonInclude
-        @NotNull
-        private String messageID;
-        /**
-         * Unique ID for this notification. Each notification must only be handled once in your system.
-         */
-        @JsonProperty(value = "notificationid", required = true)
-        @JsonInclude
-        @NotNull
-        private String notificationID;
-        /**
-         * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>9594811343</li>
-         * </ul>
-         */
-        @JsonProperty(value = "orderid", required = true)
-        @JsonInclude
-        @NotNull
-        private String orderID;
-        /**
-         * The time of the transaction and the GMT offset (+01 means GMT + 1 hours).
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>2014-01-30 13:28:45.652299+01</li>
-         *   <li>2014-03-31 11:50:06.46106+00</li>
-         * </ul>
-         */
-        @JsonProperty(value = "timestamp", required = true)
-        @JsonInclude
-        @NotNull
-        private String timestamp;
-      }
-    }
-  }
-
-  @Getter
-  @Jacksonized
-  @RequiredArgsConstructor
-  @Setter
-  @SuperBuilder
-  public static class PendingDefaultNotificationResponse extends JsonRpcResponse<PendingDefaultNotificationResponse.Result> {
-    @Getter
-    @Jacksonized
-    @RequiredArgsConstructor
-    @Setter
-    @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
+    public static class Result extends ResponseResult<AckData> {
 
     }
   }
@@ -6223,84 +6271,13 @@ public class Models {
       @RequiredArgsConstructor
       @Setter
       @SuperBuilder
-      public static class Data extends AbstractNotificationRequestData implements IAbstractPendingNotificationData {
-        /**
-         * {@code 98.02}
-         */
-        @JsonProperty(value = "amount", required = true)
-        @JsonInclude
-        @NotNull
-        private double amount;
-        @JsonProperty(value = "attributes")
-        private AnyAttributes attributes;
-        /**
-         * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>BGN</li>
-         *   <li>CZK</li>
-         *   <li>DKK</li>
-         *   <li>EUR</li>
-         *   <li>GBP</li>
-         *   <li>HRK</li>
-         *   <li>HUF</li>
-         *   <li>NOK</li>
-         *   <li>PLN</li>
-         *   <li>RON</li>
-         *   <li>SEK</li>
-         * </ul>
-         */
-        @JsonProperty(value = "currency", required = true)
-        @JsonInclude
-        private String currency;
+      public static class Data extends AbstractPendingNotificationData {
         /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * <p>
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
         @JsonProperty(value = "enduserid")
         private String endUserID;
-        /**
-         * Your unique ID of the transaction.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>12345678</li>
-         * </ul>
-         */
-        @JsonProperty(value = "messageid", required = true)
-        @JsonInclude
-        @NotNull
-        private String messageID;
-        /**
-         * Unique ID for this notification. Each notification must only be handled once in your system.
-         */
-        @JsonProperty(value = "notificationid", required = true)
-        @JsonInclude
-        @NotNull
-        private String notificationID;
-        /**
-         * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>9594811343</li>
-         * </ul>
-         */
-        @JsonProperty(value = "orderid", required = true)
-        @JsonInclude
-        @NotNull
-        private String orderID;
-        /**
-         * The time of the transaction and the GMT offset (+01 means GMT + 1 hours).
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>2014-01-30 13:28:45.652299+01</li>
-         *   <li>2014-03-31 11:50:06.46106+00</li>
-         * </ul>
-         */
-        @JsonProperty(value = "timestamp", required = true)
-        @JsonInclude
-        @NotNull
-        private String timestamp;
       }
     }
   }
@@ -6316,7 +6293,7 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
+    public static class Result extends ResponseResult<AckData> {
 
     }
   }
@@ -6341,7 +6318,7 @@ public class Models {
       @RequiredArgsConstructor
       @Setter
       @SuperBuilder
-      public static class Data extends AbstractNotificationRequestData implements IAbstractPendingNotificationData {
+      public static class Data extends AbstractPendingNotificationData {
         /**
          * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
          * <h2>Examples</h2>
@@ -6353,87 +6330,17 @@ public class Models {
         @JsonProperty(value = "accountid")
         private String accountID;
         /**
-         * {@code 98.02}
-         */
-        @JsonProperty(value = "amount", required = true)
-        @JsonInclude
-        @NotNull
-        private double amount;
-        @JsonProperty(value = "attributes")
-        private AnyAttributes attributes;
-        /**
-         * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>BGN</li>
-         *   <li>CZK</li>
-         *   <li>DKK</li>
-         *   <li>EUR</li>
-         *   <li>GBP</li>
-         *   <li>HRK</li>
-         *   <li>HUF</li>
-         *   <li>NOK</li>
-         *   <li>PLN</li>
-         *   <li>RON</li>
-         *   <li>SEK</li>
-         * </ul>
-         */
-        @JsonProperty(value = "currency", required = true)
-        @JsonInclude
-        private String currency;
-        /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * <p>
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
         @JsonProperty(value = "enduserid")
         private String endUserID;
         /**
-         * Your unique ID of the transaction.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>12345678</li>
-         * </ul>
-         */
-        @JsonProperty(value = "messageid", required = true)
-        @JsonInclude
-        @NotNull
-        private String messageID;
-        /**
-         * Unique ID for this notification. Each notification must only be handled once in your system.
-         */
-        @JsonProperty(value = "notificationid", required = true)
-        @JsonInclude
-        @NotNull
-        private String notificationID;
-        /**
-         * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>9594811343</li>
-         * </ul>
-         */
-        @JsonProperty(value = "orderid", required = true)
-        @JsonInclude
-        @NotNull
-        private String orderID;
-        /**
          * The expected payment date for the debit. Note that this gives you an indication if the paymentDate you submitted has been adjusted eg due to a bank holiday.
+         * <p>From PendingDirectDebitNotificationData</p>
          */
         @JsonProperty(value = "paymentdate")
         private String paymentdate;
-        /**
-         * The time of the transaction and the GMT offset (+01 means GMT + 1 hours).
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>2014-01-30 13:28:45.652299+01</li>
-         *   <li>2014-03-31 11:50:06.46106+00</li>
-         * </ul>
-         */
-        @JsonProperty(value = "timestamp", required = true)
-        @JsonInclude
-        @NotNull
-        private String timestamp;
       }
     }
   }
@@ -6449,7 +6356,7 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
+    public static class Result extends ResponseResult<AckData> {
 
     }
   }
@@ -6474,77 +6381,8 @@ public class Models {
       @RequiredArgsConstructor
       @Setter
       @SuperBuilder
-      public static class Data extends AbstractNotificationRequestData implements IAbstractPendingNotificationData {
-        /**
-         * {@code 98.02}
-         */
-        @JsonProperty(value = "amount", required = true)
-        @JsonInclude
-        @NotNull
-        private double amount;
-        @JsonProperty(value = "attributes")
-        private AnyAttributes attributes;
-        /**
-         * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>BGN</li>
-         *   <li>CZK</li>
-         *   <li>DKK</li>
-         *   <li>EUR</li>
-         *   <li>GBP</li>
-         *   <li>HRK</li>
-         *   <li>HUF</li>
-         *   <li>NOK</li>
-         *   <li>PLN</li>
-         *   <li>RON</li>
-         *   <li>SEK</li>
-         * </ul>
-         */
-        @JsonProperty(value = "currency", required = true)
-        @JsonInclude
-        private String currency;
-        /**
-         * Your unique ID of the transaction.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>12345678</li>
-         * </ul>
-         */
-        @JsonProperty(value = "messageid", required = true)
-        @JsonInclude
-        @NotNull
-        private String messageID;
-        /**
-         * Unique ID for this notification. Each notification must only be handled once in your system.
-         */
-        @JsonProperty(value = "notificationid", required = true)
-        @JsonInclude
-        @NotNull
-        private String notificationID;
-        /**
-         * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>9594811343</li>
-         * </ul>
-         */
-        @JsonProperty(value = "orderid", required = true)
-        @JsonInclude
-        @NotNull
-        private String orderID;
-        /**
-         * The time of the transaction and the GMT offset (+01 means GMT + 1 hours).
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>2014-01-30 13:28:45.652299+01</li>
-         *   <li>2014-03-31 11:50:06.46106+00</li>
-         * </ul>
-         */
-        @JsonProperty(value = "timestamp", required = true)
-        @JsonInclude
-        @NotNull
-        private String timestamp;
+      public static class Data extends AbstractPendingNotificationData {
+
       }
     }
   }
@@ -6560,7 +6398,78 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
+    public static class Result extends ResponseResult<AckData> {
+
+    }
+  }
+
+  @Getter
+  @Jacksonized
+  @Setter
+  @SuperBuilder
+  public static class PendingNotification extends JsonRpcNotification<PendingNotification.Params> {
+    public PendingNotification() {
+      super("pending");
+    }
+
+    @Getter
+    @Jacksonized
+    @RequiredArgsConstructor
+    @Setter
+    @SuperBuilder
+    public static class Params extends JsonRpcNotificationParams<Params.Data> {
+      @Getter
+      @Jacksonized
+      @RequiredArgsConstructor
+      @Setter
+      @SuperBuilder
+      public static class Data extends AbstractPendingNotificationData {
+        /**
+         * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
+         * <p>From PendingDirectDebitNotificationData</p>
+         * <p>
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>1234567890</li>
+         *   <li>7653385737</li>
+         * </ul>
+         */
+        @JsonProperty(value = "accountid")
+        private String accountID;
+        /**
+         * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
+         * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
+         */
+        @JsonProperty(value = "enduserid")
+        private String endUserID;
+        /**
+         * The expected payment date for the debit. Note that this gives you an indication if the paymentDate you submitted has been adjusted eg due to a bank holiday.
+         * <p>From PendingDirectDebitNotificationData</p>
+         */
+        @JsonProperty(value = "paymentdate")
+        private String paymentdate;
+        /**
+         * Flag indicating that this is for Direct Debit refund. Note that this flag is not sent unless it's for a refund. Only value will be 1.
+         * <p>From PendingRefundDirectDebitNotificationData</p>
+         */
+        @JsonProperty(value = "refund")
+        private String refund;
+      }
+    }
+  }
+
+  @Getter
+  @Jacksonized
+  @RequiredArgsConstructor
+  @Setter
+  @SuperBuilder
+  public static class PendingNotificationResponse extends JsonRpcResponse<PendingNotificationResponse.Result> {
+    @Getter
+    @Jacksonized
+    @RequiredArgsConstructor
+    @Setter
+    @SuperBuilder
+    public static class Result extends ResponseResult<AckData> {
 
     }
   }
@@ -6585,84 +6494,13 @@ public class Models {
       @RequiredArgsConstructor
       @Setter
       @SuperBuilder
-      public static class Data extends AbstractNotificationRequestData implements IAbstractPendingNotificationData {
-        /**
-         * {@code 98.02}
-         */
-        @JsonProperty(value = "amount", required = true)
-        @JsonInclude
-        @NotNull
-        private double amount;
-        @JsonProperty(value = "attributes")
-        private AnyAttributes attributes;
-        /**
-         * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>BGN</li>
-         *   <li>CZK</li>
-         *   <li>DKK</li>
-         *   <li>EUR</li>
-         *   <li>GBP</li>
-         *   <li>HRK</li>
-         *   <li>HUF</li>
-         *   <li>NOK</li>
-         *   <li>PLN</li>
-         *   <li>RON</li>
-         *   <li>SEK</li>
-         * </ul>
-         */
-        @JsonProperty(value = "currency", required = true)
-        @JsonInclude
-        private String currency;
+      public static class Data extends AbstractPendingNotificationData {
         /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * <p>
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
         @JsonProperty(value = "enduserid")
         private String endUserID;
-        /**
-         * Your unique ID of the transaction.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>12345678</li>
-         * </ul>
-         */
-        @JsonProperty(value = "messageid", required = true)
-        @JsonInclude
-        @NotNull
-        private String messageID;
-        /**
-         * Unique ID for this notification. Each notification must only be handled once in your system.
-         */
-        @JsonProperty(value = "notificationid", required = true)
-        @JsonInclude
-        @NotNull
-        private String notificationID;
-        /**
-         * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>9594811343</li>
-         * </ul>
-         */
-        @JsonProperty(value = "orderid", required = true)
-        @JsonInclude
-        @NotNull
-        private String orderID;
-        /**
-         * The time of the transaction and the GMT offset (+01 means GMT + 1 hours).
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>2014-01-30 13:28:45.652299+01</li>
-         *   <li>2014-03-31 11:50:06.46106+00</li>
-         * </ul>
-         */
-        @JsonProperty(value = "timestamp", required = true)
-        @JsonInclude
-        @NotNull
-        private String timestamp;
         /**
          * Flag indicating that this is for Direct Debit refund. Note that this flag is not sent unless it's for a refund. Only value will be 1.
          */
@@ -6684,7 +6522,7 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Result extends ResponseResult<GeneralNotificationResponseData> {
+    public static class Result extends ResponseResult<AckData> {
 
     }
   }
@@ -6726,7 +6564,6 @@ public class Models {
      */
     @JsonProperty(value = "Lastname", required = true)
     @JsonInclude
-    @NotNull
     private String lastname;
     /**
      * Partytype can be <code>PERSON</code> or <code>ORGANISATION</code> (if the recipient or ultimate debtor is an organisation/company).
@@ -7126,7 +6963,6 @@ public class Models {
         private String currency;
         /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * <p>
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
         @JsonProperty(value = "EndUserID", required = true)
@@ -7145,7 +6981,6 @@ public class Models {
          */
         @JsonProperty(value = "Lastname", required = true)
         @JsonInclude
-        @NotNull
         private String lastname;
         /**
          * Your unique ID for the payout. If the MessageID is a previously initiated P2P order then the payout will be attached to that P2P order and the amount must be equal to or lower than the previously deposited amount.
@@ -7281,6 +7116,7 @@ public class Models {
            * Information about the Payer (ultimate debtor). This is required for some merchants and partners. SenderInformation is mandatory to send in Attributes{} for money transfer services (including remittance houses), e-wallets, prepaid cards, as well as for Trustly Partners that are using Express Merchant Onboarding and aggregate traffic under a master processing account (other cases may also apply).
            */
           @JsonProperty(value = "SenderInformation")
+          @Valid
           private SenderInformation senderInformation;
           /**
            * The text to show on the end-user's bank statement after Trustly's own 10 digit reference (which always will be displayed first). The reference must let the end user identify the merchant based on this value. So the ShopperStatement should contain either your brand name, website name, or company name.
@@ -7453,7 +7289,6 @@ public class Models {
         private String clearingHouse;
         /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * <p>
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
         @JsonProperty(value = "EndUserID")
@@ -7470,7 +7305,6 @@ public class Models {
          */
         @JsonProperty(value = "Lastname", required = true)
         @JsonInclude
-        @NotNull
         private String lastname;
         @Getter
         @Jacksonized
@@ -7654,6 +7488,7 @@ public class Models {
     @JsonProperty(value = "data", required = true)
     @JsonInclude
     @NotNull
+    @Valid
     private TData data;
     @JsonProperty(value = "method", required = true)
     @JsonInclude
@@ -7695,7 +7530,6 @@ public class Models {
       public static class Data extends AbstractRequestData<Data.Attributes> {
         /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * <p>
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
         @JsonProperty(value = "EndUserID", required = true)
@@ -7776,7 +7610,6 @@ public class Models {
            */
           @JsonProperty(value = "Lastname", required = true)
           @JsonInclude
-          @NotNull
           private String lastname;
           /**
            * The end-users localization preference in the format language[_territory]. Language is the ISO 639-1 code and territory the ISO 3166-1-alpha-2 code.
@@ -8152,7 +7985,6 @@ public class Models {
       public static class Data extends AbstractRequestData<Data.Attributes> {
         /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * <p>
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
         @JsonProperty(value = "EndUserID")
@@ -8350,7 +8182,6 @@ public class Models {
         private String currency;
         /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * <p>
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
         @JsonProperty(value = "EndUserID", required = true)
@@ -8479,7 +8310,6 @@ public class Models {
            */
           @JsonProperty(value = "Lastname", required = true)
           @JsonInclude
-          @NotNull
           private String lastname;
           /**
            * The end-users localization preference in the format language[_territory]. Language is the ISO 639-1 code and territory the ISO 3166-1-alpha-2 code.
@@ -8534,6 +8364,7 @@ public class Models {
            * Information about the Payer (ultimate debtor). This is required for some merchants and partners. SenderInformation is mandatory to send in Attributes{} for money transfer services (including remittance houses), e-wallets, prepaid cards, as well as for Trustly Partners that are using Express Merchant Onboarding and aggregate traffic under a master processing account (other cases may also apply).
            */
           @JsonProperty(value = "SenderInformation")
+          @Valid
           private SenderInformation senderInformation;
           /**
            * The text to show on the end-user's bank statement after Trustly's own 10 digit reference (which always will be displayed first). The reference must let the end user identify the merchant based on this value. So the ShopperStatement should contain either your brand name, website name, or company name.
@@ -8638,7 +8469,56 @@ public class Models {
   @SuperBuilder
   public static class WithRejection<TRejected> {
     @JsonProperty(value = "rejected")
+    @Valid
     private TRejected rejected;
+  }
+
+  public enum CreditRefundDirectDebitCancelReason {
+    /**
+     * The request was declined
+     */
+    DECLINED("DECLINED"),
+    /**
+     * The request was cancelled
+     */
+    CANCELED("CANCELED"),
+    /**
+     * There was an error during the request
+     */
+    ERROR("ERROR"),
+    /**
+     * Direct Debit Mandate: Either when the consumer cancels in the journey or if you call cancel mandate method, or the payment was canceled from the api.
+     */
+    CANCELLED("CANCELLED"),
+    /**
+     * Direct Debit Mandate: If the underlying scheme reports failure or cancellation of the mandate
+     */
+    FAILED("FAILED"),
+    /**
+     * Direct Debit Mandate: If the mandate already exist
+     */
+    MANDATE_ALREADY_EXISTS("MANDATE_ALREADY_EXISTS"),
+    /**
+     * Direct Debit Mandate: If the provided accountId was incorrect
+     */
+    INVALID_ACCOUNT_ID("INVALID_ACCOUNT_ID"),
+    /**
+     * The mandate is invalid for some reason.
+     */
+    ERROR_MANDATE_INVALID("ERROR_MANDATE_INVALID"),
+    /**
+     * Ie. missing funds or being canceled by the end-user.
+     */
+    ERROR_CHARGE_NOT_APPROVED("ERROR_CHARGE_NOT_APPROVED"),
+    /**
+     * The specified account is not valid, eg sending funds to it is not possible.
+     */
+    INVALID_ACCOUNT("INVALID_ACCOUNT");
+    @JsonValue
+    private final String value;
+    CreditRefundDirectDebitCancelReason(String value) {
+      this.value = value;
+    }
   }
 
   public interface IAbstractKYCNotificationData {
@@ -8647,16 +8527,6 @@ public class Models {
     String getMessageID();
     String getNotificationID();
     String getOrderID();
-  }
-
-  public interface IAbstractPendingNotificationData {
-    double getAmount();
-    AnyAttributes getAttributes();
-    String getCurrency();
-    String getMessageID();
-    String getNotificationID();
-    String getOrderID();
-    String getTimestamp();
   }
 
   public interface IAdditionalProperties {

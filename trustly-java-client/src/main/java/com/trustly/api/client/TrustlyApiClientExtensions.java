@@ -5,6 +5,8 @@ import com.trustly.api.exceptions.TrustlyNoNotificationClientException;
 import com.trustly.api.exceptions.TrustlyValidationException;
 import com.trustly.api.util.TrustlyStreamUtils;
 import com.trustly.api.util.TrustlyStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +17,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static com.trustly.api.domain.Models.NotificationResponseDataBase;
 
 public class TrustlyApiClientExtensions {
+
+  private static final Logger log = LoggerFactory.getLogger(TrustlyApiClientExtensions.class);
 
   public static final String GENERIC_ERROR_MESSAGE = "An exception occurred (error message given by trustly-api-client for Java)";
 
@@ -47,6 +51,8 @@ public class TrustlyApiClientExtensions {
         }
       );
     } catch (Exception ex) {
+
+      log.error("Encountered an error trying to handle notification '" + requestStringBody + "'", ex);
 
       var assemblyVersion = TrustlyApiClientExtensions.class.getPackage().getImplementationVersion();
 
@@ -86,6 +92,9 @@ public class TrustlyApiClientExtensions {
 
     var rpcString = TrustlyApiClientSettings.DEFAULT_OBJECT_MAPPER.writeValueAsString(rpcResponse);
     var assemblyVersion = TrustlyApiClientExtensions.class.getPackage().getImplementationVersion();
+    if (assemblyVersion == null) {
+      assemblyVersion = "v1";
+    }
 
     responder.addHeader("Content-Type", "application/json");
     responder.addHeader("Accept", "application/json");
