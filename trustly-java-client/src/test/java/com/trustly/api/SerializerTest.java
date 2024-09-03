@@ -1,11 +1,15 @@
 package com.trustly.api;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.trustly.api.client.JsonRpcFactory;
 import com.trustly.api.client.JsonRpcValidator;
 import com.trustly.api.client.TrustlyApiClient;
-import com.trustly.api.domain.Models.DepositRequest;
 import com.trustly.api.domain.Models.AckData;
+import com.trustly.api.domain.Models.DepositRequest;
 import com.trustly.api.domain.Models.RegisterAccountResponse;
 import com.trustly.api.domain.Models.SelectAccountRequest;
 import com.trustly.api.exceptions.TrustlyValidationException;
@@ -279,5 +283,61 @@ class SerializerTest {
 
     // ShopperStatement is NOT specified -- but we should NOT throw exception, since that validation group is not specified.
     validator.validate(jsonRpc);
+  }
+
+  @Test
+  void testRequestData() throws Exception {
+
+    var requestData = new RequestData(
+      new SenderInformation("2020-01-02")
+    );
+
+    final var om = new ObjectMapper();
+    final var jsonString = om.writeValueAsString(requestData);
+
+    Assertions.assertEquals("{\"senderInformation\":{\"DateOfBirth\":\"2020-01-02\"}}", jsonString);
+
+    final var value1 = om.readValue("\"foo\"", SingleProp.class);
+    Assertions.assertEquals(value1.getKind(), "foo");
+
+    Assertions.assertThrowsExactly(MismatchedInputException.class, () -> om.readValue("{\"kind\": \"foo\"}", SingleProp.class));
+  }
+
+  private static class RequestData {
+    private final SenderInformation senderInformation;
+
+    public RequestData(@JsonProperty(value = "senderInformation") SenderInformation senderInformation) {
+      this.senderInformation = senderInformation;
+    }
+
+    public SenderInformation getSenderInformation() {
+      return this.senderInformation;
+    }
+  }
+
+  private static class SenderInformation {
+    @JsonProperty(value = "DateOfBirth")
+    private final String dateOfBirth;
+
+    public SenderInformation(@JsonProperty(value = "DateOfBirth") String dateOfBirth) {
+      this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getDateOfBirth() {
+      return this.dateOfBirth;
+    }
+  }
+
+  private static class SingleProp {
+    private final String kind;
+
+    @JsonCreator
+    public SingleProp(String kind) {
+      this.kind = kind;
+    }
+
+    public String getKind() {
+      return this.kind;
+    }
   }
 }

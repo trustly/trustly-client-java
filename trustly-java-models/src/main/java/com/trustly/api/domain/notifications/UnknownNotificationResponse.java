@@ -1,5 +1,6 @@
 package com.trustly.api.domain.notifications;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.trustly.api.domain.Models;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +14,15 @@ import lombok.extern.jackson.Jacksonized;
 @Setter
 @SuperBuilder
 public class UnknownNotificationResponse extends Models.JsonRpcResponse<UnknownNotificationResponse.Result> {
+
   @Getter
   @Jacksonized
-  @RequiredArgsConstructor
   @Setter
   @SuperBuilder
   public static class Result extends Models.ResponseResult<UnknownNotificationAckData> {
 
+    public Result(@JsonProperty(value = "method", required = true) String method) {
+      super(method);
+    }
   }
 }

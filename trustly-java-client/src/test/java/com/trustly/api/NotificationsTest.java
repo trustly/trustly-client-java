@@ -5,6 +5,7 @@ import com.trustly.api.client.TrustlyApiClientExtensions;
 import com.trustly.api.client.TrustlyApiClientExtensions.NotificationResponder;
 import com.trustly.api.domain.Models;
 import com.trustly.api.domain.notifications.UnknownNotificationAckData;
+import com.trustly.api.exceptions.TrustlyNoNotificationClientException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -124,9 +125,59 @@ class NotificationsTest {
   }
 
   @Test
+  void testUnknownNotificationWithMissingProps() throws Exception {
+
+    try (var client = new TrustlyApiClient(settings, new NoOpJsonRpcSigner())) {
+      client.getSettings().setIncludeExceptionMessageInNotificationResponse(true);
+
+      final AtomicReference<Object> receivedUnknownValue = new AtomicReference<>();
+
+      client.addOnUnknownNotification(args -> {
+        args.respondWith(new UnknownNotificationAckData());
+        receivedUnknownValue.set(args.getData().getAdditionalProperties().get("something"));
+      });
+
+      final InputStream is = this.getClass().getResourceAsStream("/notifications/incoming/_unknown_missing_props.json");
+      final Map<String, String> headers = new HashMap<>();
+      final AtomicInteger status = new AtomicInteger();
+      final AtomicReference<String> responseString = new AtomicReference<>();
+
+      final NotificationResponder responder = new NotificationResponder() {
+        @Override
+        public void addHeader(String key, String value) {
+          headers.put(key, value);
+        }
+
+        @Override
+        public void setStatus(int httpStatus) {
+          status.set(httpStatus);
+        }
+
+        @Override
+        public void writeBody(String value) {
+          responseString.set(value);
+        }
+      };
+
+      Assertions.assertThrowsExactly(
+        TrustlyNoNotificationClientException.class,
+        () -> TrustlyApiClientExtensions.handleNotificationRequest(client, is, responder)
+      );
+
+      Assertions.assertEquals(500, status.get(), "Http 500 was expected");
+      Assertions.assertEquals("application/json", headers.get("Content-Type"));
+      Assertions.assertTrue(responseString.get().contains("params.data.orderID: must not be null"));
+      Assertions.assertTrue(responseString.get().contains("params.data.messageID: must not be null"));
+      Assertions.assertTrue(responseString.get().contains("params.data.notificationID: must not be null"));
+      Assertions.assertNull(receivedUnknownValue.get());
+    }
+  }
+
+  @Test
   void testUnknownNotification() throws Exception {
 
     try (var client = new TrustlyApiClient(settings, new NoOpJsonRpcSigner())) {
+      client.getSettings().setIncludeExceptionMessageInNotificationResponse(true);
 
       final AtomicReference<Object> receivedUnknownValue = new AtomicReference<>();
 
@@ -148,7 +199,6 @@ class NotificationsTest {
 
         @Override
         public void setStatus(int httpStatus) {
-          Assertions.assertEquals(200, httpStatus, "Http 200 was expected, an error must have occurred");
           status.set(httpStatus);
         }
 
@@ -160,7 +210,7 @@ class NotificationsTest {
 
       TrustlyApiClientExtensions.handleNotificationRequest(client, is, responder);
 
-      Assertions.assertEquals(200, status.get());
+      Assertions.assertEquals(200, status.get(), "Http 200 was expected, an error must have occurred: " + responseString.get());
       Assertions.assertEquals("application/json", headers.get("Content-Type"));
       Assertions.assertNotNull(responseString.get());
       Assertions.assertEquals("abc", receivedUnknownValue.get());

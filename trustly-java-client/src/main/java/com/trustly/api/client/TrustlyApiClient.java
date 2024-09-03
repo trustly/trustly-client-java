@@ -342,7 +342,7 @@ public class TrustlyApiClient implements Closeable {
 
   public <
     TReqData extends AbstractRequestData<TReqAttributes>,
-    TReqAttributes,
+    TReqAttributes extends AbstractRequestDataAttributes,
     TReqParams extends JsonRpcRequestParams<TReqData>,
     TReq extends JsonRpcRequest<TReqParams>,
     TResData,
@@ -363,7 +363,7 @@ public class TrustlyApiClient implements Closeable {
 
   public <
     TReqData extends AbstractRequestData<TReqAttributes>,
-    TReqAttributes,
+    TReqAttributes extends AbstractRequestDataAttributes,
     TResData,
     TResResult extends ResponseResult<TResData>,
     TRes extends JsonRpcResponse<TResResult>
@@ -386,7 +386,7 @@ public class TrustlyApiClient implements Closeable {
    */
   public <
     TReqData extends AbstractRequestData<TReqAttributes>,
-    TReqAttributes,
+    TReqAttributes extends AbstractRequestDataAttributes,
     TReqParams extends JsonRpcRequestParams<TReqData>,
     TReq extends JsonRpcRequest<TReqParams>,
     TResData,
@@ -400,7 +400,7 @@ public class TrustlyApiClient implements Closeable {
   ) throws TrustlyRequestException {
 
     if (rpcRequest.getParams() == null) {
-      rpcRequest.setParams((TReqParams) new JsonRpcRequestParams<TReqAttributes>());
+      rpcRequest.setParams((TReqParams) new JsonRpcRequestParams<TReqData>());
     }
 
     if (rpcRequest.getParams().getData() == null) {
@@ -481,7 +481,7 @@ public class TrustlyApiClient implements Closeable {
     throws TrustlyRejectionException {
 
     if (rpcResponse.getResult().getData() instanceof WithRejection) {
-      WithRejection<?> rejectionResult = (WithRejection<?>) rpcResponse.getResult().getData();
+      WithRejection<?, ?> rejectionResult = (WithRejection<?, ?>) rpcResponse.getResult().getData();
 
       if (rejectionResult.getRejected() != null) {
 

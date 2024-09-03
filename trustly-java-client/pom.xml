@@ -117,40 +117,6 @@
         </executions>
       </plugin>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jarsigner-plugin</artifactId>
-        <version>3.0.0</version>
-        <executions>
-          <execution>
-            <id>sign</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>sign</goal>
-            </goals>
-            <configuration>
-
-              <keystore>NONE</keystore> <!-- Use NONE to indicate HSM usage -->
-              <storepass>NONE</storepass>
-              <storetype>PKCS11</storetype> <!-- SafeNet HSM typically uses PKCS11 -->
-              <sigalg>SHA256withRSA</sigalg>
-              <provider>sun.security.pkcs11.SunPKCS11</provider>
-
-<!--              <keystore>${env.HOME}/.keystore</keystore> &lt;!&ndash; Adjust this path to your keystore location &ndash;&gt;-->
-<!--              <storepass>changeit</storepass> &lt;!&ndash; Password for the keystore &ndash;&gt;-->
-
-              <alias>TrustlySign</alias> <!-- Alias of the certificate -->
-<!--              <keypass>changeit</keypass> &lt;!&ndash; Password for the key if different from the keystore password &ndash;&gt;-->
-              <tsa>http://timestamp.digicert.com</tsa> <!-- Timestamp server (optional but recommended) -->
-
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-<!--      jarsigner -keystore NONE -storepass NONE -storetype PKCS11 -sigalg SHA256withRSA -providerClass sun.security.pkcs11.SunPKCS11 -->
-<!--      -providerArg <path to pkcs11properties.cfg> -signedjar <path to signed file output> <unsigned file path> <keypair alias> -tsa http://timestamp.digicert.com-->
-
 <!--      <plugin>-->
 <!--        <groupId>org.apache.maven.plugins</groupId>-->
 <!--        <artifactId>maven-gpg-plugin</artifactId>-->

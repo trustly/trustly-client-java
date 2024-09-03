@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class JsonRpcFactory {
 
-  public <TReqData extends AbstractRequestData> JsonRpcRequest<JsonRpcRequestParams<TReqData>> create(TReqData requestData, String method, String uuid) {
+  public <TReqAttr extends AbstractRequestDataAttributes, TReqData extends AbstractRequestData<TReqAttr>> JsonRpcRequest<JsonRpcRequestParams<TReqData>> create(TReqData requestData, String method, String uuid) {
 
     return JsonRpcRequest.<JsonRpcRequestParams<TReqData>>builder()
       .method(method)

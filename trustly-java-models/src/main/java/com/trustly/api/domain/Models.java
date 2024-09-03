@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.Singular;
 
-@Generated(value = "omnigen", date = "2024-07-11T08:31:54.066Z")
+@Generated(value = "omnigen", date = "2024-08-27T08:58:53.872Z")
 @SuppressWarnings("unused")
 public class Models {
   @Getter
@@ -43,37 +43,6 @@ public class Models {
     @JsonInclude
     @NotNull
     private String accountID;
-    @JsonProperty(value = "attributes")
-    private T attributes;
-    /**
-     * Your unique ID of the transaction.
-     * <h2>Examples</h2>
-     * <ul>
-     *   <li>12345678</li>
-     * </ul>
-     */
-    @JsonProperty(value = "messageid", required = true)
-    @JsonInclude
-    @NotNull
-    private String messageID;
-    /**
-     * Unique ID for this notification. Each notification must only be handled once in your system.
-     */
-    @JsonProperty(value = "notificationid", required = true)
-    @JsonInclude
-    @NotNull
-    private String notificationID;
-    /**
-     * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
-     * <h2>Examples</h2>
-     * <ul>
-     *   <li>9594811343</li>
-     * </ul>
-     */
-    @JsonProperty(value = "orderid", required = true)
-    @JsonInclude
-    @NotNull
-    private String orderID;
     /**
      * Whether the account is verified or not. 0 for not verified, 1 for verified.
      */
@@ -81,6 +50,9 @@ public class Models {
     @JsonInclude
     @NotNull
     private StringBoolean verified;
+    @JsonProperty(value = "attributes")
+    @Valid
+    private T attributes;
   }
 
   @Getter
@@ -89,30 +61,6 @@ public class Models {
   @Setter
   @SuperBuilder
   public static class AbstractAccountNotificationDataAttributes extends AbstractRequestDataAttributes {
-    /**
-     * The address of the account holder
-     */
-    @JsonProperty(value = "address")
-    private String address;
-    /**
-     * The bank for this account
-     * <h2>Examples</h2>
-     * <ul>
-     *   <li>SEB</li>
-     *   <li>Skandiabanken</li>
-     * </ul>
-     */
-    @JsonProperty(value = "bank")
-    private String bank;
-    /**
-     * The city of the account holder
-     * <h2>Examples</h2>
-     * <ul>
-     *   <li>Examplecity</li>
-     * </ul>
-     */
-    @JsonProperty(value = "city")
-    private String city;
     /**
      * The clearing house of the end-user's bank account. Typically the name of a country in uppercase letters. See examples or table at https://developers.trustly.com/emea/docs/registeraccount.
      * <h2>Examples</h2>
@@ -151,6 +99,16 @@ public class Models {
     @JsonProperty(value = "clearinghouse")
     private String clearingHouse;
     /**
+     * The bank for this account
+     * <h2>Examples</h2>
+     * <ul>
+     *   <li>SEB</li>
+     *   <li>Skandiabanken</li>
+     * </ul>
+     */
+    @JsonProperty(value = "bank")
+    private String bank;
+    /**
      * A text that is safe to show the enduser for identifying the account. Do not parse this text since it will be a different format for different accounts.
      * <h2>Examples</h2>
      * <ul>
@@ -165,15 +123,6 @@ public class Models {
     @JsonProperty(value = "lastdigits")
     private String lastdigits;
     /**
-     * The name of the account holder
-     * <h2>Examples</h2>
-     * <ul>
-     *   <li>John Doe</li>
-     * </ul>
-     */
-    @JsonProperty(value = "name")
-    private String name;
-    /**
      * An ID that uniquely identifies the account holder. Only present in markets where SSN is applicable. Note: The format of this field will for some countries look different than the example.
      * <h2>Examples</h2>
      * <ul>
@@ -184,6 +133,20 @@ public class Models {
     @JsonProperty(value = "personid")
     private String personID;
     /**
+     * The name of the account holder
+     * <h2>Examples</h2>
+     * <ul>
+     *   <li>John Doe</li>
+     * </ul>
+     */
+    @JsonProperty(value = "name")
+    private String name;
+    /**
+     * The address of the account holder
+     */
+    @JsonProperty(value = "address")
+    private String address;
+    /**
      * The zipcode of the account holder
      * <h2>Examples</h2>
      * <ul>
@@ -192,6 +155,15 @@ public class Models {
      */
     @JsonProperty(value = "zipcode")
     private String zipcode;
+    /**
+     * The city of the account holder
+     * <h2>Examples</h2>
+     * <ul>
+     *   <li>Examplecity</li>
+     * </ul>
+     */
+    @JsonProperty(value = "city")
+    private String city;
   }
 
   @Getter
@@ -201,30 +173,8 @@ public class Models {
   @SuperBuilder
   public static class AbstractCancelNotificationData<T extends AbstractRequestDataAttributes> extends AbstractNotificationRequestData {
     @JsonProperty(value = "attributes")
+    @Valid
     private T attributes;
-    /**
-     * Your unique ID of the transaction.
-     * <h2>Examples</h2>
-     * <ul>
-     *   <li>12345678</li>
-     * </ul>
-     */
-    @JsonProperty(value = "messageid")
-    private String messageID;
-    /**
-     * Unique ID for this notification. Each notification must only be handled once in your system.
-     */
-    @JsonProperty(value = "notificationid")
-    private String notificationID;
-    /**
-     * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
-     * <h2>Examples</h2>
-     * <ul>
-     *   <li>9594811343</li>
-     * </ul>
-     */
-    @JsonProperty(value = "orderid")
-    private String orderID;
   }
 
   @Getter
@@ -234,12 +184,16 @@ public class Models {
   @SuperBuilder
   public static class AbstractCreditNotificationData<T extends AbstractRequestDataAttributes> extends AbstractNotificationRequestData {
     /**
+     * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
+     * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
+     */
+    @JsonProperty(value = "enduserid")
+    private String endUserID;
+    /**
      * {@code 98.02}
      */
     @JsonProperty(value = "amount")
     private double amount;
-    @JsonProperty(value = "attributes")
-    private T attributes;
     /**
      * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
      * <h2>Examples</h2>
@@ -260,35 +214,6 @@ public class Models {
     @JsonProperty(value = "currency")
     private String currency;
     /**
-     * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-     * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
-     */
-    @JsonProperty(value = "enduserid")
-    private String endUserID;
-    /**
-     * Your unique ID of the transaction.
-     * <h2>Examples</h2>
-     * <ul>
-     *   <li>12345678</li>
-     * </ul>
-     */
-    @JsonProperty(value = "messageid")
-    private String messageID;
-    /**
-     * Unique ID for this notification. Each notification must only be handled once in your system.
-     */
-    @JsonProperty(value = "notificationid")
-    private String notificationID;
-    /**
-     * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
-     * <h2>Examples</h2>
-     * <ul>
-     *   <li>9594811343</li>
-     * </ul>
-     */
-    @JsonProperty(value = "orderid")
-    private String orderID;
-    /**
      * The time of the transaction and the GMT offset (+01 means GMT + 1 hours).
      * <h2>Examples</h2>
      * <ul>
@@ -298,6 +223,9 @@ public class Models {
      */
     @JsonProperty(value = "timestamp")
     private String timestamp;
+    @JsonProperty(value = "attributes")
+    @Valid
+    private T attributes;
   }
 
   @Getter
@@ -315,9 +243,6 @@ public class Models {
   @Setter
   @SuperBuilder
   public static class AbstractDebitNotificationData<T extends AbstractRequestDataAttributes> extends AbstractNotificationRequestData implements IAdditionalProperties {
-    @Singular
-    @JsonAnySetter
-    private Map<String, Object> additionalProperties;
     /**
      * <h2>Examples</h2>
      * <ul>
@@ -338,8 +263,6 @@ public class Models {
     @JsonInclude
     @NotNull
     private String amount;
-    @JsonProperty(value = "attributes")
-    private T attributes;
     /**
      * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
      * <h2>Examples</h2>
@@ -369,35 +292,6 @@ public class Models {
     @NotNull
     private String endUserID;
     /**
-     * Your unique ID of the transaction.
-     * <h2>Examples</h2>
-     * <ul>
-     *   <li>12345678</li>
-     * </ul>
-     */
-    @JsonProperty(value = "messageid", required = true)
-    @JsonInclude
-    @NotNull
-    private String messageID;
-    /**
-     * Unique ID for this notification. Each notification must only be handled once in your system.
-     */
-    @JsonProperty(value = "notificationid", required = true)
-    @JsonInclude
-    @NotNull
-    private String notificationID;
-    /**
-     * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
-     * <h2>Examples</h2>
-     * <ul>
-     *   <li>9594811343</li>
-     * </ul>
-     */
-    @JsonProperty(value = "orderid", required = true)
-    @JsonInclude
-    @NotNull
-    private String orderID;
-    /**
      * The time of the transaction and the GMT offset (+01 means GMT + 1 hours).
      * <h2>Examples</h2>
      * <ul>
@@ -409,6 +303,13 @@ public class Models {
     @JsonInclude
     @NotNull
     private String timestamp;
+    @Singular
+    @JsonAnySetter
+    private Map<String, Object> additionalProperties;
+    @JsonProperty(value = "attributes")
+    @Valid
+    private T attributes;
+
     public void addAdditionalProperty(String key, Object value) {
       this.additionalProperties.put(key, value);
     }
@@ -424,10 +325,7 @@ public class Models {
   @RequiredArgsConstructor
   @Setter
   @SuperBuilder
-  public static class AbstractKYCNotificationData implements IAbstractKYCNotificationData {
-    @JsonProperty(value = "attributes")
-    @Valid
-    private KYCNotificationDataAttributes attributes;
+  public static class AbstractKYCNotificationData extends AbstractNotificationRequestData {
     /**
      * Trustly generated unique identifier based on player’s bank account profile*.
      * Can be used as an identifier when <code>personid</code> is not available.
@@ -442,35 +340,81 @@ public class Models {
     @JsonInclude
     @NotNull
     private String kycentityid;
-    /**
-     * Your unique ID of the transaction.
-     * <h2>Examples</h2>
-     * <ul>
-     *   <li>12345678</li>
-     * </ul>
-     */
-    @JsonProperty(value = "messageid", required = true)
-    @JsonInclude
-    @NotNull
-    private String messageID;
-    /**
-     * Unique ID for this notification. Each notification must only be handled once in your system.
-     */
-    @JsonProperty(value = "notificationid", required = true)
-    @JsonInclude
-    @NotNull
-    private String notificationID;
-    /**
-     * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
-     * <h2>Examples</h2>
-     * <ul>
-     *   <li>9594811343</li>
-     * </ul>
-     */
-    @JsonProperty(value = "orderid", required = true)
-    @JsonInclude
-    @NotNull
-    private String orderID;
+    @JsonProperty(value = "attributes")
+    @Valid
+    private KYCNotificationDataAttributes attributes;
+
+    @Getter
+    @Jacksonized
+    @RequiredArgsConstructor
+    @Setter
+    @SuperBuilder
+    public static class KYCNotificationDataAttributes extends AbstractRequestDataAttributes {
+      /**
+       * An ID that uniquely identifies the account holder. Only present in markets where SSN is applicable. Note: The format of this field will for some countries look different than the example.
+       * <h2>Examples</h2>
+       * <ul>
+       *   <li>SE198201019876</li>
+       *   <li>19900501</li>
+       * </ul>
+       */
+      @JsonProperty(value = "personid", required = true)
+      @JsonInclude
+      @NotNull
+      private String personID;
+      /**
+       * First name of the person, or the name of the organization/company.
+       */
+      @JsonProperty(value = "firstname", required = true)
+      @JsonInclude
+      @NotNull
+      private String firstname;
+      /**
+       * Last name of the person (NULL/empty for organization/company).
+       */
+      @JsonProperty(value = "lastname", required = true)
+      @JsonInclude
+      private String lastname;
+      /**
+       * The end-user's date of birth.
+       */
+      @JsonProperty(value = "dob", required = true)
+      @JsonInclude
+      @NotNull
+      private String dob;
+      /**
+       * Recipient address street
+       * <h2>Examples</h2>
+       * <ul>
+       *   <li>Main Street 1</li>
+       * </ul>
+       */
+      @JsonProperty(value = "street", required = true)
+      @JsonInclude
+      @NotNull
+      private String street;
+      /**
+       * The postalcode of the recipient address.
+       */
+      @JsonProperty(value = "zipcode", required = true)
+      @JsonInclude
+      @NotNull
+      private String zipcode;
+      /**
+       * The city of the recipient address.
+       */
+      @JsonProperty(value = "city", required = true)
+      @JsonInclude
+      @NotNull
+      private String city;
+      /**
+       * The ISO 3166-1-alpha-2 code of the recipient address country.
+       */
+      @JsonProperty(value = "country", required = true)
+      @JsonInclude
+      @NotNull
+      private String country;
+    }
   }
 
   @Getter
@@ -487,7 +431,35 @@ public class Models {
   @Setter
   @SuperBuilder
   public abstract static class AbstractNotificationRequestData {
-
+    /**
+     * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
+     * <h2>Examples</h2>
+     * <ul>
+     *   <li>9594811343</li>
+     * </ul>
+     */
+    @JsonProperty(value = "orderid", required = true)
+    @JsonInclude
+    @NotNull
+    private String orderID;
+    /**
+     * Your unique ID of the transaction.
+     * <h2>Examples</h2>
+     * <ul>
+     *   <li>12345678</li>
+     * </ul>
+     */
+    @JsonProperty(value = "messageid", required = true)
+    @JsonInclude
+    @NotNull
+    private String messageID;
+    /**
+     * Unique ID for this notification. Each notification must only be handled once in your system.
+     */
+    @JsonProperty(value = "notificationid", required = true)
+    @JsonInclude
+    @NotNull
+    private String notificationID;
   }
 
   @Getter
@@ -510,9 +482,6 @@ public class Models {
     @JsonInclude
     @NotNull
     private double amount;
-    @JsonProperty(value = "attributes")
-    @Valid
-    private AnyAttributes attributes;
     /**
      * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
      * <h2>Examples</h2>
@@ -534,35 +503,6 @@ public class Models {
     @JsonInclude
     private String currency;
     /**
-     * Your unique ID of the transaction.
-     * <h2>Examples</h2>
-     * <ul>
-     *   <li>12345678</li>
-     * </ul>
-     */
-    @JsonProperty(value = "messageid", required = true)
-    @JsonInclude
-    @NotNull
-    private String messageID;
-    /**
-     * Unique ID for this notification. Each notification must only be handled once in your system.
-     */
-    @JsonProperty(value = "notificationid", required = true)
-    @JsonInclude
-    @NotNull
-    private String notificationID;
-    /**
-     * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
-     * <h2>Examples</h2>
-     * <ul>
-     *   <li>9594811343</li>
-     * </ul>
-     */
-    @JsonProperty(value = "orderid", required = true)
-    @JsonInclude
-    @NotNull
-    private String orderID;
-    /**
      * The time of the transaction and the GMT offset (+01 means GMT + 1 hours).
      * <h2>Examples</h2>
      * <ul>
@@ -574,6 +514,9 @@ public class Models {
     @JsonInclude
     @NotNull
     private String timestamp;
+    @JsonProperty(value = "attributes")
+    @Valid
+    private AnyAttributes attributes;
   }
 
   @Getter
@@ -581,18 +524,18 @@ public class Models {
   @RequiredArgsConstructor
   @Setter
   @SuperBuilder
-  public static class AbstractRequestData<T> {
-    @JsonProperty(value = "Attributes")
-    @Valid
-    private T attributes;
-    @JsonProperty(value = "Password", required = true)
-    @JsonInclude
-    @NotNull
-    private String password;
+  public static class AbstractRequestData<T extends AbstractRequestDataAttributes> {
     @JsonProperty(value = "Username", required = true)
     @JsonInclude
     @NotNull
     private String username;
+    @JsonProperty(value = "Password", required = true)
+    @JsonInclude
+    @NotNull
+    private String password;
+    @JsonProperty(value = "Attributes")
+    @Valid
+    private T attributes;
   }
 
   @Getter
@@ -603,6 +546,7 @@ public class Models {
     @Singular
     @JsonAnySetter
     private Map<String, Object> additionalProperties;
+
     public void addAdditionalProperty(String key, Object value) {
       this.additionalProperties.put(key, value);
     }
@@ -635,26 +579,6 @@ public class Models {
       @SuperBuilder
       public static class Data extends AbstractRequestData<AnyAttributes> {
         /**
-         * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>BGN</li>
-         *   <li>CZK</li>
-         *   <li>DKK</li>
-         *   <li>EUR</li>
-         *   <li>GBP</li>
-         *   <li>HRK</li>
-         *   <li>HUF</li>
-         *   <li>NOK</li>
-         *   <li>PLN</li>
-         *   <li>RON</li>
-         *   <li>SEK</li>
-         * </ul>
-         */
-        @JsonProperty(value = "Currency", required = true)
-        @JsonInclude
-        private String currency;
-        /**
          * Date string in the ISO 8601 format (YYYY-MM-DD)
          * <h2>Examples</h2>
          * <ul>
@@ -676,6 +600,26 @@ public class Models {
         @JsonInclude
         @NotNull
         private String toDate;
+        /**
+         * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>BGN</li>
+         *   <li>CZK</li>
+         *   <li>DKK</li>
+         *   <li>EUR</li>
+         *   <li>GBP</li>
+         *   <li>HRK</li>
+         *   <li>HUF</li>
+         *   <li>NOK</li>
+         *   <li>PLN</li>
+         *   <li>RON</li>
+         *   <li>SEK</li>
+         * </ul>
+         */
+        @JsonProperty(value = "Currency", required = true)
+        @JsonInclude
+        private String currency;
       }
     }
   }
@@ -688,10 +632,13 @@ public class Models {
   public static class AccountLedgerResponse extends JsonRpcResponse<AccountLedgerResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<List<Result.DataEntry>> {
+      public Result() {
+        super("AccountLedger");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
@@ -699,44 +646,30 @@ public class Models {
       @SuperBuilder
       public static class DataEntry {
         /**
-         * The name of the bookkeeping account this ledger record belongs to.
+         * Your userid in our system.
          */
-        @JsonProperty(value = "accountname")
-        private String accountname;
-        /**
-         * The amount your balance in our system was affected with due to this ledger record. May contain a lot of decimals.
-         */
-        @JsonProperty(value = "amount")
-        private String amount;
-        /**
-         * The currency of the amount in this ledger record.
-         */
-        @JsonProperty(value = "currency")
-        private String currency;
+        @JsonProperty(value = "userid")
+        private String userID;
         /**
          * The datestamp for when this ledger row affected your balance in our system.
          */
         @JsonProperty(value = "datestamp")
         private String datestamp;
         /**
-         * An ID meaning different things for different payment methods, you probably don't need this data.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>3209647863</li>
-         * </ul>
+         * The globally unique OrderID that resulted in this ledger record.
          */
-        @JsonProperty(value = "gluepayid")
-        private String gluepayid;
+        @JsonProperty(value = "orderid")
+        private long orderID;
+        /**
+         * The name of the bookkeeping account this ledger record belongs to.
+         */
+        @JsonProperty(value = "accountname")
+        private String accountname;
         /**
          * Your unique MessageID that you used to create the order that resulted in this ledger record.
          */
         @JsonProperty(value = "messageid")
         private String messageID;
-        /**
-         * The globally unique OrderID that resulted in this ledger record.
-         */
-        @JsonProperty(value = "orderid")
-        private long orderID;
         /**
          * A human friendly description of this ledger record.
          * <h2>Examples</h2>
@@ -747,10 +680,24 @@ public class Models {
         @JsonProperty(value = "transactiontype")
         private String transactiontype;
         /**
-         * Your userid in our system.
+         * The currency of the amount in this ledger record.
          */
-        @JsonProperty(value = "userid")
-        private String userID;
+        @JsonProperty(value = "currency")
+        private String currency;
+        /**
+         * The amount your balance in our system was affected with due to this ledger record. May contain a lot of decimals.
+         */
+        @JsonProperty(value = "amount")
+        private String amount;
+        /**
+         * An ID meaning different things for different payment methods, you probably don't need this data.
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>3209647863</li>
+         * </ul>
+         */
+        @JsonProperty(value = "gluepayid")
+        private String gluepayid;
       }
     }
   }
@@ -785,9 +732,30 @@ public class Models {
     @RequiredArgsConstructor
     @Setter
     @SuperBuilder
-    public static class Attributes extends AbstractAccountNotificationDataAttributes implements IAdditionalProperties {
-      @JsonProperty(value = "accountholders")
-      private List<String> accountholders;
+    public static class Attributes extends AbstractAccountNotificationDataAttributes {
+      /**
+       * Whether the direct debit mandate is active or not, 1 for active, 0 for non-active.
+       */
+      @JsonProperty(value = "directdebitmandate")
+      private NumberBoolean directDebitMandate;
+      /**
+       * The ISO 3166-1-alpha-2 code of the end-user's country. This will be used for pre-selecting the country for the end-user in the iframe.
+       * Note: This will only have an effect for new end-users. If an end-user has done a previous order (with the same EndUserID), the country that was last used will be pre-selected.
+       */
+      @JsonProperty(value = "country")
+      private String country;
+      /**
+       * The bank number identifying the end-user's bank in the given clearing house. For bank accounts in IBAN format you should just provide an empty string (""). For non-IBAN format, see examples. The BankNumber for Swedish bank accounts should be the local "clearing number", and the AccountNumber parameter should contain the rest of the account number. Most Swedish banks have a 4-digit clearing number, but a 5-digit clearing number is used for Swedbank accounts when the clearing number starts with "8". Nordea accounts where the account number is the same as the person's national identification number always has "3300" as the clearing number.
+       * <p>
+       * IBAN for Swedish bank accounts is supported upon request. When making API calls with Swedish IBAN, ensure to include the Clearinghouse attribute as "IBAN" instead of "SWEDEN". See more at https://developers.trustly.com/emea/docs/registeraccount
+       * <h2>Examples</h2>
+       * <ul>
+       *   <li>Sweden: ^[0-9]{4,5}$</li>
+       *   <li>United Kingdom: ^[0-9]{6}$</li>
+       * </ul>
+       */
+      @JsonProperty(value = "bankcode")
+      private String bankcode;
       /**
        * Name of the account
        * <h2>Examples</h2>
@@ -797,6 +765,21 @@ public class Models {
        */
       @JsonProperty(value = "accountname")
       private String accountname;
+      @JsonProperty(value = "accountholders")
+      private List<String> accountholders;
+      /**
+       * The branch identifier
+       * <h2>Examples</h2>
+       * <ul>
+       *   <li>6160</li>
+       *   <li>6000</li>
+       *   <li>bg</li>
+       *   <li>123123</li>
+       *   <li>HANDSESS</li>
+       * </ul>
+       */
+      @JsonProperty(value = "bankidentifier")
+      private String bankidentifier;
       /**
        * The account number, identifying the end-user's account in the bank. Can be either IBAN or country-specific format, see examples or read more at https://developers.trustly.com/emea/docs/registeraccount
        * <h2>Examples</h2>
@@ -838,53 +821,6 @@ public class Models {
       private String accountnumber;
       @JsonProperty(value = "accountsource")
       private MandateAccountSource accountsource;
-      @Singular
-      @JsonAnySetter
-      private Map<String, Object> additionalProperties;
-      /**
-       * The bank number identifying the end-user's bank in the given clearing house. For bank accounts in IBAN format you should just provide an empty string (""). For non-IBAN format, see examples. The BankNumber for Swedish bank accounts should be the local "clearing number", and the AccountNumber parameter should contain the rest of the account number. Most Swedish banks have a 4-digit clearing number, but a 5-digit clearing number is used for Swedbank accounts when the clearing number starts with "8". Nordea accounts where the account number is the same as the person's national identification number always has "3300" as the clearing number.
-       * <p>
-       * IBAN for Swedish bank accounts is supported upon request. When making API calls with Swedish IBAN, ensure to include the Clearinghouse attribute as "IBAN" instead of "SWEDEN". See more at https://developers.trustly.com/emea/docs/registeraccount
-       * <h2>Examples</h2>
-       * <ul>
-       *   <li>Sweden: ^[0-9]{4,5}$</li>
-       *   <li>United Kingdom: ^[0-9]{6}$</li>
-       * </ul>
-       */
-      @JsonProperty(value = "bankcode")
-      private String bankcode;
-      /**
-       * The branch identifier
-       * <h2>Examples</h2>
-       * <ul>
-       *   <li>6160</li>
-       *   <li>6000</li>
-       *   <li>bg</li>
-       *   <li>123123</li>
-       *   <li>HANDSESS</li>
-       * </ul>
-       */
-      @JsonProperty(value = "bankidentifier")
-      private String bankidentifier;
-      /**
-       * The ISO 3166-1-alpha-2 code of the end-user's country. This will be used for pre-selecting the country for the end-user in the iframe.
-       * Note: This will only have an effect for new end-users. If an end-user has done a previous order (with the same EndUserID), the country that was last used will be pre-selected.
-       */
-      @JsonProperty(value = "country")
-      private String country;
-      /**
-       * Whether the direct debit mandate is active or not, 1 for active, 0 for non-active.
-       */
-      @JsonProperty(value = "directdebitmandate")
-      private NumberBoolean directDebitMandate;
-      public void addAdditionalProperty(String key, Object value) {
-        this.additionalProperties.put(key, value);
-      }
-
-      @JsonAnyGetter
-      public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-      }
 
       public enum MandateAccountSource {
         /**
@@ -903,8 +839,10 @@ public class Models {
          * If the scheme notifies about a change of account, this only aplies to BACS.
          */
         REGISTRATION_SCHEME("REGISTRATION_SCHEME");
+
         @JsonValue
         private final String value;
+
         MandateAccountSource(String value) {
           this.value = value;
         }
@@ -920,11 +858,12 @@ public class Models {
   public static class AccountMandateNotificationResponse extends JsonRpcResponse<AccountMandateNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("account");
+      }
     }
   }
 
@@ -954,6 +893,7 @@ public class Models {
         private AccountDefaultNotificationData _accountDefaultNotificationData;
         @Valid
         private AccountMandateNotificationData _accountMandateNotificationData;
+
         @JsonCreator
         public Data(JsonNode raw) {
           this._raw = raw;
@@ -984,18 +924,8 @@ public class Models {
           @RequiredArgsConstructor
           @Setter
           @SuperBuilder
-          public static class Attributes extends AbstractAccountNotificationDataAttributes implements IAdditionalProperties {
-            @Singular
-            @JsonAnySetter
-            private Map<String, Object> additionalProperties;
-            public void addAdditionalProperty(String key, Object value) {
-              this.additionalProperties.put(key, value);
-            }
+          public static class Attributes extends AbstractAccountNotificationDataAttributes {
 
-            @JsonAnyGetter
-            public Map<String, Object> getAdditionalProperties() {
-              return this.additionalProperties;
-            }
           }
         }
       }
@@ -1010,11 +940,12 @@ public class Models {
   public static class AccountNotificationResponse extends JsonRpcResponse<AccountNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("account");
+      }
     }
   }
 
@@ -1040,12 +971,33 @@ public class Models {
       @SuperBuilder
       public static class Data extends AbstractRequestData<Data.Attributes> {
         /**
+         * The URL to which notifications for this payment should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
+         */
+        @JsonProperty(value = "NotificationURL", required = true)
+        @JsonInclude
+        @NotNull
+        private String notificationUrl;
+        /**
          * The AccountID received from an Account notification to which the money shall be sent.
          */
         @JsonProperty(value = "AccountID", required = true)
         @JsonInclude
         @NotNull
         private String accountId;
+        /**
+         * ID, username, hash or anything uniquely identifying the end-user requesting the withdrawal. Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
+         */
+        @JsonProperty(value = "EndUserID", required = true)
+        @JsonInclude
+        @NotNull
+        private String endUserId;
+        /**
+         * Your unique ID for the payout. If the MessageID is a previously initiated P2P order then the payout will be attached to that P2P order and the amount must be equal to or lower than the previously deposited amount.
+         */
+        @JsonProperty(value = "MessageID", required = true)
+        @JsonInclude
+        @NotNull
+        private String messageId;
         /**
          * The amount to send. Only digits. Use dot (.) as decimal separator. If the end-user holds a balance in the merchant's system then the amount must have been deducted from that balance before calling this method.
          */
@@ -1073,33 +1025,22 @@ public class Models {
         @JsonProperty(value = "Currency", required = true)
         @JsonInclude
         private String currency;
-        /**
-         * ID, username, hash or anything uniquely identifying the end-user requesting the withdrawal. Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
-         */
-        @JsonProperty(value = "EndUserID", required = true)
-        @JsonInclude
-        @NotNull
-        private String endUserId;
-        /**
-         * Your unique ID for the payout. If the MessageID is a previously initiated P2P order then the payout will be attached to that P2P order and the amount must be equal to or lower than the previously deposited amount.
-         */
-        @JsonProperty(value = "MessageID", required = true)
-        @JsonInclude
-        @NotNull
-        private String messageId;
-        /**
-         * The URL to which notifications for this payment should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
-         */
-        @JsonProperty(value = "NotificationURL", required = true)
-        @JsonInclude
-        @NotNull
-        private String notificationUrl;
+
         @Getter
         @Jacksonized
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
         public static class Attributes extends AbstractRequestDataAttributes {
+          /**
+           * The text to show on the end-user's bank statement after Trustly's own 10 digit reference (which always will be displayed first). The reference must let the end user identify the merchant based on this value. So the ShopperStatement should contain either your brand name, website name, or company name.
+           * <p>
+           * If possible, try to keep this text as short as possible to maximise the chance that the full reference will fit into the reference field on the customer's bank since some banks allow only a limited number of characters. If the full ShopperStatement does not fit into the reference it will be truncated from the end.
+           */
+          @JsonProperty(value = "ShopperStatement", required = true)
+          @JsonInclude
+          @NotNull
+          private String shopperStatement;
           /**
            * The ExternalReference is a reference set by the merchant for any purpose and does not need to be unique for every API call. For example, it can be used for invoice references, OCR numbers and also for offering end users the option to part-pay an invoice using the same ExternalReference. The ExternalReference will be included in version 1.2 of the settlement report, <code>ViewAutomaticSettlementDetailsCSV</code>.
            * <h2>Examples</h2>
@@ -1109,13 +1050,6 @@ public class Models {
            */
           @JsonProperty(value = "ExternalReference")
           private String externalReference;
-          /**
-           * VISA category codes describing the merchant's nature of business.
-           * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master processing account.  It is also mandatory for E-wallets used directly in a merchant's checkout.
-           * Mandatory attributes for Trustly Partners that are using Express account. It is also mandatory for E-wallets used directly in a merchant's checkout, whereby the purpose of a Trustly transaction is to pay for goods/services by placing funds on the payer's e-money account ("funding stage") following an immediate transfer into the e-money account of the payee ( "payment" stage).
-           */
-          @JsonProperty(value = "MerchantCategoryCode")
-          private String merchantCategoryCode;
           /**
            * Human-readable identifier of the consumer-facing merchant (e.g. legal name or trade name)
            * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master processing account.  It is also mandatory for E-wallets used directly in a merchant's checkout.
@@ -1131,20 +1065,18 @@ public class Models {
           @JsonProperty(value = "PSPMerchantURL")
           private String pspMerchantUrl;
           /**
+           * VISA category codes describing the merchant's nature of business.
+           * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master processing account.  It is also mandatory for E-wallets used directly in a merchant's checkout.
+           * Mandatory attributes for Trustly Partners that are using Express account. It is also mandatory for E-wallets used directly in a merchant's checkout, whereby the purpose of a Trustly transaction is to pay for goods/services by placing funds on the payer's e-money account ("funding stage") following an immediate transfer into the e-money account of the payee ( "payment" stage).
+           */
+          @JsonProperty(value = "MerchantCategoryCode")
+          private String merchantCategoryCode;
+          /**
            * Information about the Payer (ultimate debtor). This is required for some merchants and partners. SenderInformation is mandatory to send in Attributes{} for money transfer services (including remittance houses), e-wallets, prepaid cards, as well as for Trustly Partners that are using Express Merchant Onboarding and aggregate traffic under a master processing account (other cases may also apply).
            */
           @JsonProperty(value = "SenderInformation")
           @Valid
           private SenderInformation senderInformation;
-          /**
-           * The text to show on the end-user's bank statement after Trustly's own 10 digit reference (which always will be displayed first). The reference must let the end user identify the merchant based on this value. So the ShopperStatement should contain either your brand name, website name, or company name.
-           * <p>
-           * If possible, try to keep this text as short as possible to maximise the chance that the full reference will fit into the reference field on the customer's bank since some banks allow only a limited number of characters. If the full ShopperStatement does not fit into the reference it will be truncated from the end.
-           */
-          @JsonProperty(value = "ShopperStatement", required = true)
-          @JsonInclude
-          @NotNull
-          private String shopperStatement;
         }
       }
     }
@@ -1158,10 +1090,13 @@ public class Models {
   public static class AccountPayoutResponse extends JsonRpcResponse<AccountPayoutResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("AccountPayout");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
@@ -1195,6 +1130,7 @@ public class Models {
     @Singular
     @JsonAnySetter
     private Map<String, Object> additionalProperties;
+
     public void addAdditionalProperty(String key, Object value) {
       this.additionalProperties.put(key, value);
     }
@@ -1206,8 +1142,10 @@ public class Models {
 
     public enum Status {
       OK("OK");
+
       @JsonValue
       private final String value;
+
       Status(String value) {
         this.value = value;
       }
@@ -1267,10 +1205,13 @@ public class Models {
   public static class ApproveWithdrawalResponse extends JsonRpcResponse<ApproveWithdrawalResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("ApproveWithdrawal");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
@@ -1329,10 +1270,13 @@ public class Models {
   public static class BalanceResponse extends JsonRpcResponse<BalanceResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<List<Result.DataEntry>> {
+      public Result() {
+        super("Balance");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
@@ -1340,15 +1284,15 @@ public class Models {
       @SuperBuilder
       public static class DataEntry {
         /**
-         * The balance with 2 decimals
-         */
-        @JsonProperty(value = "balance")
-        private String balance;
-        /**
          * The currency
          */
         @JsonProperty(value = "currency")
         private String currency;
+        /**
+         * The balance with 2 decimals
+         */
+        @JsonProperty(value = "balance")
+        private String balance;
       }
     }
   }
@@ -1393,61 +1337,33 @@ public class Models {
   public static class CancelChargeResponse extends JsonRpcResponse<CancelChargeResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("CancelCharge");
+      }
+
+      /**
+       * 1 if the Charge could be canceled, and 0 otherwise.
+       */
       @Getter
       @Jacksonized
+      @RequiredArgsConstructor
       @Setter
       @SuperBuilder
-      public static class Data {
-        @JsonValue
-        private final JsonNode _raw;
-        @Valid
-        private ResponseDataWithReject _responseDataWithReject;
-        @Valid
-        private ResponseDataWithResult _responseDataWithResult;
-        @JsonCreator
-        public Data(JsonNode raw) {
-          this._raw = raw;
-        }
-
-        public ResponseDataWithReject getResponseDataWithReject(ObjectMapper transformer) throws JsonProcessingException {
-          if (this._responseDataWithReject != null) {
-            return this._responseDataWithReject;
-          }
-          return this._responseDataWithReject = transformer.treeToValue(this._raw, ResponseDataWithReject.class);
-        }
-
-        public ResponseDataWithResult getResponseDataWithResult(ObjectMapper transformer) throws JsonProcessingException {
-          if (this._responseDataWithResult != null) {
-            return this._responseDataWithResult;
-          }
-          return this._responseDataWithResult = transformer.treeToValue(this._raw, ResponseDataWithResult.class);
-        }
-
-        @Getter
-        @Jacksonized
-        @RequiredArgsConstructor
-        @Setter
-        @SuperBuilder
-        public static class ResponseDataWithReject extends WithRejection<String> {
-          public String getResult() {
-            return "0";
-          }
-        }
-
-        @Getter
-        @Jacksonized
-        @RequiredArgsConstructor
-        @Setter
-        @SuperBuilder
-        public static class ResponseDataWithResult {
-          public String getResult() {
-            return "1";
-          }
-        }
+      public static class Data extends WithRejection<StringBoolean, String> {
+        /**
+         * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>9594811343</li>
+         * </ul>
+         */
+        @JsonProperty(value = "orderid", required = true)
+        @JsonInclude
+        @NotNull
+        private String orderID;
       }
     }
   }
@@ -1478,28 +1394,17 @@ public class Models {
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
-        public static class Attributes extends AbstractRequestDataAttributes implements IAdditionalProperties {
-          @Singular
-          @JsonAnySetter
-          private Map<String, Object> additionalProperties;
+        public static class Attributes extends AbstractRequestDataAttributes {
+          /**
+           * From CancelDirectCreditNotificationDataAttributes
+           */
+          @JsonProperty(value = "reason")
+          private DirectCreditCancelReason reason;
           /**
            * Description of reason. If Direct Debit Mandate, then  this applies when reason is <code>FAILED: BACS ADDACS_1(INSTRUCTION CANCELLED BY PAYER)</code>. See https://eu.developers.trustly.com/doc/reference/mdd#description-of-details-eg-failure-details
            */
           @JsonProperty(value = "details")
           private String details;
-          /**
-           * <p>From CancelDirectCreditNotificationDataAttributes</p>
-           */
-          @JsonProperty(value = "reason")
-          private DirectCreditCancelReason reason;
-          public void addAdditionalProperty(String key, Object value) {
-            this.additionalProperties.put(key, value);
-          }
-
-          @JsonAnyGetter
-          public Map<String, Object> getAdditionalProperties() {
-            return this.additionalProperties;
-          }
 
           public enum DirectCreditCancelReason {
             /**
@@ -1514,8 +1419,10 @@ public class Models {
              * All other failures
              */
             FAILED("FAILED");
+
             @JsonValue
             private final String value;
+
             DirectCreditCancelReason(String value) {
               this.value = value;
             }
@@ -1533,11 +1440,12 @@ public class Models {
   public static class CancelDirectCreditNotificationResponse extends JsonRpcResponse<CancelDirectCreditNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("cancel");
+      }
     }
   }
 
@@ -1585,23 +1493,19 @@ public class Models {
   public static class CancelDirectDebitMandateResponse extends JsonRpcResponse<CancelDirectDebitMandateResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("CancelDirectDebitMandate");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
       @Setter
       @SuperBuilder
-      public static class Data extends WithRejection<Data.CancelDirectDebitMandateReject> {
-        /**
-         * 1 if the cancel was accepted, 0 otherwise. Note that this does not indicate that the mandate has been removed in the scheme, that happens in a later stage.
-         */
-        @JsonProperty(value = "result", required = true)
-        @JsonInclude
-        @NotNull
-        private StringBoolean result;
+      public static class Data extends WithRejection<StringBoolean, Data.CancelDirectDebitMandateReject> {
         /**
          * If the cancel was NOT accepted, a textual code describing the rejection reason, null otherwise.
          */
@@ -1610,8 +1514,10 @@ public class Models {
            * The mandate does not exist.
            */
           ERROR_MANDATE_NOT_FOUND("ERROR_MANDATE_NOT_FOUND");
+
           @JsonValue
           private final String value;
+
           CancelDirectDebitMandateReject(String value) {
             this.value = value;
           }
@@ -1646,28 +1552,17 @@ public class Models {
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
-        public static class Attributes extends AbstractRequestDataAttributes implements IAdditionalProperties {
-          @Singular
-          @JsonAnySetter
-          private Map<String, Object> additionalProperties;
+        public static class Attributes extends AbstractRequestDataAttributes {
+          /**
+           * From CancelDirectDebitNotificationDataAttributes
+           */
+          @JsonProperty(value = "reason")
+          private DirectDebitCancelReason reason;
           /**
            * Description of reason. If Direct Debit Mandate, then  this applies when reason is <code>FAILED: BACS ADDACS_1(INSTRUCTION CANCELLED BY PAYER)</code>. See https://eu.developers.trustly.com/doc/reference/mdd#description-of-details-eg-failure-details
            */
           @JsonProperty(value = "details")
           private String details;
-          /**
-           * <p>From CancelDirectDebitNotificationDataAttributes</p>
-           */
-          @JsonProperty(value = "reason")
-          private DirectDebitCancelReason reason;
-          public void addAdditionalProperty(String key, Object value) {
-            this.additionalProperties.put(key, value);
-          }
-
-          @JsonAnyGetter
-          public Map<String, Object> getAdditionalProperties() {
-            return this.additionalProperties;
-          }
 
           public enum DirectDebitCancelReason {
             /**
@@ -1686,8 +1581,10 @@ public class Models {
              * All other failures
              */
             FAILED("FAILED");
+
             @JsonValue
             private final String value;
+
             DirectDebitCancelReason(String value) {
               this.value = value;
             }
@@ -1705,11 +1602,12 @@ public class Models {
   public static class CancelDirectDebitNotificationResponse extends JsonRpcResponse<CancelDirectDebitNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("cancel");
+      }
     }
   }
 
@@ -1757,23 +1655,19 @@ public class Models {
   public static class CancelDirectDebitResponse extends JsonRpcResponse<CancelDirectDebitResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("CancelDirectDebit");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
       @Setter
       @SuperBuilder
-      public static class Data extends WithRejection<Data.CancelDirectDebitReject> {
-        /**
-         * 1 if the cancel was accepted, 0 otherwise.
-         */
-        @JsonProperty(value = "result", required = true)
-        @JsonInclude
-        @NotNull
-        private StringBoolean result;
+      public static class Data extends WithRejection<StringBoolean, Data.CancelDirectDebitReject> {
         /**
          * If the cancel was NOT accepted, a textual code describing the rejection reason, null otherwise.
          */
@@ -1786,8 +1680,10 @@ public class Models {
            * the charge has already been processed in the scheme (e.g. BACS) and can not be cancelled.
            */
           ERROR_CHARGE_ALREADY_PROCESSED("ERROR_CHARGE_ALREADY_PROCESSED");
+
           @JsonValue
           private final String value;
+
           CancelDirectDebitReject(String value) {
             this.value = value;
           }
@@ -1830,11 +1726,12 @@ public class Models {
   public static class CancelDirectPaymentBatchNotificationResponse extends JsonRpcResponse<CancelDirectPaymentBatchNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("cancel");
+      }
     }
   }
 
@@ -1866,6 +1763,16 @@ public class Models {
         @SuperBuilder
         public static class Attributes extends AbstractRequestDataAttributes {
           /**
+           * From CancelMandateNotificationDataAttributes
+           */
+          @JsonProperty(value = "reason")
+          private CancelReason reason;
+          /**
+           * Description of reason. If Direct Debit Mandate, then  this applies when reason is <code>FAILED: BACS ADDACS_1(INSTRUCTION CANCELLED BY PAYER)</code>. See https://eu.developers.trustly.com/doc/reference/mdd#description-of-details-eg-failure-details
+           */
+          @JsonProperty(value = "details")
+          private String details;
+          /**
            * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
            * <h2>Examples</h2>
            * <ul>
@@ -1875,11 +1782,6 @@ public class Models {
            */
           @JsonProperty(value = "accountid")
           private String accountID;
-          /**
-           * Description of reason. If Direct Debit Mandate, then  this applies when reason is <code>FAILED: BACS ADDACS_1(INSTRUCTION CANCELLED BY PAYER)</code>. See https://eu.developers.trustly.com/doc/reference/mdd#description-of-details-eg-failure-details
-           */
-          @JsonProperty(value = "details")
-          private String details;
           /**
            * This parameter in a way identifies the mandate you are to setup. If it's already used, you will receive an error, ERROR_MERCHANT_REFERENCE_ALREADY_EXISTS
            * which basically informs you that there's already a mandate with that reference.
@@ -1894,11 +1796,7 @@ public class Models {
            */
           @JsonProperty(value = "merchantreference")
           private String merchantreference;
-          /**
-           * <p>From CancelMandateNotificationDataAttributes</p>
-           */
-          @JsonProperty(value = "reason")
-          private CancelReason reason;
+
           public enum CancelReason {
             /**
              * The mandate already exists
@@ -1916,8 +1814,10 @@ public class Models {
              * If the provided accountId was incorrect
              */
             INVALID_ACCOUNT_ID("INVALID_ACCOUNT_ID");
+
             @JsonValue
             private final String value;
+
             CancelReason(String value) {
               this.value = value;
             }
@@ -1935,11 +1835,12 @@ public class Models {
   public static class CancelMandateNotificationResponse extends JsonRpcResponse<CancelMandateNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("cancel");
+      }
     }
   }
 
@@ -1971,12 +1872,6 @@ public class Models {
         @JsonProperty(value = "enduserid")
         private String endUserID;
         /**
-         * Flag indicating that this is for Direct Debit refund. Note that this flag is not sent unless it's for a refund. Only value will be 1.
-         * <p>From CancelRefundDirectDebitNotificationData</p>
-         */
-        @JsonProperty(value = "refund")
-        private String refund;
-        /**
          * The time of the transaction and the GMT offset (+01 means GMT + 1 hours).
          * <h2>Examples</h2>
          * <ul>
@@ -1986,24 +1881,21 @@ public class Models {
          */
         @JsonProperty(value = "timestamp")
         private String timestamp;
+        /**
+         * Flag indicating that this is for Direct Debit refund. Note that this flag is not sent unless it's for a refund. Only value will be 1.
+         * From CancelRefundDirectDebitNotificationData
+         * <p>
+         * Flag indicating that this is for Direct Debit refund. Note that this flag is not sent unless it's for a refund. Only value will be 1.
+         */
+        @JsonProperty(value = "refund")
+        private String refund;
+
         @Getter
         @Jacksonized
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
         public static class NotificationDataAttributes extends AbstractRequestDataAttributes {
-          /**
-           * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
-           * <p>From CancelMandateNotificationDataAttributes</p>
-           * <p>
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>1234567890</li>
-           *   <li>7653385737</li>
-           * </ul>
-           */
-          @JsonProperty(value = "accountid")
-          private String accountID;
           /**
            * Description of reason
            * <h2>Examples</h2>
@@ -2014,14 +1906,38 @@ public class Models {
           @JsonProperty(value = "details")
           private String details;
           /**
+           * From CancelMandateNotificationDataAttributes
+           */
+          @JsonProperty(value = "reason")
+          private CancelReason reason;
+          /**
+           * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
+           * From CancelMandateNotificationDataAttributes
+           * <p>
+           * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>1234567890</li>
+           *   <li>7653385737</li>
+           * </ul>
+           */
+          @JsonProperty(value = "accountid")
+          private String accountID;
+          /**
            * This parameter in a way identifies the mandate you are to setup. If it's already used, you will receive an error, ERROR_MERCHANT_REFERENCE_ALREADY_EXISTS
            * which basically informs you that there's already a mandate with that reference.
            * <p>
            * [BACS]: The unique mandate reference. 6 - 10 characters consisting of A-Z and 0-9. Can not begin with DDIC and neither consists of the same characters, eg. AAAAAAA.
            * [Bankgiro]: The unique mandate reference. This must be numeric and unique for the payer, eg nationalId or similar can be used. Format needs to follow regexp [1-9][0-9]{5-15}
            * [SEPA-DD]: The unique mandate reference. This must be unique for the end-user for you as a merchant. Format needs to follow regexp [0-9,a-z,A-Z]{10-35}
-           * <p>From CancelMandateNotificationDataAttributes</p>
+           * From CancelMandateNotificationDataAttributes
            * <p>
+           * This parameter in a way identifies the mandate you are to setup. If it's already used, you will receive an error, ERROR_MERCHANT_REFERENCE_ALREADY_EXISTS
+           * which basically informs you that there's already a mandate with that reference.
+           * <p>
+           * [BACS]: The unique mandate reference. 6 - 10 characters consisting of A-Z and 0-9. Can not begin with DDIC and neither consists of the same characters, eg. AAAAAAA.
+           * [Bankgiro]: The unique mandate reference. This must be numeric and unique for the payer, eg nationalId or similar can be used. Format needs to follow regexp [1-9][0-9]{5-15}
+           * [SEPA-DD]: The unique mandate reference. This must be unique for the end-user for you as a merchant. Format needs to follow regexp [0-9,a-z,A-Z]{10-35}
            * <h2>Examples</h2>
            * <ul>
            *   <li>123ABC0123</li>
@@ -2029,11 +1945,7 @@ public class Models {
            */
           @JsonProperty(value = "merchantreference")
           private String merchantreference;
-          /**
-           * <p>From CancelMandateNotificationDataAttributes</p>
-           */
-          @JsonProperty(value = "reason")
-          private CancelReason reason;
+
           public enum CancelReason {
             /**
              * The mandate already exists
@@ -2085,8 +1997,10 @@ public class Models {
              * From SwishCancelReason
              */
             ERROR("ERROR");
+
             @JsonValue
             private final String value;
+
             CancelReason(String value) {
               this.value = value;
             }
@@ -2104,11 +2018,12 @@ public class Models {
   public static class CancelNotificationResponse extends JsonRpcResponse<CancelNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("cancel");
+      }
     }
   }
 
@@ -2136,6 +2051,7 @@ public class Models {
         /**
          * Flag indicating that this is for Direct Debit refund. Note that this flag is not sent unless it's for a refund. Only value will be 1.
          */
+        @JsonProperty(value = "refund")
         public String getRefund() {
           return "1";
         }
@@ -2145,28 +2061,17 @@ public class Models {
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
-        public static class Attributes extends AbstractRequestDataAttributes implements IAdditionalProperties {
-          @Singular
-          @JsonAnySetter
-          private Map<String, Object> additionalProperties;
+        public static class Attributes extends AbstractRequestDataAttributes {
+          /**
+           * From CancelRefundDirectDebitNotificationDataAttributes
+           */
+          @JsonProperty(value = "reason")
+          private RefundDirectDebitCancelReason reason;
           /**
            * Description of reason. If Direct Debit Mandate, then  this applies when reason is <code>FAILED: BACS ADDACS_1(INSTRUCTION CANCELLED BY PAYER)</code>. See https://eu.developers.trustly.com/doc/reference/mdd#description-of-details-eg-failure-details
            */
           @JsonProperty(value = "details")
           private String details;
-          /**
-           * <p>From CancelRefundDirectDebitNotificationDataAttributes</p>
-           */
-          @JsonProperty(value = "reason")
-          private RefundDirectDebitCancelReason reason;
-          public void addAdditionalProperty(String key, Object value) {
-            this.additionalProperties.put(key, value);
-          }
-
-          @JsonAnyGetter
-          public Map<String, Object> getAdditionalProperties() {
-            return this.additionalProperties;
-          }
 
           public enum RefundDirectDebitCancelReason {
             /**
@@ -2177,8 +2082,10 @@ public class Models {
              * All other failures
              */
             FAILED("FAILED");
+
             @JsonValue
             private final String value;
+
             RefundDirectDebitCancelReason(String value) {
               this.value = value;
             }
@@ -2196,11 +2103,12 @@ public class Models {
   public static class CancelRefundDirectDebitNotificationResponse extends JsonRpcResponse<CancelRefundDirectDebitNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("cancel");
+      }
     }
   }
 
@@ -2235,12 +2143,15 @@ public class Models {
          */
         @JsonProperty(value = "timestamp")
         private String timestamp;
+
         @Getter
         @Jacksonized
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
         public static class Attributes extends AbstractRequestDataAttributes {
+          @JsonProperty(value = "reason")
+          private SwishCancelReason reason;
           /**
            * Description of reason
            * <h2>Examples</h2>
@@ -2250,8 +2161,7 @@ public class Models {
            */
           @JsonProperty(value = "details")
           private String details;
-          @JsonProperty(value = "reason")
-          private SwishCancelReason reason;
+
           public enum SwishCancelReason {
             /**
              * The request was declined
@@ -2265,8 +2175,10 @@ public class Models {
              * There was an error during the request
              */
             ERROR("ERROR");
+
             @JsonValue
             private final String value;
+
             SwishCancelReason(String value) {
               this.value = value;
             }
@@ -2284,11 +2196,12 @@ public class Models {
   public static class CancelSwishNotificationResponse extends JsonRpcResponse<CancelSwishNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("cancel");
+      }
     }
   }
 
@@ -2325,6 +2238,36 @@ public class Models {
         @JsonInclude
         @NotNull
         private String accountId;
+        /**
+         * The URL to which notifications for this should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>https://example.com/trustly/notification/a2b63j23dj23883jhfhfh</li>
+         * </ul>
+         */
+        @JsonProperty(value = "NotificationURL", required = true)
+        @JsonInclude
+        @NotNull
+        private String notificationUrl;
+        /**
+         * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
+         * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
+         */
+        @JsonProperty(value = "EndUserID", required = true)
+        @JsonInclude
+        @NotNull
+        private String endUserId;
+        /**
+         * Your unique ID of the transaction.
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>12345678</li>
+         * </ul>
+         */
+        @JsonProperty(value = "MessageID", required = true)
+        @JsonInclude
+        @NotNull
+        private String messageId;
         /**
          * <h2>Examples</h2>
          * <ul>
@@ -2365,45 +2308,22 @@ public class Models {
         @JsonProperty(value = "Currency", required = true)
         @JsonInclude
         private String currency;
-        /**
-         * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
-         */
-        @JsonProperty(value = "EndUserID", required = true)
-        @JsonInclude
-        @NotNull
-        private String endUserId;
-        /**
-         * Your unique ID of the transaction.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>12345678</li>
-         * </ul>
-         */
-        @JsonProperty(value = "MessageID", required = true)
-        @JsonInclude
-        @NotNull
-        private String messageId;
-        /**
-         * The URL to which notifications for this should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>https://example.com/trustly/notification/a2b63j23dj23883jhfhfh</li>
-         * </ul>
-         */
-        @JsonProperty(value = "NotificationURL", required = true)
-        @JsonInclude
-        @NotNull
-        private String notificationUrl;
+
         @Getter
         @Jacksonized
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
-        public static class Attributes extends AbstractRequestDataAttributes implements IAdditionalProperties {
-          @Singular
-          @JsonAnySetter
-          private Map<String, Object> additionalProperties;
+        public static class Attributes extends AbstractRequestDataAttributes {
+          /**
+           * The text to show on the end-user's bank statement after Trustly's own 10 digit reference (which always will be displayed first). The reference must let the end user identify the merchant based on this value. So the ShopperStatement should contain either your brand name, website name, or company name.
+           * <p>
+           * If possible, try to keep this text as short as possible to maximise the chance that the full reference will fit into the reference field on the customer's bank since some banks allow only a limited number of characters. If the full ShopperStatement does not fit into the reference it will be truncated from the end.
+           */
+          @JsonProperty(value = "ShopperStatement", required = true)
+          @JsonInclude
+          @NotNull
+          private String shopperStatement;
           /**
            * The email address of the end user.
            * <h2>Examples</h2>
@@ -2416,6 +2336,11 @@ public class Models {
           @NotNull
           private String email;
           /**
+           * The date when the funds will be charged from the end user's bank account. If this attribute is not sent, the charge will be attempted as soon as possible.
+           */
+          @JsonProperty(value = "PaymentDate")
+          private String paymentDate;
+          /**
            * The ExternalReference is a reference set by the merchant for any purpose and does not need to be unique for every API call. For example, it can be used for invoice references, OCR numbers and also for offering end users the option to part-pay an invoice using the same ExternalReference. The ExternalReference will be included in version 1.2 of the settlement report, <code>ViewAutomaticSettlementDetailsCSV</code>.
            * <h2>Examples</h2>
            * <ul>
@@ -2424,18 +2349,6 @@ public class Models {
            */
           @JsonProperty(value = "ExternalReference")
           private String externalReference;
-          /**
-           * VISA category codes describing the merchant's nature of business.
-           * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master processing account.  It is also mandatory for E-wallets used directly in a merchant's checkout.
-           * Mandatory attributes for Trustly Partners that are using Express account. It is also mandatory for E-wallets used directly in a merchant's checkout, whereby the purpose of a Trustly transaction is to pay for goods/services by placing funds on the payer's e-money account ("funding stage") following an immediate transfer into the e-money account of the payee ( "payment" stage).
-           */
-          @JsonProperty(value = "MerchantCategoryCode")
-          private String merchantCategoryCode;
-          /**
-           * The date when the funds will be charged from the end user's bank account. If this attribute is not sent, the charge will be attempted as soon as possible.
-           */
-          @JsonProperty(value = "PaymentDate")
-          private String paymentDate;
           /**
            * Human-readable identifier of the consumer-facing merchant (e.g. legal name or trade name)
            * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master processing account.  It is also mandatory for E-wallets used directly in a merchant's checkout.
@@ -2451,22 +2364,12 @@ public class Models {
           @JsonProperty(value = "PSPMerchantURL")
           private String pspMerchantUrl;
           /**
-           * The text to show on the end-user's bank statement after Trustly's own 10 digit reference (which always will be displayed first). The reference must let the end user identify the merchant based on this value. So the ShopperStatement should contain either your brand name, website name, or company name.
-           * <p>
-           * If possible, try to keep this text as short as possible to maximise the chance that the full reference will fit into the reference field on the customer's bank since some banks allow only a limited number of characters. If the full ShopperStatement does not fit into the reference it will be truncated from the end.
+           * VISA category codes describing the merchant's nature of business.
+           * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master processing account.  It is also mandatory for E-wallets used directly in a merchant's checkout.
+           * Mandatory attributes for Trustly Partners that are using Express account. It is also mandatory for E-wallets used directly in a merchant's checkout, whereby the purpose of a Trustly transaction is to pay for goods/services by placing funds on the payer's e-money account ("funding stage") following an immediate transfer into the e-money account of the payee ( "payment" stage).
            */
-          @JsonProperty(value = "ShopperStatement", required = true)
-          @JsonInclude
-          @NotNull
-          private String shopperStatement;
-          public void addAdditionalProperty(String key, Object value) {
-            this.additionalProperties.put(key, value);
-          }
-
-          @JsonAnyGetter
-          public Map<String, Object> getAdditionalProperties() {
-            return this.additionalProperties;
-          }
+          @JsonProperty(value = "MerchantCategoryCode")
+          private String merchantCategoryCode;
         }
       }
     }
@@ -2480,20 +2383,21 @@ public class Models {
   public static class ChargeResponse extends JsonRpcResponse<ChargeResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("Charge");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
       @Setter
       @SuperBuilder
-      public static class Data extends WithRejection<String> {
+      public static class Data extends WithRejection<StringBoolean, String> {
         @JsonProperty(value = "orderid")
         private String orderID;
-        @JsonProperty(value = "result")
-        private StringBoolean result;
       }
     }
   }
@@ -2519,6 +2423,66 @@ public class Models {
       @Setter
       @SuperBuilder
       public static class Data extends AbstractRequestData<Data.Attributes> {
+        /**
+         * ID, username, hash or anything uniquely identifying the end-user holding this account. Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
+         */
+        @JsonProperty(value = "EndUserID", required = true)
+        @JsonInclude
+        @NotNull
+        private String endUserId;
+        /**
+         * The clearing house of the end-user's bank account. Typically the name of a country in uppercase letters. See examples or table at https://developers.trustly.com/emea/docs/registeraccount.
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>AUSTRIA</li>
+         *   <li>BELGIUM</li>
+         *   <li>BULGARIA</li>
+         *   <li>CROATIA</li>
+         *   <li>CYPRUS</li>
+         *   <li>CZECH_REPUBLIC</li>
+         *   <li>DENMARK</li>
+         *   <li>ESTONIA</li>
+         *   <li>FINLAND</li>
+         *   <li>FRANCE</li>
+         *   <li>GERMANY</li>
+         *   <li>GREECE</li>
+         *   <li>HUNGARY</li>
+         *   <li>IRELAND</li>
+         *   <li>ITALY</li>
+         *   <li>LATVIA</li>
+         *   <li>LITHUANIA</li>
+         *   <li>LUXEMBOURG</li>
+         *   <li>MALTA</li>
+         *   <li>NETHERLANDS</li>
+         *   <li>NORWAY</li>
+         *   <li>POLAND</li>
+         *   <li>PORTUGAL</li>
+         *   <li>ROMANIA</li>
+         *   <li>SLOVAKIA</li>
+         *   <li>SLOVENIA</li>
+         *   <li>SPAIN</li>
+         *   <li>SWEDEN</li>
+         *   <li>UNITED_KINGDOM</li>
+         * </ul>
+         */
+        @JsonProperty(value = "ClearingHouse", required = true)
+        @JsonInclude
+        @NotNull
+        private String clearingHouse;
+        /**
+         * The bank number identifying the end-user's bank in the given clearing house. For bank accounts in IBAN format you should just provide an empty string (""). For non-IBAN format, see examples. The BankNumber for Swedish bank accounts should be the local "clearing number", and the AccountNumber parameter should contain the rest of the account number. Most Swedish banks have a 4-digit clearing number, but a 5-digit clearing number is used for Swedbank accounts when the clearing number starts with "8". Nordea accounts where the account number is the same as the person's national identification number always has "3300" as the clearing number.
+         * <p>
+         * IBAN for Swedish bank accounts is supported upon request. When making API calls with Swedish IBAN, ensure to include the Clearinghouse attribute as "IBAN" instead of "SWEDEN". See more at https://developers.trustly.com/emea/docs/registeraccount
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>Sweden: ^[0-9]{4,5}$</li>
+         *   <li>United Kingdom: ^[0-9]{6}$</li>
+         * </ul>
+         */
+        @JsonProperty(value = "BankNumber", required = true)
+        @JsonInclude
+        @NotNull
+        private String bankNumber;
         /**
          * The account number, identifying the end-user's account in the bank. Can be either IBAN or country-specific format, see examples or read more at https://developers.trustly.com/emea/docs/registeraccount
          * <h2>Examples</h2>
@@ -2561,66 +2525,6 @@ public class Models {
         @NotNull
         private String accountNumber;
         /**
-         * The bank number identifying the end-user's bank in the given clearing house. For bank accounts in IBAN format you should just provide an empty string (""). For non-IBAN format, see examples. The BankNumber for Swedish bank accounts should be the local "clearing number", and the AccountNumber parameter should contain the rest of the account number. Most Swedish banks have a 4-digit clearing number, but a 5-digit clearing number is used for Swedbank accounts when the clearing number starts with "8". Nordea accounts where the account number is the same as the person's national identification number always has "3300" as the clearing number.
-         * <p>
-         * IBAN for Swedish bank accounts is supported upon request. When making API calls with Swedish IBAN, ensure to include the Clearinghouse attribute as "IBAN" instead of "SWEDEN". See more at https://developers.trustly.com/emea/docs/registeraccount
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>Sweden: ^[0-9]{4,5}$</li>
-         *   <li>United Kingdom: ^[0-9]{6}$</li>
-         * </ul>
-         */
-        @JsonProperty(value = "BankNumber", required = true)
-        @JsonInclude
-        @NotNull
-        private String bankNumber;
-        /**
-         * The clearing house of the end-user's bank account. Typically the name of a country in uppercase letters. See examples or table at https://developers.trustly.com/emea/docs/registeraccount.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>AUSTRIA</li>
-         *   <li>BELGIUM</li>
-         *   <li>BULGARIA</li>
-         *   <li>CROATIA</li>
-         *   <li>CYPRUS</li>
-         *   <li>CZECH_REPUBLIC</li>
-         *   <li>DENMARK</li>
-         *   <li>ESTONIA</li>
-         *   <li>FINLAND</li>
-         *   <li>FRANCE</li>
-         *   <li>GERMANY</li>
-         *   <li>GREECE</li>
-         *   <li>HUNGARY</li>
-         *   <li>IRELAND</li>
-         *   <li>ITALY</li>
-         *   <li>LATVIA</li>
-         *   <li>LITHUANIA</li>
-         *   <li>LUXEMBOURG</li>
-         *   <li>MALTA</li>
-         *   <li>NETHERLANDS</li>
-         *   <li>NORWAY</li>
-         *   <li>POLAND</li>
-         *   <li>PORTUGAL</li>
-         *   <li>ROMANIA</li>
-         *   <li>SLOVAKIA</li>
-         *   <li>SLOVENIA</li>
-         *   <li>SPAIN</li>
-         *   <li>SWEDEN</li>
-         *   <li>UNITED_KINGDOM</li>
-         * </ul>
-         */
-        @JsonProperty(value = "ClearingHouse", required = true)
-        @JsonInclude
-        @NotNull
-        private String clearingHouse;
-        /**
-         * ID, username, hash or anything uniquely identifying the end-user holding this account. Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
-         */
-        @JsonProperty(value = "EndUserID", required = true)
-        @JsonInclude
-        @NotNull
-        private String endUserId;
-        /**
          * First name of the person, or the name of the organization/company.
          */
         @JsonProperty(value = "Firstname", required = true)
@@ -2633,35 +2537,47 @@ public class Models {
         @JsonProperty(value = "Lastname", required = true)
         @JsonInclude
         private String lastname;
+
         @Getter
         @Jacksonized
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
-        public static class Attributes extends AbstractRequestDataAttributes implements IAdditionalProperties {
-          @Singular
-          @JsonAnySetter
-          private Map<String, Object> additionalProperties;
+        public static class Attributes extends AbstractRequestDataAttributes {
           /**
-           * The entire shipping address.
-           * This attribute should only be used if you are unable to provide the shipping address information in the 5 separate properties: <code>AddressCountry, </code>AddressCity<code>, </code>AddressPostalCode<code>, </code>AddressLine1, <code>AddressLine2</code>
+           * The end-user's date of birth.
+           */
+          @JsonProperty(value = "DateOfBirth")
+          private String dateOfBirth;
+          /**
+           * The mobile phone number to the end-user in international format. This is used for KYC and AML routines.
+           */
+          @JsonProperty(value = "MobilePhone")
+          private String mobilePhone;
+          /**
+           * The end-user's social security number / personal number / birth number / etc.  Useful for some banks for identifying transactions and KYC/AML. If a Swedish personid ("personnummer") is provided, it will be pre-filled when the user logs in to their bank.
            * <h2>Examples</h2>
            * <ul>
-           *   <li>Birgerstreet 14, SE-11411, Stockholm, Sweden</li>
+           *   <li>790131-1234</li>
            * </ul>
            */
-          @JsonProperty(value = "Address")
-          private String address;
-          /**
-           * The city of the recipient address.
-           */
-          @JsonProperty(value = "AddressCity")
-          private String addressCity;
+          @JsonProperty(value = "NationalIdentificationNumber")
+          private String nationalIdentificationNumber;
           /**
            * The ISO 3166-1-alpha-2 code of the recipient address country.
            */
           @JsonProperty(value = "AddressCountry")
           private String addressCountry;
+          /**
+           * The postalcode of the recipient address.
+           */
+          @JsonProperty(value = "AddressPostalCode")
+          private String addressPostalCode;
+          /**
+           * The city of the recipient address.
+           */
+          @JsonProperty(value = "AddressCity")
+          private String addressCity;
           /**
            * Recipient address street
            * <h2>Examples</h2>
@@ -2677,15 +2593,15 @@ public class Models {
           @JsonProperty(value = "AddressLine2")
           private String addressLine2;
           /**
-           * The postalcode of the recipient address.
+           * The entire shipping address.
+           * This attribute should only be used if you are unable to provide the shipping address information in the 5 separate properties: <code>AddressCountry, </code>AddressCity<code>, </code>AddressPostalCode<code>, </code>AddressLine1, <code>AddressLine2</code>
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>Birgerstreet 14, SE-11411, Stockholm, Sweden</li>
+           * </ul>
            */
-          @JsonProperty(value = "AddressPostalCode")
-          private String addressPostalCode;
-          /**
-           * The end-user's date of birth.
-           */
-          @JsonProperty(value = "DateOfBirth")
-          private String dateOfBirth;
+          @JsonProperty(value = "Address")
+          private String address;
           /**
            * The email address of the end user.
            * <h2>Examples</h2>
@@ -2695,28 +2611,6 @@ public class Models {
            */
           @JsonProperty(value = "Email")
           private String email;
-          /**
-           * The mobile phone number to the end-user in international format. This is used for KYC and AML routines.
-           */
-          @JsonProperty(value = "MobilePhone")
-          private String mobilePhone;
-          /**
-           * The end-user's social security number / personal number / birth number / etc.  Useful for some banks for identifying transactions and KYC/AML. If a Swedish personid ("personnummer") is provided, it will be pre-filled when the user logs in to their bank.
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>790131-1234</li>
-           * </ul>
-           */
-          @JsonProperty(value = "NationalIdentificationNumber")
-          private String nationalIdentificationNumber;
-          public void addAdditionalProperty(String key, Object value) {
-            this.additionalProperties.put(key, value);
-          }
-
-          @JsonAnyGetter
-          public Map<String, Object> getAdditionalProperties() {
-            return this.additionalProperties;
-          }
         }
       }
     }
@@ -2730,10 +2624,13 @@ public class Models {
   public static class CreateAccountResponse extends JsonRpcResponse<CreateAccountResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("CreateAccount");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
@@ -2749,16 +2646,6 @@ public class Models {
          */
         @JsonProperty(value = "accountId")
         private int accountId;
-        /**
-         * The bank for this account
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>SEB</li>
-         *   <li>Skandiabanken</li>
-         * </ul>
-         */
-        @JsonProperty(value = "bank")
-        private String bank;
         /**
          * The clearing house of the end-user's bank account. Typically the name of a country in uppercase letters. See examples or table at https://developers.trustly.com/emea/docs/registeraccount.
          * <h2>Examples</h2>
@@ -2796,6 +2683,16 @@ public class Models {
          */
         @JsonProperty(value = "clearingHouse")
         private String clearingHouse;
+        /**
+         * The bank for this account
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>SEB</li>
+         *   <li>Skandiabanken</li>
+         * </ul>
+         */
+        @JsonProperty(value = "bank")
+        private String bank;
         /**
          * A text that is safe to show the enduser for identifying the account. Do not parse this text since it will be a different format for different accounts.
          * <h2>Examples</h2>
@@ -2868,11 +2765,12 @@ public class Models {
   public static class CreditDirectCreditNotificationResponse extends JsonRpcResponse<CreditDirectCreditNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("credit");
+      }
     }
   }
 
@@ -2907,6 +2805,7 @@ public class Models {
          */
         @JsonProperty(value = "accountid")
         private String accountID;
+
         @Getter
         @Jacksonized
         @RequiredArgsConstructor
@@ -2945,11 +2844,12 @@ public class Models {
   public static class CreditDirectDebitNotificationResponse extends JsonRpcResponse<CreditDirectDebitNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("credit");
+      }
     }
   }
 
@@ -2976,8 +2876,9 @@ public class Models {
       public static class Data extends AbstractCreditNotificationData<Data.Attributes> {
         /**
          * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
-         * <p>From CreditDirectDebitNotificationData</p>
+         * From CreditDirectDebitNotificationData
          * <p>
+         * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
          * <h2>Examples</h2>
          * <ul>
          *   <li>1234567890</li>
@@ -2988,38 +2889,19 @@ public class Models {
         private String accountID;
         /**
          * Flag indicating that this is for Direct Debit refund. Note that this flag is not sent unless it's for a refund. Only value will be 1.
-         * <p>From CreditRefundDirectDebitNotificationData</p>
+         * From CreditRefundDirectDebitNotificationData
+         * <p>
+         * Flag indicating that this is for Direct Debit refund. Note that this flag is not sent unless it's for a refund. Only value will be 1.
          */
         @JsonProperty(value = "refund")
         private String refund;
+
         @Getter
         @Jacksonized
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
         public static class Attributes extends AbstractCreditNotificationDataAttributes {
-          /**
-           * Description of reason. If Direct Debit Mandate, then  this applies when reason is <code>FAILED: BACS ADDACS_1(INSTRUCTION CANCELLED BY PAYER)</code>. See https://eu.developers.trustly.com/doc/reference/mdd#description-of-details-eg-failure-details
-           * <p>From CreditRefundDirectDebitNotificationDataAttributes</p>
-           */
-          @JsonProperty(value = "details")
-          private String details;
-          /**
-           * Payment reference, from the bank, of the payment that occurred based on the Payment request. Only available if status is PAID.
-           * <p>From CreditSwishNotificationDataAttributes</p>
-           * <p>
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>467123476</li>
-           * </ul>
-           */
-          @JsonProperty(value = "payerAlias")
-          private String payerAlias;
-          /**
-           * <p>From CreditRefundDirectDebitNotificationDataAttributes</p>
-           */
-          @JsonProperty(value = "reason")
-          private CreditRefundDirectDebitCancelReason reason;
           /**
            * Payment reference, from the bank, of the payment that occurred based on the Payment request. Only available if status is PAID.
            * <h2>Examples</h2>
@@ -3039,6 +2921,31 @@ public class Models {
            */
           @JsonProperty(value = "statement")
           private String statement;
+          /**
+           * From CreditRefundDirectDebitNotificationDataAttributes
+           */
+          @JsonProperty(value = "reason")
+          private CreditRefundDirectDebitCancelReason reason;
+          /**
+           * Description of reason. If Direct Debit Mandate, then  this applies when reason is <code>FAILED: BACS ADDACS_1(INSTRUCTION CANCELLED BY PAYER)</code>. See https://eu.developers.trustly.com/doc/reference/mdd#description-of-details-eg-failure-details
+           * From CreditRefundDirectDebitNotificationDataAttributes
+           * <p>
+           * Description of reason. If Direct Debit Mandate, then  this applies when reason is <code>FAILED: BACS ADDACS_1(INSTRUCTION CANCELLED BY PAYER)</code>. See https://eu.developers.trustly.com/doc/reference/mdd#description-of-details-eg-failure-details
+           */
+          @JsonProperty(value = "details")
+          private String details;
+          /**
+           * Payment reference, from the bank, of the payment that occurred based on the Payment request. Only available if status is PAID.
+           * From CreditSwishNotificationDataAttributes
+           * <p>
+           * Payment reference, from the bank, of the payment that occurred based on the Payment request. Only available if status is PAID.
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>467123476</li>
+           * </ul>
+           */
+          @JsonProperty(value = "payerAlias")
+          private String payerAlias;
         }
       }
     }
@@ -3052,11 +2959,12 @@ public class Models {
   public static class CreditNotificationResponse extends JsonRpcResponse<CreditNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("credit");
+      }
     }
   }
 
@@ -3084,6 +2992,7 @@ public class Models {
         /**
          * Flag indicating that this is for Direct Debit refund. Note that this flag is not sent unless it's for a refund. Only value will be 1.
          */
+        @JsonProperty(value = "refund")
         public String getRefund() {
           return "1";
         }
@@ -3094,16 +3003,6 @@ public class Models {
         @Setter
         @SuperBuilder
         public static class Attributes extends AbstractCreditNotificationDataAttributes {
-          /**
-           * Description of reason. If Direct Debit Mandate, then  this applies when reason is <code>FAILED: BACS ADDACS_1(INSTRUCTION CANCELLED BY PAYER)</code>. See https://eu.developers.trustly.com/doc/reference/mdd#description-of-details-eg-failure-details
-           */
-          @JsonProperty(value = "details")
-          private String details;
-          /**
-           * <p>From CreditRefundDirectDebitNotificationDataAttributes</p>
-           */
-          @JsonProperty(value = "reason")
-          private CreditRefundDirectDebitCancelReason reason;
           /**
            * Payment reference, from the bank, of the payment that occurred based on the Payment request. Only available if status is PAID.
            * <h2>Examples</h2>
@@ -3123,6 +3022,16 @@ public class Models {
            */
           @JsonProperty(value = "statement")
           private String statement;
+          /**
+           * From CreditRefundDirectDebitNotificationDataAttributes
+           */
+          @JsonProperty(value = "reason")
+          private CreditRefundDirectDebitCancelReason reason;
+          /**
+           * Description of reason. If Direct Debit Mandate, then  this applies when reason is <code>FAILED: BACS ADDACS_1(INSTRUCTION CANCELLED BY PAYER)</code>. See https://eu.developers.trustly.com/doc/reference/mdd#description-of-details-eg-failure-details
+           */
+          @JsonProperty(value = "details")
+          private String details;
         }
       }
     }
@@ -3136,11 +3045,12 @@ public class Models {
   public static class CreditRefundDirectDebitNotificationResponse extends JsonRpcResponse<CreditRefundDirectDebitNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("credit");
+      }
     }
   }
 
@@ -3175,21 +3085,21 @@ public class Models {
            * Payment reference, from the bank, of the payment that occurred based on the Payment request. Only available if status is PAID.
            * <h2>Examples</h2>
            * <ul>
-           *   <li>467123476</li>
-           * </ul>
-           */
-          @JsonProperty(value = "payerAlias")
-          private String payerAlias;
-          /**
-           * Payment reference, from the bank, of the payment that occurred based on the Payment request. Only available if status is PAID.
-           * <h2>Examples</h2>
-           * <ul>
            *   <li>1E2FC19E5E5E4E18916609B7F8911C12</li>
            *   <li>TRLY80494-1001</li>
            * </ul>
            */
           @JsonProperty(value = "reference")
           private String reference;
+          /**
+           * Payment reference, from the bank, of the payment that occurred based on the Payment request. Only available if status is PAID.
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>467123476</li>
+           * </ul>
+           */
+          @JsonProperty(value = "payerAlias")
+          private String payerAlias;
         }
       }
     }
@@ -3203,11 +3113,12 @@ public class Models {
   public static class CreditSwishNotificationResponse extends JsonRpcResponse<CreditSwishNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("credit");
+      }
     }
   }
 
@@ -3237,20 +3148,7 @@ public class Models {
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
-        public static class Attributes extends AbstractRequestDataAttributes implements IAdditionalProperties {
-          @Singular
-          @JsonAnySetter
-          private Map<String, Object> additionalProperties;
-          /**
-           * Description of reason. If Direct Debit Mandate, then  this applies when reason is <code>FAILED: BACS ADDACS_1(INSTRUCTION CANCELLED BY PAYER)</code>. See https://eu.developers.trustly.com/doc/reference/mdd#description-of-details-eg-failure-details
-           */
-          @JsonProperty(value = "details")
-          private String details;
-          /**
-           * <p>From DebitDirectCreditNotificationDataAttributes</p>
-           */
-          @JsonProperty(value = "reason")
-          private DirectCreditDebitNotificationReason reason;
+        public static class Attributes extends AbstractRequestDataAttributes {
           /**
            * Payment reference, from the bank, of the payment that occurred based on the Payment request. Only available if status is PAID.
            * <h2>Examples</h2>
@@ -3270,22 +3168,26 @@ public class Models {
            */
           @JsonProperty(value = "statement")
           private String statement;
-          public void addAdditionalProperty(String key, Object value) {
-            this.additionalProperties.put(key, value);
-          }
-
-          @JsonAnyGetter
-          public Map<String, Object> getAdditionalProperties() {
-            return this.additionalProperties;
-          }
+          /**
+           * From DebitDirectCreditNotificationDataAttributes
+           */
+          @JsonProperty(value = "reason")
+          private DirectCreditDebitNotificationReason reason;
+          /**
+           * Description of reason. If Direct Debit Mandate, then  this applies when reason is <code>FAILED: BACS ADDACS_1(INSTRUCTION CANCELLED BY PAYER)</code>. See https://eu.developers.trustly.com/doc/reference/mdd#description-of-details-eg-failure-details
+           */
+          @JsonProperty(value = "details")
+          private String details;
 
           public enum DirectCreditDebitNotificationReason {
             /**
              * All other failures
              */
             FAILED("FAILED");
+
             @JsonValue
             private final String value;
+
             DirectCreditDebitNotificationReason(String value) {
               this.value = value;
             }
@@ -3303,11 +3205,12 @@ public class Models {
   public static class DebitDirectCreditNotificationResponse extends JsonRpcResponse<DebitDirectCreditNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<DebitNotificationResponseData> {
-
+      public Result() {
+        super("debit");
+      }
     }
   }
 
@@ -3338,16 +3241,6 @@ public class Models {
         @Setter
         @SuperBuilder
         public static class Attributes extends AbstractRequestDataAttributes {
-          @Singular
-          @JsonAnySetter
-          private Map<String, Object> additionalProperties;
-          /**
-           * Description of reason. If Direct Debit Mandate, then  this applies when reason is <code>FAILED: BACS ADDACS_1(INSTRUCTION CANCELLED BY PAYER)</code>. See https://eu.developers.trustly.com/doc/reference/mdd#description-of-details-eg-failure-details
-           */
-          @JsonProperty(value = "details")
-          private String details;
-          @JsonProperty(value = "reason")
-          private Reason reason;
           /**
            * Payment reference, from the bank, of the payment that occurred based on the Payment request. Only available if status is PAID.
            * <h2>Examples</h2>
@@ -3367,14 +3260,13 @@ public class Models {
            */
           @JsonProperty(value = "statement")
           private String statement;
-          public void addAdditionalProperty(String key, Object value) {
-            this.additionalProperties.put(key, value);
-          }
-
-          @JsonAnyGetter
-          public Map<String, Object> getAdditionalProperties() {
-            return this.additionalProperties;
-          }
+          @JsonProperty(value = "reason")
+          private Reason reason;
+          /**
+           * Description of reason. If Direct Debit Mandate, then  this applies when reason is <code>FAILED: BACS ADDACS_1(INSTRUCTION CANCELLED BY PAYER)</code>. See https://eu.developers.trustly.com/doc/reference/mdd#description-of-details-eg-failure-details
+           */
+          @JsonProperty(value = "details")
+          private String details;
 
           public enum Reason {
             /**
@@ -3393,8 +3285,10 @@ public class Models {
              * All other failures
              */
             FAILED("FAILED");
+
             @JsonValue
             private final String value;
+
             Reason(String value) {
               this.value = value;
             }
@@ -3412,11 +3306,12 @@ public class Models {
   public static class DebitDirectDebitNotificationResponse extends JsonRpcResponse<DebitDirectDebitNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<DebitNotificationResponseData> {
-
+      public Result() {
+        super("debit");
+      }
     }
   }
 
@@ -3443,29 +3338,19 @@ public class Models {
       public static class Data extends AbstractDebitNotificationData<Data.DirectDebitNotificationDataAttributes> {
         /**
          * Flag indicating that this is for Direct Debit refund. Note that this flag is not sent unless it's for a refund. Only value will be 1.
-         * <p>From DebitRefundDirectDebitNotificationData</p>
+         * From DebitRefundDirectDebitNotificationData
+         * <p>
+         * Flag indicating that this is for Direct Debit refund. Note that this flag is not sent unless it's for a refund. Only value will be 1.
          */
         @JsonProperty(value = "refund")
         private String refund;
+
         @Getter
         @Jacksonized
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
-        public static class DirectDebitNotificationDataAttributes extends AbstractRequestDataAttributes implements IAdditionalProperties {
-          @Singular
-          @JsonAnySetter
-          private Map<String, Object> additionalProperties;
-          /**
-           * Description of reason. If Direct Debit Mandate, then  this applies when reason is <code>FAILED: BACS ADDACS_1(INSTRUCTION CANCELLED BY PAYER)</code>. See https://eu.developers.trustly.com/doc/reference/mdd#description-of-details-eg-failure-details
-           */
-          @JsonProperty(value = "details")
-          private String details;
-          /**
-           * <p>From DebitDirectCreditNotificationDataAttributes</p>
-           */
-          @JsonProperty(value = "reason")
-          private Reason reason;
+        public static class DirectDebitNotificationDataAttributes extends AbstractRequestDataAttributes {
           /**
            * Payment reference, from the bank, of the payment that occurred based on the Payment request. Only available if status is PAID.
            * <h2>Examples</h2>
@@ -3485,14 +3370,16 @@ public class Models {
            */
           @JsonProperty(value = "statement")
           private String statement;
-          public void addAdditionalProperty(String key, Object value) {
-            this.additionalProperties.put(key, value);
-          }
-
-          @JsonAnyGetter
-          public Map<String, Object> getAdditionalProperties() {
-            return this.additionalProperties;
-          }
+          /**
+           * Description of reason. If Direct Debit Mandate, then  this applies when reason is <code>FAILED: BACS ADDACS_1(INSTRUCTION CANCELLED BY PAYER)</code>. See https://eu.developers.trustly.com/doc/reference/mdd#description-of-details-eg-failure-details
+           */
+          @JsonProperty(value = "details")
+          private String details;
+          /**
+           * From DebitDirectCreditNotificationDataAttributes
+           */
+          @JsonProperty(value = "reason")
+          private Reason reason;
 
           public enum Reason {
             /**
@@ -3516,8 +3403,10 @@ public class Models {
              * From DebitDirectDebitNotificationReason
              */
             CANCELLED("CANCELLED");
+
             @JsonValue
             private final String value;
+
             Reason(String value) {
               this.value = value;
             }
@@ -3535,11 +3424,12 @@ public class Models {
   public static class DebitNotificationResponse extends JsonRpcResponse<DebitNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<DebitNotificationResponseData> {
-
+      public Result() {
+        super("debit");
+      }
     }
   }
 
@@ -3552,8 +3442,10 @@ public class Models {
     public enum Status {
       OK("OK"),
       FAILED("FAILED");
+
       @JsonValue
       private final String value;
+
       Status(String value) {
         this.value = value;
       }
@@ -3584,6 +3476,7 @@ public class Models {
         /**
          * Flag indicating that this is for Direct Debit refund. Note that this flag is not sent unless it's for a refund. Only value will be 1.
          */
+        @JsonProperty(value = "refund")
         public String getRefund() {
           return "1";
         }
@@ -3593,10 +3486,7 @@ public class Models {
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
-        public static class Attributes extends AbstractRequestDataAttributes implements IAdditionalProperties {
-          @Singular
-          @JsonAnySetter
-          private Map<String, Object> additionalProperties;
+        public static class Attributes extends AbstractRequestDataAttributes {
           /**
            * Payment reference, from the bank, of the payment that occurred based on the Payment request. Only available if status is PAID.
            * <h2>Examples</h2>
@@ -3616,14 +3506,6 @@ public class Models {
            */
           @JsonProperty(value = "statement")
           private String statement;
-          public void addAdditionalProperty(String key, Object value) {
-            this.additionalProperties.put(key, value);
-          }
-
-          @JsonAnyGetter
-          public Map<String, Object> getAdditionalProperties() {
-            return this.additionalProperties;
-          }
         }
       }
     }
@@ -3637,11 +3519,12 @@ public class Models {
   public static class DebitRefundDirectDebitNotificationResponse extends JsonRpcResponse<DebitRefundDirectDebitNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<DebitNotificationResponseData> {
-
+      public Result() {
+        super("debit");
+      }
     }
   }
 
@@ -3689,10 +3572,13 @@ public class Models {
   public static class DenyWithdrawalResponse extends JsonRpcResponse<DenyWithdrawalResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("DenyWithdrawal");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
@@ -3738,9 +3624,17 @@ public class Models {
       @Setter
       @SuperBuilder
       public static class Data extends AbstractRequestData<Data.Attributes> implements IAdditionalProperties {
-        @Singular
-        @JsonAnySetter
-        private Map<String, Object> additionalProperties;
+        /**
+         * The URL to which notifications for this should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>https://example.com/trustly/notification/a2b63j23dj23883jhfhfh</li>
+         * </ul>
+         */
+        @JsonProperty(value = "NotificationURL", required = true)
+        @JsonInclude
+        @NotNull
+        private String notificationUrl;
         /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
@@ -3760,17 +3654,10 @@ public class Models {
         @JsonInclude
         @NotNull
         private String messageId;
-        /**
-         * The URL to which notifications for this should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>https://example.com/trustly/notification/a2b63j23dj23883jhfhfh</li>
-         * </ul>
-         */
-        @JsonProperty(value = "NotificationURL", required = true)
-        @JsonInclude
-        @NotNull
-        private String notificationUrl;
+        @Singular
+        @JsonAnySetter
+        private Map<String, Object> additionalProperties;
+
         public void addAdditionalProperty(String key, Object value) {
           this.additionalProperties.put(key, value);
         }
@@ -3785,30 +3672,20 @@ public class Models {
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
-        public static class Attributes extends AbstractRequestDataAttributes implements IAdditionalProperties {
+        public static class Attributes extends AbstractRequestDataAttributes {
           /**
-           * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>1234567890</li>
-           *   <li>7653385737</li>
-           * </ul>
+           * First name of the person, or the name of the organization/company.
            */
-          @JsonProperty(value = "AccountId")
-          private String accountId;
-          @Singular
-          @JsonAnySetter
-          private Map<String, Object> additionalProperties;
+          @JsonProperty(value = "Firstname", required = true)
+          @JsonInclude
+          @NotNull
+          private String firstname;
           /**
-           * The amount to deposit with exactly two decimals in the currency specified by Currency. Do not use this attribute in combination with<code>suggestedMinAmount</code> and <code>suggestedMaxAmount</code>. Only digits. Use dot (.) as decimal separator.
+           * Last name of the person (NULL/empty for organization/company).
            */
-          @JsonProperty(value = "Amount")
-          private String amount;
-          /**
-           * The AccountID received from an account notification which shall be charged in a Trustly Direct Debit deposit. This attribute should only be sent in combination with {"QuickDeposit" : 1}
-           */
-          @JsonProperty(value = "ChargeAccountId")
-          private String chargeAccountId;
+          @JsonProperty(value = "Lastname", required = true)
+          @JsonInclude
+          private String lastname;
           /**
            * The ISO 3166-1-alpha-2 code of the end-user's country. This will be used for pre-selecting the country for the end-user in the iframe.
            * Note: This will only have an effect for new end-users. If an end-user has done a previous order (with the same EndUserID), the country that was last used will be pre-selected.
@@ -3817,6 +3694,102 @@ public class Models {
           @JsonInclude
           @NotNull
           private String country;
+          /**
+           * The end-users localization preference in the format language[_territory]. Language is the ISO 639-1 code and territory the ISO 3166-1-alpha-2 code.
+           */
+          @JsonProperty(value = "Locale", required = true)
+          @JsonInclude
+          @NotNull
+          private String locale;
+          /**
+           * The text to show on the end-user's bank statement after Trustly's own 10 digit reference (which always will be displayed first). The reference must let the end user identify the merchant based on this value. So the ShopperStatement should contain either your brand name, website name, or company name.
+           * <p>
+           * If possible, try to keep this text as short as possible to maximise the chance that the full reference will fit into the reference field on the customer's bank since some banks allow only a limited number of characters. If the full ShopperStatement does not fit into the reference it will be truncated from the end.
+           */
+          @JsonProperty(value = "ShopperStatement", required = true)
+          @JsonInclude
+          @NotNull
+          private String shopperStatement;
+          /**
+           * The email address of the end user.
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>test@trustly.com</li>
+           * </ul>
+           */
+          @JsonProperty(value = "Email", required = true)
+          @JsonInclude
+          @NotNull
+          private String email;
+          /**
+           * The mobile phone number to the end-user in international format. This is used for KYC and AML routines.
+           */
+          @JsonProperty(value = "MobilePhone")
+          private String mobilePhone;
+          /**
+           * The IP-address of the end-user.
+           */
+          @JsonProperty(value = "IP")
+          private String ip;
+          /**
+           * The URL to which the end-user should be redirected after a successful deposit.  Do not put any logic on that page since it's not guaranteed that the end-user will in fact visit it.
+           */
+          @JsonProperty(value = "SuccessURL", required = true)
+          @JsonInclude
+          @NotNull
+          private String successUrl;
+          /**
+           * The URL to which the end-user should be redirected after a failed  deposit. Do not put any logic on that page since it's not guaranteed that the end-user will in fact visit it.
+           */
+          @JsonProperty(value = "FailURL", required = true)
+          @JsonInclude
+          @NotNull
+          private String failUrl;
+          /**
+           * The TemplateURL should be used if you want to design your own payment page but have it hosted on Trustly's side. The URL of your template page should be provided in this attribute in every Deposit API call. Our system will then fetch the content of your template page, insert the Trustly iframe into it and host the entire page on Trustly’s side. In the response to the Deposit request, you will receive a URL to the hosted template page which you should redirect the user to (the hosted page cannot be put inside an iframe).
+           */
+          @JsonProperty(value = "TemplateURL")
+          private String templateUrl;
+          /**
+           * The html target/frame-name of the SuccessURL. Only _top, _self and _parent are supported.
+           */
+          @JsonProperty(value = "URLTarget")
+          private UrlTarget urlTarget;
+          /**
+           * The end-user's social security number / personal number / birth number / etc.  Useful for some banks for identifying transactions and KYC/AML. If a Swedish personid ("personnummer") is provided, it will be pre-filled when the user logs in to their bank.
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>790131-1234</li>
+           * </ul>
+           */
+          @JsonProperty(value = "NationalIdentificationNumber")
+          private String nationalIdentificationNumber;
+          /**
+           * This attribute disables the possibility to change/type in national identification number when logging in to a Swedish bank. If this attribute is sent, the attribute NationalIdentificationNumber needs to be correctly included in the request.  Note: This is only available for Swedish banks.
+           */
+          @JsonProperty(value = "UnchangeableNationalIdentificationNumber")
+          private String unchangeableNationalIdentificationNumber;
+          /**
+           * If you are using Trustly from within your native iOS app, this attribute should be sent so that we can redirect the users back to your app in case an external app is used for authentication (for example Mobile Bank ID in Sweden).
+           */
+          @JsonProperty(value = "URLScheme")
+          private String urlScheme;
+          /**
+           * When rendering the Trustly Checkout in a native app you are required to pass your application's url as an attribute to the order initiation request. By doing so, Trustly can redirect users back to your app after using external identification apps such as Mobile BankID: Please visit documentation site for more information. It must not be included for transactions that are not originating from an app.
+           * <p>
+           * NOTE! This value is only used for redirecting users back to the native app within the flows. See also SuccessURL and FailURL descriptions.
+           */
+          @JsonProperty(value = "ReturnToAppURL")
+          private String returnToAppUrl;
+          /**
+           * iDeal. The iDEAL integration offered by Trustly allows for both iDEAL and Trustly payments on a single integration with all transactions visible in the same AccountLedger. To initiate a new iDEAL payment, add Method = "deposit.bank.netherlands.ideal" to the Deposit attributes.
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>deposit.bank.netherlands.ideal</li>
+           * </ul>
+           */
+          @JsonProperty(value = "Method")
+          private String method;
           /**
            * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
            * <h2>Examples</h2>
@@ -3838,16 +3811,55 @@ public class Models {
           @JsonInclude
           private String currency;
           /**
-           * The email address of the end user.
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>test@trustly.com</li>
-           * </ul>
+           * The amount to deposit with exactly two decimals in the currency specified by Currency. Do not use this attribute in combination with<code>suggestedMinAmount</code> and <code>suggestedMaxAmount</code>. Only digits. Use dot (.) as decimal separator.
            */
-          @JsonProperty(value = "Email", required = true)
-          @JsonInclude
-          @NotNull
-          private String email;
+          @JsonProperty(value = "Amount")
+          private String amount;
+          /**
+           * The ISO 3166-1-alpha-2 code of the shipping address country.
+           */
+          @JsonProperty(value = "ShippingAddressCountry")
+          private String shippingAddressCountry;
+          /**
+           * The postal code of the shipping address.
+           */
+          @JsonProperty(value = "ShippingAddressPostalCode")
+          private String shippingAddressPostalCode;
+          /**
+           * The city of the shipping address.
+           */
+          @JsonProperty(value = "ShippingAddressCity")
+          private String shippingAddressCity;
+          /**
+           * Shipping address street
+           */
+          @JsonProperty(value = "ShippingAddressLine1")
+          private String shippingAddressLine1;
+          /**
+           * Additional shipping address information.
+           */
+          @JsonProperty(value = "ShippingAddressLine2")
+          private String shippingAddressLine2;
+          /**
+           * The entire shipping address. This attribute should only be used if you are unable to provide the shipping address information in the 5 separate attributes: <code>ShippingAddressCountry</code>, <code>ShippingAddressCity</code>, <code>ShippingAddressPostalCode</code>, <code>ShippingAddressLine</code>, <code>ShippingAddressLine</code>
+           */
+          @JsonProperty(value = "ShippingAddress")
+          private String shippingAddress;
+          /**
+           * In addition to the deposit, request a direct debit mandate from the account used for the deposit. 1 enables, 0 disables. The default is disabled. If this attribute is set, additional account notifications might be sent. You can read more about Trustly Direct Debit here,  under section 2.1
+           */
+          @JsonProperty(value = "RequestDirectDebitMandate")
+          private StringBoolean requestDirectDebitMandate;
+          /**
+           * The AccountID received from an account notification which shall be charged in a Trustly Direct Debit deposit. This attribute should only be sent in combination with {"QuickDeposit" : 1}
+           */
+          @JsonProperty(value = "ChargeAccountId")
+          private String chargeAccountId;
+          /**
+           * Set to 1 for Trustly Direct Debit deposits. QuickDeposit should be  set set to 1 when the end user attempts a quick deposit, even if  ChargeAccountID is not set. You can read more about QuickDeposits  here, under section 1.1 and 1.2.
+           */
+          @JsonProperty(value = "QuickDeposit")
+          private StringBoolean quickDeposit;
           /**
            * The ExternalReference is a reference set by the merchant for any purpose and does not need to be unique for every API call. For example, it can be used for invoice references, OCR numbers and also for offering end users the option to part-pay an invoice using the same ExternalReference. The ExternalReference will be included in version 1.2 of the settlement report, <code>ViewAutomaticSettlementDetailsCSV</code>.
            * <h2>Examples</h2>
@@ -3857,68 +3869,6 @@ public class Models {
            */
           @JsonProperty(value = "ExternalReference")
           private String externalReference;
-          /**
-           * The URL to which the end-user should be redirected after a failed  deposit. Do not put any logic on that page since it's not guaranteed that the end-user will in fact visit it.
-           */
-          @JsonProperty(value = "FailURL", required = true)
-          @JsonInclude
-          @NotNull
-          private String failUrl;
-          /**
-           * First name of the person, or the name of the organization/company.
-           */
-          @JsonProperty(value = "Firstname", required = true)
-          @JsonInclude
-          @NotNull
-          private String firstname;
-          /**
-           * The IP-address of the end-user.
-           */
-          @JsonProperty(value = "IP")
-          private String ip;
-          /**
-           * Last name of the person (NULL/empty for organization/company).
-           */
-          @JsonProperty(value = "Lastname", required = true)
-          @JsonInclude
-          private String lastname;
-          /**
-           * The end-users localization preference in the format language[_territory]. Language is the ISO 639-1 code and territory the ISO 3166-1-alpha-2 code.
-           */
-          @JsonProperty(value = "Locale", required = true)
-          @JsonInclude
-          @NotNull
-          private String locale;
-          /**
-           * VISA category codes describing the merchant's nature of business.
-           * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master processing account.  It is also mandatory for E-wallets used directly in a merchant's checkout.
-           * Mandatory attributes for Trustly Partners that are using Express account. It is also mandatory for E-wallets used directly in a merchant's checkout, whereby the purpose of a Trustly transaction is to pay for goods/services by placing funds on the payer's e-money account ("funding stage") following an immediate transfer into the e-money account of the payee ( "payment" stage).
-           */
-          @JsonProperty(value = "MerchantCategoryCode")
-          private String merchantCategoryCode;
-          /**
-           * iDeal. The iDEAL integration offered by Trustly allows for both iDEAL and Trustly payments on a single integration with all transactions visible in the same AccountLedger. To initiate a new iDEAL payment, add Method = "deposit.bank.netherlands.ideal" to the Deposit attributes.
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>deposit.bank.netherlands.ideal</li>
-           * </ul>
-           */
-          @JsonProperty(value = "Method")
-          private String method;
-          /**
-           * The mobile phone number to the end-user in international format. This is used for KYC and AML routines.
-           */
-          @JsonProperty(value = "MobilePhone")
-          private String mobilePhone;
-          /**
-           * The end-user's social security number / personal number / birth number / etc.  Useful for some banks for identifying transactions and KYC/AML. If a Swedish personid ("personnummer") is provided, it will be pre-filled when the user logs in to their bank.
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>790131-1234</li>
-           * </ul>
-           */
-          @JsonProperty(value = "NationalIdentificationNumber")
-          private String nationalIdentificationNumber;
           /**
            * Human-readable identifier of the consumer-facing merchant (e.g. legal name or trade name)
            * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master processing account.  It is also mandatory for E-wallets used directly in a merchant's checkout.
@@ -3934,10 +3884,22 @@ public class Models {
           @JsonProperty(value = "PSPMerchantURL")
           private String pspMerchantUrl;
           /**
-           * Set to 1 for Trustly Direct Debit deposits. QuickDeposit should be  set set to 1 when the end user attempts a quick deposit, even if  ChargeAccountID is not set. You can read more about QuickDeposits  here, under section 1.1 and 1.2.
+           * VISA category codes describing the merchant's nature of business.
+           * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master processing account.  It is also mandatory for E-wallets used directly in a merchant's checkout.
+           * Mandatory attributes for Trustly Partners that are using Express account. It is also mandatory for E-wallets used directly in a merchant's checkout, whereby the purpose of a Trustly transaction is to pay for goods/services by placing funds on the payer's e-money account ("funding stage") following an immediate transfer into the e-money account of the payee ( "payment" stage).
            */
-          @JsonProperty(value = "QuickDeposit")
-          private StringBoolean quickDeposit;
+          @JsonProperty(value = "MerchantCategoryCode")
+          private String merchantCategoryCode;
+          /**
+           * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>1234567890</li>
+           *   <li>7653385737</li>
+           * </ul>
+           */
+          @JsonProperty(value = "AccountId")
+          private String accountId;
           /**
            * Information about the Payee (ultimate creditor). The burden of identifying who the Payee for any given transaction is lies with the Trustly customer. Required for some merchants and partners. RecipientInformation is mandatory to send for money transfer services (including remittance houses), e-wallets, prepaid cards, as well as for Trustly Partners that are using Express Merchant Onboarding and aggregate traffic under a master processing account (other cases may also apply).
            */
@@ -3945,106 +3907,20 @@ public class Models {
           @Valid
           private RecipientInformation recipientInformation;
           /**
-           * In addition to the deposit, request a direct debit mandate from the account used for the deposit. 1 enables, 0 disables. The default is disabled. If this attribute is set, additional account notifications might be sent. You can read more about Trustly Direct Debit here,  under section 2.1
-           */
-          @JsonProperty(value = "RequestDirectDebitMandate")
-          private StringBoolean requestDirectDebitMandate;
-          /**
            * Trustly will send a KYC notification to the merchant’s <code>NotificationURL</code> if the attribute "RequestKYC" : "1" is sent in a Deposit API call. The KYC notification should be expected after the end user has performed a successful login to their bank, and always before a deposit transfer is initiated.
            */
           @JsonProperty(value = "RequestKYC")
           private StringBoolean requestKyc;
-          /**
-           * When rendering the Trustly Checkout in a native app you are required to pass your application's url as an attribute to the order initiation request. By doing so, Trustly can redirect users back to your app after using external identification apps such as Mobile BankID: Please visit documentation site for more information. It must not be included for transactions that are not originating from an app.
-           * <p>
-           * NOTE! This value is only used for redirecting users back to the native app within the flows. See also SuccessURL and FailURL descriptions.
-           */
-          @JsonProperty(value = "ReturnToAppURL")
-          private String returnToAppUrl;
-          /**
-           * The entire shipping address. This attribute should only be used if you are unable to provide the shipping address information in the 5 separate attributes: <code>ShippingAddressCountry</code>, <code>ShippingAddressCity</code>, <code>ShippingAddressPostalCode</code>, <code>ShippingAddressLine</code>, <code>ShippingAddressLine</code>
-           */
-          @JsonProperty(value = "ShippingAddress")
-          private String shippingAddress;
-          /**
-           * The city of the shipping address.
-           */
-          @JsonProperty(value = "ShippingAddressCity")
-          private String shippingAddressCity;
-          /**
-           * The ISO 3166-1-alpha-2 code of the shipping address country.
-           */
-          @JsonProperty(value = "ShippingAddressCountry")
-          private String shippingAddressCountry;
-          /**
-           * Shipping address street
-           */
-          @JsonProperty(value = "ShippingAddressLine1")
-          private String shippingAddressLine1;
-          /**
-           * Additional shipping address information.
-           */
-          @JsonProperty(value = "ShippingAddressLine2")
-          private String shippingAddressLine2;
-          /**
-           * The postal code of the shipping address.
-           */
-          @JsonProperty(value = "ShippingAddressPostalCode")
-          private String shippingAddressPostalCode;
-          /**
-           * The text to show on the end-user's bank statement after Trustly's own 10 digit reference (which always will be displayed first). The reference must let the end user identify the merchant based on this value. So the ShopperStatement should contain either your brand name, website name, or company name.
-           * <p>
-           * If possible, try to keep this text as short as possible to maximise the chance that the full reference will fit into the reference field on the customer's bank since some banks allow only a limited number of characters. If the full ShopperStatement does not fit into the reference it will be truncated from the end.
-           */
-          @JsonProperty(value = "ShopperStatement", required = true)
-          @JsonInclude
-          @NotNull
-          private String shopperStatement;
-          /**
-           * The URL to which the end-user should be redirected after a successful deposit.  Do not put any logic on that page since it's not guaranteed that the end-user will in fact visit it.
-           */
-          @JsonProperty(value = "SuccessURL", required = true)
-          @JsonInclude
-          @NotNull
-          private String successUrl;
-          /**
-           * The maximum amount the end-user is allowed to deposit in the currency specified by Currency. Only digits. Use dot (.) as decimal separator.
-           */
-          @JsonProperty(value = "SuggestedMaxAmount")
-          private String suggestedMaxAmount;
           /**
            * The minimum amount the end-user is allowed to deposit in the currency specified by Currency.Only digits. Use dot (.) as decimal separator.
            */
           @JsonProperty(value = "SuggestedMinAmount")
           private String suggestedMinAmount;
           /**
-           * The TemplateURL should be used if you want to design your own payment page but have it hosted on Trustly's side. The URL of your template page should be provided in this attribute in every Deposit API call. Our system will then fetch the content of your template page, insert the Trustly iframe into it and host the entire page on Trustly’s side. In the response to the Deposit request, you will receive a URL to the hosted template page which you should redirect the user to (the hosted page cannot be put inside an iframe).
+           * The maximum amount the end-user is allowed to deposit in the currency specified by Currency. Only digits. Use dot (.) as decimal separator.
            */
-          @JsonProperty(value = "TemplateURL")
-          private String templateUrl;
-          /**
-           * This attribute disables the possibility to change/type in national identification number when logging in to a Swedish bank. If this attribute is sent, the attribute NationalIdentificationNumber needs to be correctly included in the request.  Note: This is only available for Swedish banks.
-           */
-          @JsonProperty(value = "UnchangeableNationalIdentificationNumber")
-          private String unchangeableNationalIdentificationNumber;
-          /**
-           * If you are using Trustly from within your native iOS app, this attribute should be sent so that we can redirect the users back to your app in case an external app is used for authentication (for example Mobile Bank ID in Sweden).
-           */
-          @JsonProperty(value = "URLScheme")
-          private String urlScheme;
-          /**
-           * The html target/frame-name of the SuccessURL. Only _top, _self and _parent are supported.
-           */
-          @JsonProperty(value = "URLTarget")
-          private UrlTarget urlTarget;
-          public void addAdditionalProperty(String key, Object value) {
-            this.additionalProperties.put(key, value);
-          }
-
-          @JsonAnyGetter
-          public Map<String, Object> getAdditionalProperties() {
-            return this.additionalProperties;
-          }
+          @JsonProperty(value = "SuggestedMaxAmount")
+          private String suggestedMaxAmount;
 
           /**
            * Information about the Payee (ultimate creditor). The burden of identifying who the Payee for any given transaction is lies with the Trustly customer. Required for some merchants and partners. RecipientInformation is mandatory to send for money transfer services (including remittance houses), e-wallets, prepaid cards, as well as for Trustly Partners that are using Express Merchant Onboarding and aggregate traffic under a master processing account (other cases may also apply).
@@ -4070,10 +3946,13 @@ public class Models {
   public static class DepositResponse extends JsonRpcResponse<DepositResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("Deposit");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
@@ -4120,6 +3999,36 @@ public class Models {
       @SuperBuilder
       public static class Data extends AbstractRequestData<DirectDebitRequestDataAttributes> {
         /**
+         * Your unique ID of the transaction.
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>12345678</li>
+         * </ul>
+         */
+        @JsonProperty(value = "MessageID", required = true)
+        @JsonInclude
+        @NotNull
+        private String messageId;
+        /**
+         * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
+         * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
+         */
+        @JsonProperty(value = "EndUserID", required = true)
+        @JsonInclude
+        @NotNull
+        private String endUserId;
+        /**
+         * The URL to which notifications for this should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>https://example.com/trustly/notification/a2b63j23dj23883jhfhfh</li>
+         * </ul>
+         */
+        @JsonProperty(value = "NotificationURL", required = true)
+        @JsonInclude
+        @NotNull
+        private String notificationUrl;
+        /**
          * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
          * <h2>Examples</h2>
          * <ul>
@@ -4131,6 +4040,19 @@ public class Models {
         @JsonInclude
         @NotNull
         private String accountId;
+        /**
+         * The branch identifier
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>6160</li>
+         *   <li>6000</li>
+         *   <li>bg</li>
+         *   <li>123123</li>
+         *   <li>HANDSESS</li>
+         * </ul>
+         */
+        @JsonProperty(value = "BankIdentifier")
+        private String bankIdentifier;
         /**
          * The account number, identifying the end-user's account in the bank. Can be either IBAN or country-specific format, see examples or read more at https://developers.trustly.com/emea/docs/registeraccount
          * <h2>Examples</h2>
@@ -4176,25 +4098,6 @@ public class Models {
         @JsonProperty(value = "Amount")
         private String amount;
         /**
-         * The branch identifier
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>6160</li>
-         *   <li>6000</li>
-         *   <li>bg</li>
-         *   <li>123123</li>
-         *   <li>HANDSESS</li>
-         * </ul>
-         */
-        @JsonProperty(value = "BankIdentifier")
-        private String bankIdentifier;
-        /**
-         * The ISO 3166-1-alpha-2 code of the end-user's country. This will be used for pre-selecting the country for the end-user in the iframe.
-         * Note: This will only have an effect for new end-users. If an end-user has done a previous order (with the same EndUserID), the country that was last used will be pre-selected.
-         */
-        @JsonProperty(value = "Country")
-        private String country;
-        /**
          * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
          * <h2>Examples</h2>
          * <ul>
@@ -4214,35 +4117,11 @@ public class Models {
         @JsonProperty(value = "Currency")
         private String currency;
         /**
-         * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
+         * The ISO 3166-1-alpha-2 code of the end-user's country. This will be used for pre-selecting the country for the end-user in the iframe.
+         * Note: This will only have an effect for new end-users. If an end-user has done a previous order (with the same EndUserID), the country that was last used will be pre-selected.
          */
-        @JsonProperty(value = "EndUserID", required = true)
-        @JsonInclude
-        @NotNull
-        private String endUserId;
-        /**
-         * Your unique ID of the transaction.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>12345678</li>
-         * </ul>
-         */
-        @JsonProperty(value = "MessageID", required = true)
-        @JsonInclude
-        @NotNull
-        private String messageId;
-        /**
-         * The URL to which notifications for this should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>https://example.com/trustly/notification/a2b63j23dj23883jhfhfh</li>
-         * </ul>
-         */
-        @JsonProperty(value = "NotificationURL", required = true)
-        @JsonInclude
-        @NotNull
-        private String notificationUrl;
+        @JsonProperty(value = "Country")
+        private String country;
       }
     }
   }
@@ -4255,16 +4134,19 @@ public class Models {
   public static class DirectCreditResponse extends JsonRpcResponse<DirectCreditResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("DirectCredit");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
       @Setter
       @SuperBuilder
-      public static class Data extends WithRejection<Data.DirectCreditRejected> {
+      public static class Data extends WithRejection<StringBoolean, Data.DirectCreditRejected> {
         /**
          * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
          * <h2>Examples</h2>
@@ -4276,10 +4158,7 @@ public class Models {
         @JsonInclude
         @NotNull
         private String orderID;
-        @JsonProperty(value = "result", required = true)
-        @JsonInclude
-        @NotNull
-        private StringBoolean result;
+
         public enum DirectCreditRejected {
           /**
            * No matching active accountId
@@ -4301,8 +4180,10 @@ public class Models {
            * The mandate doesn't support the currency
            */
           ERROR_CURRENCY_FAILURE("ERROR_CURRENCY_FAILURE");
+
           @JsonValue
           private final String value;
+
           DirectCreditRejected(String value) {
             this.value = value;
           }
@@ -4333,14 +4214,6 @@ public class Models {
       @SuperBuilder
       public static class Data extends AbstractRequestData<Data.Attributes> {
         /**
-         * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
-         */
-        @JsonProperty(value = "EndUserID", required = true)
-        @JsonInclude
-        @NotNull
-        private String endUserId;
-        /**
          * Your unique ID of the transaction.
          * <h2>Examples</h2>
          * <ul>
@@ -4362,12 +4235,21 @@ public class Models {
         @JsonInclude
         @NotNull
         private String notificationUrl;
+        /**
+         * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
+         * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
+         */
+        @JsonProperty(value = "EndUserID", required = true)
+        @JsonInclude
+        @NotNull
+        private String endUserId;
+
         @Getter
         @Jacksonized
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
-        public static class Attributes extends AbstractRequestDataAttributes implements IAdditionalProperties {
+        public static class Attributes extends AbstractRequestDataAttributes {
           /**
            * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
            * <h2>Examples</h2>
@@ -4378,89 +4260,6 @@ public class Models {
            */
           @JsonProperty(value = "AccountId")
           private String accountId;
-          @Singular
-          @JsonAnySetter
-          private Map<String, Object> additionalProperties;
-          /**
-           * The city of the recipient address.
-           */
-          @JsonProperty(value = "AddressCity")
-          private String addressCity;
-          /**
-           * The ISO 3166-1-alpha-2 code of the recipient address country.
-           */
-          @JsonProperty(value = "AddressCountry")
-          private String addressCountry;
-          /**
-           * Recipient address street
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>Main Street 1</li>
-           * </ul>
-           */
-          @JsonProperty(value = "AddressLine1")
-          private String addressLine1;
-          /**
-           * Additional address information of the recipient.
-           */
-          @JsonProperty(value = "AddressLine2")
-          private String addressLine2;
-          /**
-           * The postalcode of the recipient address.
-           */
-          @JsonProperty(value = "AddressPostalCode")
-          private String addressPostalCode;
-          /**
-           * The country where the mandate is to be created.
-           */
-          @JsonProperty(value = "Country", required = true)
-          @JsonInclude
-          @NotNull
-          private String country;
-          /**
-           * The end-user's date of birth.
-           */
-          @JsonProperty(value = "DateOfBirth")
-          private String dateOfBirth;
-          /**
-           * The email address of the end user.
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>test@trustly.com</li>
-           * </ul>
-           */
-          @JsonProperty(value = "Email", required = true)
-          @JsonInclude
-          @NotNull
-          private String email;
-          /**
-           * The URL to which the end-user should be redirected after a failed  deposit. Do not put any logic on that page since it's not guaranteed that the end-user will in fact visit it.
-           */
-          @JsonProperty(value = "FailURL", required = true)
-          @JsonInclude
-          @NotNull
-          private String failUrl;
-          /**
-           * The first name of the end user.
-           * [BACS]: Only mandatory if manual entry should be enabled.
-           * [Bankgiro]: Mandatory
-           * [Sepa-DD]: Mandatory
-           */
-          @JsonProperty(value = "Firstname")
-          private String firstname;
-          /**
-           * The last name of the end user.
-           * [BACS]: Only mandatory if manual entry should be enabled.
-           * [Bankgiro]: Mandatory
-           * [Sepa-DD]: Mandatory
-           */
-          @JsonProperty(value = "Lastname")
-          private String lastname;
-          /**
-           * The end-users localization preference in the format language[_territory]. Language is the ISO 639-1 code and territory the ISO 3166-1-alpha-2 code.
-           */
-          @JsonProperty(value = "Locale")
-          private String locale;
           /**
            * This parameter in a way identifies the mandate you are to setup. If it's already used, you will receive an error, ERROR_MERCHANT_REFERENCE_ALREADY_EXISTS
            * which basically informs you that there's already a mandate with that reference.
@@ -4478,10 +4277,63 @@ public class Models {
           @NotNull
           private String merchantReference;
           /**
+           * The country where the mandate is to be created.
+           */
+          @JsonProperty(value = "Country", required = true)
+          @JsonInclude
+          @NotNull
+          private String country;
+          /**
+           * The first name of the end user.
+           * [BACS]: Only mandatory if manual entry should be enabled.
+           * [Bankgiro]: Mandatory
+           * [Sepa-DD]: Mandatory
+           */
+          @JsonProperty(value = "Firstname")
+          private String firstname;
+          /**
+           * The last name of the end user.
+           * [BACS]: Only mandatory if manual entry should be enabled.
+           * [Bankgiro]: Mandatory
+           * [Sepa-DD]: Mandatory
+           */
+          @JsonProperty(value = "Lastname")
+          private String lastname;
+          /**
+           * The email address of the end user.
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>test@trustly.com</li>
+           * </ul>
+           */
+          @JsonProperty(value = "Email", required = true)
+          @JsonInclude
+          @NotNull
+          private String email;
+          /**
            * The mobile phone number to the end-user in international format. This is used for KYC and AML routines.
            */
           @JsonProperty(value = "MobilePhone")
           private String mobilePhone;
+          /**
+           * The URL to which the end-user should be redirected after a successful deposit.  Do not put any logic on that page since it's not guaranteed that the end-user will in fact visit it.
+           */
+          @JsonProperty(value = "SuccessURL", required = true)
+          @JsonInclude
+          @NotNull
+          private String successUrl;
+          /**
+           * The URL to which the end-user should be redirected after a failed  deposit. Do not put any logic on that page since it's not guaranteed that the end-user will in fact visit it.
+           */
+          @JsonProperty(value = "FailURL", required = true)
+          @JsonInclude
+          @NotNull
+          private String failUrl;
+          /**
+           * The end-user's date of birth.
+           */
+          @JsonProperty(value = "DateOfBirth")
+          private String dateOfBirth;
           /**
            * The national identification number.Format is yyyyMMddxxxx. Only applicable for Bankgiro(SE)
            * <p>
@@ -4490,11 +4342,53 @@ public class Models {
           @JsonProperty(value = "NationalIdentificationNumber")
           private String nationalIdentificationNumber;
           /**
+           * Only applicable for Bankgiro(SE)
+           * [Bankgiro]If the nationalId should be locked to the value of NationalIdentificationNumber, then set this to 1 or omit the parameter (you may set it to 0 as well).
+           */
+          @JsonProperty(value = "UnchangeableNationalIdentificationNumber")
+          private String unchangeableNationalIdentificationNumber;
+          /**
            * If the payment plan is known in advance, this information is displayed when approving the mandate.
            */
           @JsonProperty(value = "PaymentSchedule")
           @Valid
           private DirectDebitPaymentSchedule paymentSchedule;
+          /**
+           * Recipient address street
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>Main Street 1</li>
+           * </ul>
+           */
+          @JsonProperty(value = "AddressLine1")
+          private String addressLine1;
+          /**
+           * Additional address information of the recipient.
+           */
+          @JsonProperty(value = "AddressLine2")
+          private String addressLine2;
+          /**
+           * The city of the recipient address.
+           */
+          @JsonProperty(value = "AddressCity")
+          private String addressCity;
+          /**
+           * The postalcode of the recipient address.
+           */
+          @JsonProperty(value = "AddressPostalCode")
+          private String addressPostalCode;
+          /**
+           * The ISO 3166-1-alpha-2 code of the recipient address country.
+           */
+          @JsonProperty(value = "AddressCountry")
+          private String addressCountry;
+          /**
+           * The end-users localization preference in the format language[_territory]. Language is the ISO 639-1 code and territory the ISO 3166-1-alpha-2 code.
+           */
+          @JsonProperty(value = "Locale")
+          private String locale;
+          @JsonProperty(value = "Theme")
+          private DirectDebitTheme theme;
           /**
            * When rendering the Trustly Checkout in a native app you are required to pass your application's url as an attribute to the order initiation request. By doing so, Trustly can redirect users back to your app after using external identification apps such as Mobile BankID: Please visit documentation site for more information. It must not be included for transactions that are not originating from an app.
            * <p>
@@ -4509,29 +4403,6 @@ public class Models {
            */
           @JsonProperty(value = "ShopperStatement")
           private String shopperStatement;
-          /**
-           * The URL to which the end-user should be redirected after a successful deposit.  Do not put any logic on that page since it's not guaranteed that the end-user will in fact visit it.
-           */
-          @JsonProperty(value = "SuccessURL", required = true)
-          @JsonInclude
-          @NotNull
-          private String successUrl;
-          @JsonProperty(value = "Theme")
-          private DirectDebitTheme theme;
-          /**
-           * Only applicable for Bankgiro(SE)
-           * [Bankgiro]If the nationalId should be locked to the value of NationalIdentificationNumber, then set this to 1 or omit the parameter (you may set it to 0 as well).
-           */
-          @JsonProperty(value = "UnchangeableNationalIdentificationNumber")
-          private String unchangeableNationalIdentificationNumber;
-          public void addAdditionalProperty(String key, Object value) {
-            this.additionalProperties.put(key, value);
-          }
-
-          @JsonAnyGetter
-          public Map<String, Object> getAdditionalProperties() {
-            return this.additionalProperties;
-          }
 
           /**
            * If the payment plan is known in advance, this information is displayed when approving the mandate.
@@ -4545,6 +4416,7 @@ public class Models {
             @Singular
             @JsonAnySetter
             private Map<String, Object> additionalProperties;
+
             public void addAdditionalProperty(String key, Object value) {
               this.additionalProperties.put(key, value);
             }
@@ -4559,8 +4431,10 @@ public class Models {
             DARK("DARK"),
             LIGHT("LIGHT"),
             DEFAULT("DEFAULT");
+
             @JsonValue
             private final String value;
+
             DirectDebitTheme(String value) {
               this.value = value;
             }
@@ -4578,10 +4452,13 @@ public class Models {
   public static class DirectDebitMandateResponse extends JsonRpcResponse<DirectDebitMandateResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("DirectDebitMandate");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
@@ -4632,6 +4509,28 @@ public class Models {
       @SuperBuilder
       public static class Data extends AbstractRequestData<DirectDebitRequestDataAttributes> implements IAdditionalProperties {
         /**
+         * Your unique ID of the transaction.
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>12345678</li>
+         * </ul>
+         */
+        @JsonProperty(value = "MessageID", required = true)
+        @JsonInclude
+        @NotNull
+        private String messageId;
+        /**
+         * The URL to which notifications for this should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>https://example.com/trustly/notification/a2b63j23dj23883jhfhfh</li>
+         * </ul>
+         */
+        @JsonProperty(value = "NotificationURL", required = true)
+        @JsonInclude
+        @NotNull
+        private String notificationUrl;
+        /**
          * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
          * <h2>Examples</h2>
          * <ul>
@@ -4643,9 +4542,20 @@ public class Models {
         @JsonInclude
         @NotNull
         private String accountId;
-        @Singular
-        @JsonAnySetter
-        private Map<String, Object> additionalProperties;
+        /**
+         * This parameter in a way identifies the mandate you are to setup. If it's already used, you will receive an error, ERROR_MERCHANT_REFERENCE_ALREADY_EXISTS
+         * which basically informs you that there's already a mandate with that reference.
+         * <p>
+         * [BACS]: The unique mandate reference. 6 - 10 characters consisting of A-Z and 0-9. Can not begin with DDIC and neither consists of the same characters, eg. AAAAAAA.
+         * [Bankgiro]: The unique mandate reference. This must be numeric and unique for the payer, eg nationalId or similar can be used. Format needs to follow regexp [1-9][0-9]{5-15}
+         * [SEPA-DD]: The unique mandate reference. This must be unique for the end-user for you as a merchant. Format needs to follow regexp [0-9,a-z,A-Z]{10-35}
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>123ABC0123</li>
+         * </ul>
+         */
+        @JsonProperty(value = "MerchantReference")
+        private String merchantReference;
         /**
          * The amount to deposit with exactly two decimals in the currency specified by Currency. Do not use this attribute in combination with<code>suggestedMinAmount</code> and <code>suggestedMaxAmount</code>. Only digits. Use dot (.) as decimal separator.
          */
@@ -4673,42 +4583,10 @@ public class Models {
         @JsonProperty(value = "Currency", required = true)
         @JsonInclude
         private String currency;
-        /**
-         * This parameter in a way identifies the mandate you are to setup. If it's already used, you will receive an error, ERROR_MERCHANT_REFERENCE_ALREADY_EXISTS
-         * which basically informs you that there's already a mandate with that reference.
-         * <p>
-         * [BACS]: The unique mandate reference. 6 - 10 characters consisting of A-Z and 0-9. Can not begin with DDIC and neither consists of the same characters, eg. AAAAAAA.
-         * [Bankgiro]: The unique mandate reference. This must be numeric and unique for the payer, eg nationalId or similar can be used. Format needs to follow regexp [1-9][0-9]{5-15}
-         * [SEPA-DD]: The unique mandate reference. This must be unique for the end-user for you as a merchant. Format needs to follow regexp [0-9,a-z,A-Z]{10-35}
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>123ABC0123</li>
-         * </ul>
-         */
-        @JsonProperty(value = "MerchantReference")
-        private String merchantReference;
-        /**
-         * Your unique ID of the transaction.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>12345678</li>
-         * </ul>
-         */
-        @JsonProperty(value = "MessageID", required = true)
-        @JsonInclude
-        @NotNull
-        private String messageId;
-        /**
-         * The URL to which notifications for this should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>https://example.com/trustly/notification/a2b63j23dj23883jhfhfh</li>
-         * </ul>
-         */
-        @JsonProperty(value = "NotificationURL", required = true)
-        @JsonInclude
-        @NotNull
-        private String notificationUrl;
+        @Singular
+        @JsonAnySetter
+        private Map<String, Object> additionalProperties;
+
         public void addAdditionalProperty(String key, Object value) {
           this.additionalProperties.put(key, value);
         }
@@ -4726,10 +4604,7 @@ public class Models {
   @RequiredArgsConstructor
   @Setter
   @SuperBuilder
-  public static class DirectDebitRequestDataAttributes extends AbstractRequestDataAttributes implements IAdditionalProperties {
-    @Singular
-    @JsonAnySetter
-    private Map<String, Object> additionalProperties;
+  public static class DirectDebitRequestDataAttributes extends AbstractRequestDataAttributes {
     @JsonProperty(value = "CollectionType")
     private DirectDebitCollectionType collectionType;
     /**
@@ -4748,22 +4623,16 @@ public class Models {
      */
     @JsonProperty(value = "ShopperStatement")
     private String shopperStatement;
-    public void addAdditionalProperty(String key, Object value) {
-      this.additionalProperties.put(key, value);
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-      return this.additionalProperties;
-    }
 
     public enum DirectDebitCollectionType {
       INITIAL("INITIAL"),
       RECURRING("RECURRING"),
       RE_SUBMITTED("RE_SUBMITTED"),
       FINAL("FINAL");
+
       @JsonValue
       private final String value;
+
       DirectDebitCollectionType(String value) {
         this.value = value;
       }
@@ -4778,19 +4647,19 @@ public class Models {
   public static class DirectDebitResponse extends JsonRpcResponse<DirectDebitResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("DirectDebit");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
       @Setter
       @SuperBuilder
-      public static class Data extends WithRejection<Data.DirectDebitRejected> implements IAdditionalProperties {
-        @Singular
-        @JsonAnySetter
-        private Map<String, Object> additionalProperties;
+      public static class Data extends WithRejection<StringBoolean, Data.DirectDebitRejected> implements IAdditionalProperties {
         /**
          * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
          * <h2>Examples</h2>
@@ -4802,10 +4671,10 @@ public class Models {
         @JsonInclude
         @NotNull
         private String orderID;
-        @JsonProperty(value = "result", required = true)
-        @JsonInclude
-        @NotNull
-        private StringBoolean result;
+        @Singular
+        @JsonAnySetter
+        private Map<String, Object> additionalProperties;
+
         public void addAdditionalProperty(String key, Object value) {
           this.additionalProperties.put(key, value);
         }
@@ -4840,8 +4709,10 @@ public class Models {
            * Invalid collection type
            */
           ERROR_COLLECTION_TYPE_FAILURE("ERROR_COLLECTION_TYPE_FAILURE");
+
           @JsonValue
           private final String value;
+
           DirectDebitRejected(String value) {
             this.value = value;
           }
@@ -4872,31 +4743,6 @@ public class Models {
       @SuperBuilder
       public static class Data extends AbstractRequestData<Data.Attributes> {
         /**
-         * The ISO 3166-1-alpha-2 code of the end-user's country. This will be used for pre-selecting the country for the end-user in the iframe.
-         * Note: This will only have an effect for new end-users. If an end-user has done a previous order (with the same EndUserID), the country that was last used will be pre-selected.
-         */
-        @JsonProperty(value = "Country")
-        private String country;
-        /**
-         * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>BGN</li>
-         *   <li>CZK</li>
-         *   <li>DKK</li>
-         *   <li>EUR</li>
-         *   <li>GBP</li>
-         *   <li>HRK</li>
-         *   <li>HUF</li>
-         *   <li>NOK</li>
-         *   <li>PLN</li>
-         *   <li>RON</li>
-         *   <li>SEK</li>
-         * </ul>
-         */
-        @JsonProperty(value = "Currency")
-        private String currency;
-        /**
          * Your unique ID of the transaction.
          * <h2>Examples</h2>
          * <ul>
@@ -4918,15 +4764,47 @@ public class Models {
         @JsonInclude
         @NotNull
         private String notificationUrl;
+        /**
+         * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>BGN</li>
+         *   <li>CZK</li>
+         *   <li>DKK</li>
+         *   <li>EUR</li>
+         *   <li>GBP</li>
+         *   <li>HRK</li>
+         *   <li>HUF</li>
+         *   <li>NOK</li>
+         *   <li>PLN</li>
+         *   <li>RON</li>
+         *   <li>SEK</li>
+         * </ul>
+         */
+        @JsonProperty(value = "Currency")
+        private String currency;
+        /**
+         * The ISO 3166-1-alpha-2 code of the end-user's country. This will be used for pre-selecting the country for the end-user in the iframe.
+         * Note: This will only have an effect for new end-users. If an end-user has done a previous order (with the same EndUserID), the country that was last used will be pre-selected.
+         */
+        @JsonProperty(value = "Country")
+        private String country;
+
         @Getter
         @Jacksonized
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
-        public static class Attributes extends AbstractRequestDataAttributes implements IAdditionalProperties {
-          @Singular
-          @JsonAnySetter
-          private Map<String, Object> additionalProperties;
+        public static class Attributes extends AbstractRequestDataAttributes {
+          /**
+           * Date string in the ISO 8601 format (YYYY-MM-DD)
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>2014-04-01</li>
+           * </ul>
+           */
+          @JsonProperty(value = "PaymentDate")
+          private String paymentDate;
           /**
            * The uploaded unique file name on the SFTP server containing the instructions.
            * <h2>Examples</h2>
@@ -4945,23 +4823,6 @@ public class Models {
            */
           @JsonProperty(value = "Checksum")
           private String checksum;
-          /**
-           * Date string in the ISO 8601 format (YYYY-MM-DD)
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>2014-04-01</li>
-           * </ul>
-           */
-          @JsonProperty(value = "PaymentDate")
-          private String paymentDate;
-          public void addAdditionalProperty(String key, Object value) {
-            this.additionalProperties.put(key, value);
-          }
-
-          @JsonAnyGetter
-          public Map<String, Object> getAdditionalProperties() {
-            return this.additionalProperties;
-          }
         }
       }
     }
@@ -4975,10 +4836,13 @@ public class Models {
   public static class DirectPaymentBatchResponse extends JsonRpcResponse<DirectPaymentBatchResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("DirectPaymentBatch");
+      }
+
       /**
        * 1 if the charge was accepted for processing, 0 otherwise. Note that this is an acceptance of the order, no money has been charged from the account until you receive notifications thereof.
        */
@@ -4987,7 +4851,7 @@ public class Models {
       @RequiredArgsConstructor
       @Setter
       @SuperBuilder
-      public static class Data extends WithRejection<Data.DirectPaymentBatchRejected> {
+      public static class Data extends WithRejection<StringBoolean, Data.DirectPaymentBatchRejected> {
         /**
          * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
          * <h2>Examples</h2>
@@ -4999,10 +4863,7 @@ public class Models {
         @JsonInclude
         @NotNull
         private String orderID;
-        @JsonProperty(value = "result", required = true)
-        @JsonInclude
-        @NotNull
-        private StringBoolean result;
+
         public enum DirectPaymentBatchRejected {
           /**
            * The account has not properly been configured.
@@ -5024,8 +4885,10 @@ public class Models {
            * The checksum for the file doesn't match.
            */
           ERROR_INVALID_CHECKSUM("ERROR_INVALID_CHECKSUM");
+
           @JsonValue
           private final String value;
+
           DirectPaymentBatchRejected(String value) {
             this.value = value;
           }
@@ -5087,10 +4950,13 @@ public class Models {
   public static class GetWithdrawalsResponse extends JsonRpcResponse<GetWithdrawalsResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<List<Result.DataEntry>> {
+      public Result() {
+        super("GetWithdrawals");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
@@ -5098,43 +4964,12 @@ public class Models {
       @SuperBuilder
       public static class DataEntry {
         /**
-         * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>1234567890</li>
-         *   <li>7653385737</li>
-         * </ul>
+         * Reference code for the withdrawal generated by Trustly.
          */
-        @JsonProperty(value = "accountid", required = true)
+        @JsonProperty(value = "reference", required = true)
         @JsonInclude
         @NotNull
-        private String accountID;
-        /**
-         * The amount of the withdrawal.
-         */
-        @JsonProperty(value = "amount", required = true)
-        @JsonInclude
-        @NotNull
-        private String amount;
-        /**
-         * The currency of the withdrawal.
-         */
-        @JsonProperty(value = "currency", required = true)
-        @JsonInclude
-        @NotNull
-        private String currency;
-        /**
-         * Date and time when the withdrawal request was received.
-         */
-        @JsonProperty(value = "datestamp", required = true)
-        @JsonInclude
-        @NotNull
-        private String datestamp;
-        /**
-         * The estimated date and time for when the funds will be available on the receiving bank account. If this information is not available it will be null.
-         */
-        @JsonProperty(value = "eta")
-        private String eta;
+        private String reference;
         /**
          * Date and time when the withdrawal was last updated.
          */
@@ -5150,12 +4985,12 @@ public class Models {
         @NotNull
         private String orderID;
         /**
-         * Reference code for the withdrawal generated by Trustly.
+         * Date and time when the withdrawal request was received.
          */
-        @JsonProperty(value = "reference", required = true)
+        @JsonProperty(value = "datestamp", required = true)
         @JsonInclude
         @NotNull
-        private String reference;
+        private String datestamp;
         /**
          * The current state of the withdrawal.
          * It's important that no logic is built on the merchant side based on any specific transferState. New states can be added, and existing states can be changed or removed without notice.
@@ -5178,6 +5013,37 @@ public class Models {
         @JsonInclude
         @NotNull
         private String transferstate;
+        /**
+         * The amount of the withdrawal.
+         */
+        @JsonProperty(value = "amount", required = true)
+        @JsonInclude
+        @NotNull
+        private String amount;
+        /**
+         * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>1234567890</li>
+         *   <li>7653385737</li>
+         * </ul>
+         */
+        @JsonProperty(value = "accountid", required = true)
+        @JsonInclude
+        @NotNull
+        private String accountID;
+        /**
+         * The currency of the withdrawal.
+         */
+        @JsonProperty(value = "currency", required = true)
+        @JsonInclude
+        @NotNull
+        private String currency;
+        /**
+         * The estimated date and time for when the funds will be available on the receiving bank account. If this information is not available it will be null.
+         */
+        @JsonProperty(value = "eta")
+        private String eta;
       }
     }
   }
@@ -5204,6 +5070,17 @@ public class Models {
       @SuperBuilder
       public static class Data extends AbstractRequestData<Data.Attributes> {
         /**
+         * The URL to which notifications for this should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>https://example.com/trustly/notification/a2b63j23dj23883jhfhfh</li>
+         * </ul>
+         */
+        @JsonProperty(value = "NotificationURL", required = true)
+        @JsonInclude
+        @NotNull
+        private String notificationUrl;
+        /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
@@ -5222,17 +5099,7 @@ public class Models {
         @JsonInclude
         @NotNull
         private String messageId;
-        /**
-         * The URL to which notifications for this should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>https://example.com/trustly/notification/a2b63j23dj23883jhfhfh</li>
-         * </ul>
-         */
-        @JsonProperty(value = "NotificationURL", required = true)
-        @JsonInclude
-        @NotNull
-        private String notificationUrl;
+
         @Getter
         @Jacksonized
         @RequiredArgsConstructor
@@ -5250,73 +5117,6 @@ public class Models {
           @JsonProperty(value = "AccountID")
           private String accountId;
           /**
-           * The city of the recipient address.
-           */
-          @JsonProperty(value = "AddressCity")
-          private String addressCity;
-          /**
-           * The ISO 3166-1-alpha-2 code of the recipient address country.
-           */
-          @JsonProperty(value = "AddressCountry")
-          private String addressCountry;
-          /**
-           * [BACS]:If flat and building is available, then use that for this field. If there's no flat/building at all, then use the street and number. Note that without AddressLine1, manual entry will be disabled.
-           * [Bankgiro]: Not mandatory
-           * [SepaDD]: Mandatory
-           */
-          @JsonProperty(value = "AddressLine1")
-          private String addressLine1;
-          /**
-           * [BACS]:If there are flat and building information, then use addressLine2 for the street and number. Note that without AddressLine1, manual entry will be disabled.
-           * [Bankgiro]: Not mandatory
-           * [SepaDD]: Optional and depends on the country if needed.
-           */
-          @JsonProperty(value = "AddressLine2")
-          private String addressLine2;
-          /**
-           * The postalcode of the recipient address.
-           */
-          @JsonProperty(value = "AddressPostalCode")
-          private String addressPostalCode;
-          /**
-           * The country where the mandate is to be created.
-           */
-          @JsonProperty(value = "Country", required = true)
-          @JsonInclude
-          @NotNull
-          private String country;
-          /**
-           * The email address of the end user.
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>test@trustly.com</li>
-           * </ul>
-           */
-          @JsonProperty(value = "Email", required = true)
-          @JsonInclude
-          @NotNull
-          private String email;
-          /**
-           * The first name of the end user.
-           * [BACS]: Only mandatory if manual entry should be enabled.
-           * [Bankgiro]: Mandatory
-           * [Sepa-DD]: Mandatory
-           */
-          @JsonProperty(value = "Firstname")
-          private String firstname;
-          @JsonProperty(value = "ImportType", required = true)
-          @JsonInclude
-          @NotNull
-          private DirectDebitImportType importType;
-          /**
-           * The last name of the end user.
-           * [BACS]: Only mandatory if manual entry should be enabled.
-           * [Bankgiro]: Mandatory
-           * [Sepa-DD]: Mandatory
-           */
-          @JsonProperty(value = "Lastname")
-          private String lastname;
-          /**
            * This parameter in a way identifies the mandate you are to setup. If it's already used, you will receive an error, ERROR_MERCHANT_REFERENCE_ALREADY_EXISTS
            * which basically informs you that there's already a mandate with that reference.
            * <p>
@@ -5332,11 +5132,56 @@ public class Models {
           @JsonInclude
           @NotNull
           private String merchantReference;
+          @JsonProperty(value = "ImportType", required = true)
+          @JsonInclude
+          @NotNull
+          private DirectDebitImportType importType;
+          /**
+           * The country where the mandate is to be created.
+           */
+          @JsonProperty(value = "Country", required = true)
+          @JsonInclude
+          @NotNull
+          private String country;
+          /**
+           * The first name of the end user.
+           * [BACS]: Only mandatory if manual entry should be enabled.
+           * [Bankgiro]: Mandatory
+           * [Sepa-DD]: Mandatory
+           */
+          @JsonProperty(value = "Firstname")
+          private String firstname;
+          /**
+           * The last name of the end user.
+           * [BACS]: Only mandatory if manual entry should be enabled.
+           * [Bankgiro]: Mandatory
+           * [Sepa-DD]: Mandatory
+           */
+          @JsonProperty(value = "Lastname")
+          private String lastname;
+          /**
+           * The email address of the end user.
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>test@trustly.com</li>
+           * </ul>
+           */
+          @JsonProperty(value = "Email", required = true)
+          @JsonInclude
+          @NotNull
+          private String email;
           /**
            * The mobile phone number to the end-user in international format. This is used for KYC and AML routines.
            */
           @JsonProperty(value = "MobilePhone")
           private String mobilePhone;
+          /**
+           * The text to show on the end-user's bank statement after Trustly's own 10 digit reference (which always will be displayed first). The reference must let the end user identify the merchant based on this value. So the ShopperStatement should contain either your brand name, website name, or company name.
+           * <p>
+           * If possible, try to keep this text as short as possible to maximise the chance that the full reference will fit into the reference field on the customer's bank since some banks allow only a limited number of characters. If the full ShopperStatement does not fit into the reference it will be truncated from the end.
+           */
+          @JsonProperty(value = "ShopperStatement")
+          private String shopperStatement;
           /**
            * The national identification number.Format is yyyyMMddxxxx. Only applicable for Bankgiro(SE)
            * <p>
@@ -5345,12 +5190,35 @@ public class Models {
           @JsonProperty(value = "NationalIdentificationNumber")
           private String nationalIdentificationNumber;
           /**
-           * The text to show on the end-user's bank statement after Trustly's own 10 digit reference (which always will be displayed first). The reference must let the end user identify the merchant based on this value. So the ShopperStatement should contain either your brand name, website name, or company name.
-           * <p>
-           * If possible, try to keep this text as short as possible to maximise the chance that the full reference will fit into the reference field on the customer's bank since some banks allow only a limited number of characters. If the full ShopperStatement does not fit into the reference it will be truncated from the end.
+           * [BACS]:If flat and building is available, then use that for this field. If there's no flat/building at all, then use the street and number. Note that without AddressLine1, manual entry will be disabled.
+           * [Bankgiro]: Not mandatory
+           * [SepaDD]: Mandatory
            */
-          @JsonProperty(value = "ShopperStatement")
-          private String shopperStatement;
+          @JsonProperty(value = "AddressLine1")
+          private String addressLine1;
+          /**
+           * [BACS]:If there are flat and building information, then use addressLine2 for the street and number. Note that without AddressLine1, manual entry will be disabled.
+           * [Bankgiro]: Not mandatory
+           * [SepaDD]: Optional and depends on the country if needed.
+           */
+          @JsonProperty(value = "AddressLine2")
+          private String addressLine2;
+          /**
+           * The city of the recipient address.
+           */
+          @JsonProperty(value = "AddressCity")
+          private String addressCity;
+          /**
+           * The postalcode of the recipient address.
+           */
+          @JsonProperty(value = "AddressPostalCode")
+          private String addressPostalCode;
+          /**
+           * The ISO 3166-1-alpha-2 code of the recipient address country.
+           */
+          @JsonProperty(value = "AddressCountry")
+          private String addressCountry;
+
           public enum DirectDebitImportType {
             /**
              * Does NOT register the mandate with the scheme (<code>REGISTER</code> does)
@@ -5360,8 +5228,10 @@ public class Models {
              * Registers the mandate with the scheme
              */
             REGISTER("REGISTER");
+
             @JsonValue
             private final String value;
+
             DirectDebitImportType(String value) {
               this.value = value;
             }
@@ -5379,23 +5249,19 @@ public class Models {
   public static class ImportDirectDebitMandateResponse extends JsonRpcResponse<ImportDirectDebitMandateResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("ImportDirectDebitMandate");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
       @Setter
       @SuperBuilder
-      public static class Data extends WithRejection<Data.ImportDirectDebitReject> {
-        /**
-         * 1 if the import was accepted, 0 otherwise. Note that this does not indicate that the mandate has been fully registered. An account notification will be sent to inform about the activation of the mandate.
-         */
-        @JsonProperty(value = "result", required = true)
-        @JsonInclude
-        @NotNull
-        private StringBoolean result;
+      public static class Data extends WithRejection<StringBoolean, Data.ImportDirectDebitReject> {
         /**
          * Reasons for not being able to import the mandate
          */
@@ -5420,8 +5286,10 @@ public class Models {
            * other reasons
            */
           ERROR_UNKNOWN("ERROR_UNKNOWN");
+
           @JsonValue
           private final String value;
+
           ImportDirectDebitReject(String value) {
             this.value = value;
           }
@@ -5435,18 +5303,23 @@ public class Models {
    */
   @Getter
   @Jacksonized
-  @RequiredArgsConstructor
   @Setter
   @SuperBuilder
   public static class JsonRpcError {
+    @JsonProperty(value = "error")
+    private final JsonNode error;
     @Default
     @JsonProperty(value = "code")
-    private Integer code = -1;
-    @JsonProperty(value = "error")
-    private Object error;
+    private int code = -1;
     @Default
     @JsonProperty(value = "message")
     private String message = "Unknown Error";
+
+    public JsonRpcError(@JsonProperty(value = "error") JsonNode error) {
+      this.error = error;
+    }
+
+    @JsonProperty(value = "name")
     public String getName() {
       return "JSONRPCError";
     }
@@ -5466,17 +5339,20 @@ public class Models {
     @NotNull
     @Valid
     private ErrorUnknownError error;
+
+    @JsonProperty(value = "version")
     public String getVersion() {
       return "1.1";
     }
 
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class ErrorUnknownError extends JsonRpcError {
-
+      public ErrorUnknownError(@JsonProperty(value = "error") JsonNode error) {
+        super(error);
+      }
     }
   }
 
@@ -5487,15 +5363,20 @@ public class Models {
   @Jacksonized
   @Setter
   @SuperBuilder
-  public static class JsonRpcNotification<TParams> {
+  public static class JsonRpcNotification<TParams extends JsonRpcNotificationParams<?>> {
+    @JsonProperty(value = "method", required = true)
+    @JsonInclude
     @NotNull
     private final String method;
+    @JsonProperty(value = "params")
     @Valid
     private TParams params;
+
     public JsonRpcNotification(@JsonProperty(value = "method", required = true) String method) {
       this.method = method;
     }
 
+    @JsonProperty(value = "version")
     public String getVersion() {
       return "1.1";
     }
@@ -5510,25 +5391,25 @@ public class Models {
   @Setter
   @SuperBuilder
   public static class JsonRpcNotificationParams<T> {
-    @JsonProperty(value = "data", required = true)
-    @JsonInclude
-    @NotNull
-    @Valid
-    private T data;
     /**
-     * <p>The signature that the Trustly server generated, which you can verify against with our public key</p>
+     * The signature that the Trustly server generated, which you can verify against with our public key
      */
     @JsonProperty(value = "signature", required = true)
     @JsonInclude
     @NotNull
     private String signature;
     /**
-     * <p>The unique identifier for this request</p>
+     * The unique identifier for this request
      */
     @JsonProperty(value = "uuid", required = true)
     @JsonInclude
     @NotNull
     private String UUID;
+    @JsonProperty(value = "data", required = true)
+    @JsonInclude
+    @NotNull
+    @Valid
+    private T data;
   }
 
   /**
@@ -5538,15 +5419,20 @@ public class Models {
   @Jacksonized
   @Setter
   @SuperBuilder
-  public static class JsonRpcRequest<TParams> {
+  public static class JsonRpcRequest<TParams extends JsonRpcRequestParams<? extends AbstractRequestData<? extends AbstractRequestDataAttributes>>> {
+    @JsonProperty(value = "method", required = true)
+    @JsonInclude
     @NotNull
     private final String method;
+    @JsonProperty(value = "params")
     @Valid
     private TParams params;
+
     public JsonRpcRequest(@JsonProperty(value = "method", required = true) String method) {
       this.method = method;
     }
 
+    @JsonProperty(value = "version")
     public String getVersion() {
       return "1.1";
     }
@@ -5560,26 +5446,26 @@ public class Models {
   @RequiredArgsConstructor
   @Setter
   @SuperBuilder
-  public static class JsonRpcRequestParams<T> {
-    @JsonProperty(value = "Data", required = true)
-    @JsonInclude
-    @NotNull
-    @Valid
-    private T data;
+  public static class JsonRpcRequestParams<T extends AbstractRequestData<? extends AbstractRequestDataAttributes>> {
     /**
-     * <p>The signature which validates your request to the Trustly server</p>
+     * The signature which validates your request to the Trustly server
      */
     @JsonProperty(value = "Signature", required = true)
     @JsonInclude
     @NotNull
     private String signature;
     /**
-     * <p>The unique identifier for this request</p>
+     * The unique identifier for this request
      */
     @JsonProperty(value = "UUID", required = true)
     @JsonInclude
     @NotNull
     private String uuid;
+    @JsonProperty(value = "Data", required = true)
+    @JsonInclude
+    @NotNull
+    @Valid
+    private T data;
   }
 
   /**
@@ -5590,10 +5476,12 @@ public class Models {
   @RequiredArgsConstructor
   @Setter
   @SuperBuilder
-  public static class JsonRpcResponse<T> {
+  public static class JsonRpcResponse<T extends ResponseResult<?>> {
     @JsonProperty(value = "result")
     @Valid
     private T result;
+
+    @JsonProperty(value = "version")
     public String getVersion() {
       return "1.1";
     }
@@ -5622,19 +5510,13 @@ public class Models {
         @JsonValue
         private final JsonNode _raw;
         @Valid
-        private KYCAbortNotificationData _kycAbortNotificationData;
-        @Valid
         private KYCDefaultNotificationData _kycDefaultNotificationData;
+        @Valid
+        private KYCAbortNotificationData _kycAbortNotificationData;
+
         @JsonCreator
         public Data(JsonNode raw) {
           this._raw = raw;
-        }
-
-        public KYCAbortNotificationData getKycAbortNotificationData(ObjectMapper transformer) throws JsonProcessingException {
-          if (this._kycAbortNotificationData != null) {
-            return this._kycAbortNotificationData;
-          }
-          return this._kycAbortNotificationData = transformer.treeToValue(this._raw, KYCAbortNotificationData.class);
         }
 
         public KYCDefaultNotificationData getKycDefaultNotificationData(ObjectMapper transformer) throws JsonProcessingException {
@@ -5644,12 +5526,19 @@ public class Models {
           return this._kycDefaultNotificationData = transformer.treeToValue(this._raw, KYCDefaultNotificationData.class);
         }
 
+        public KYCAbortNotificationData getKycAbortNotificationData(ObjectMapper transformer) throws JsonProcessingException {
+          if (this._kycAbortNotificationData != null) {
+            return this._kycAbortNotificationData;
+          }
+          return this._kycAbortNotificationData = transformer.treeToValue(this._raw, KYCAbortNotificationData.class);
+        }
+
         @Getter
         @Jacksonized
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
-        public static class KYCAbortNotificationData extends AbstractNotificationRequestData implements IAbstractKYCNotificationData {
+        public static class KYCAbortNotificationData extends AbstractKYCNotificationData {
           @JsonProperty(value = "abort", required = true)
           @JsonInclude
           @NotNull
@@ -5665,52 +5554,6 @@ public class Models {
           @JsonInclude
           @NotNull
           private String abortmessage;
-          @JsonProperty(value = "attributes")
-          @Valid
-          private KYCNotificationDataAttributes attributes;
-          /**
-           * Trustly generated unique identifier based on player’s bank account profile*.
-           * Can be used as an identifier when <code>personid</code> is not available.
-           * <p>
-           * ***The identifier may change, hence our suggestion is to have a logic that does not include <code>KYCEntityID</code>
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>29a750aa-0bad-4a28-a42d-ffb9a690d93a</li>
-           * </ul>
-           */
-          @JsonProperty(value = "kycentityid", required = true)
-          @JsonInclude
-          @NotNull
-          private String kycentityid;
-          /**
-           * Your unique ID of the transaction.
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>12345678</li>
-           * </ul>
-           */
-          @JsonProperty(value = "messageid", required = true)
-          @JsonInclude
-          @NotNull
-          private String messageID;
-          /**
-           * Unique ID for this notification. Each notification must only be handled once in your system.
-           */
-          @JsonProperty(value = "notificationid", required = true)
-          @JsonInclude
-          @NotNull
-          private String notificationID;
-          /**
-           * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>9594811343</li>
-           * </ul>
-           */
-          @JsonProperty(value = "orderid", required = true)
-          @JsonInclude
-          @NotNull
-          private String orderID;
         }
 
         @Getter
@@ -5718,53 +5561,8 @@ public class Models {
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
-        public static class KYCDefaultNotificationData extends AbstractNotificationRequestData implements IAbstractKYCNotificationData {
-          @JsonProperty(value = "attributes")
-          @Valid
-          private KYCNotificationDataAttributes attributes;
-          /**
-           * Trustly generated unique identifier based on player’s bank account profile*.
-           * Can be used as an identifier when <code>personid</code> is not available.
-           * <p>
-           * ***The identifier may change, hence our suggestion is to have a logic that does not include <code>KYCEntityID</code>
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>29a750aa-0bad-4a28-a42d-ffb9a690d93a</li>
-           * </ul>
-           */
-          @JsonProperty(value = "kycentityid", required = true)
-          @JsonInclude
-          @NotNull
-          private String kycentityid;
-          /**
-           * Your unique ID of the transaction.
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>12345678</li>
-           * </ul>
-           */
-          @JsonProperty(value = "messageid", required = true)
-          @JsonInclude
-          @NotNull
-          private String messageID;
-          /**
-           * Unique ID for this notification. Each notification must only be handled once in your system.
-           */
-          @JsonProperty(value = "notificationid", required = true)
-          @JsonInclude
-          @NotNull
-          private String notificationID;
-          /**
-           * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>9594811343</li>
-           * </ul>
-           */
-          @JsonProperty(value = "orderid", required = true)
-          @JsonInclude
-          @NotNull
-          private String orderID;
+        public static class KYCDefaultNotificationData extends AbstractKYCNotificationData {
+
         }
       }
     }
@@ -5775,85 +5573,16 @@ public class Models {
   @RequiredArgsConstructor
   @Setter
   @SuperBuilder
-  public static class KYCNotificationDataAttributes extends AbstractRequestDataAttributes {
-    /**
-     * The city of the recipient address.
-     */
-    @JsonProperty(value = "city", required = true)
-    @JsonInclude
-    @NotNull
-    private String city;
-    /**
-     * The ISO 3166-1-alpha-2 code of the recipient address country.
-     */
-    @JsonProperty(value = "country", required = true)
-    @JsonInclude
-    @NotNull
-    private String country;
-    /**
-     * The end-user's date of birth.
-     */
-    @JsonProperty(value = "dob", required = true)
-    @JsonInclude
-    @NotNull
-    private String dob;
-    /**
-     * First name of the person, or the name of the organization/company.
-     */
-    @JsonProperty(value = "firstname", required = true)
-    @JsonInclude
-    @NotNull
-    private String firstname;
-    /**
-     * Last name of the person (NULL/empty for organization/company).
-     */
-    @JsonProperty(value = "lastname", required = true)
-    @JsonInclude
-    private String lastname;
-    /**
-     * An ID that uniquely identifies the account holder. Only present in markets where SSN is applicable. Note: The format of this field will for some countries look different than the example.
-     * <h2>Examples</h2>
-     * <ul>
-     *   <li>SE198201019876</li>
-     *   <li>19900501</li>
-     * </ul>
-     */
-    @JsonProperty(value = "personid", required = true)
-    @JsonInclude
-    @NotNull
-    private String personID;
-    /**
-     * Recipient address street
-     * <h2>Examples</h2>
-     * <ul>
-     *   <li>Main Street 1</li>
-     * </ul>
-     */
-    @JsonProperty(value = "street", required = true)
-    @JsonInclude
-    @NotNull
-    private String street;
-    /**
-     * The postalcode of the recipient address.
-     */
-    @JsonProperty(value = "zipcode", required = true)
-    @JsonInclude
-    @NotNull
-    private String zipcode;
-  }
-
-  @Getter
-  @Jacksonized
-  @RequiredArgsConstructor
-  @Setter
-  @SuperBuilder
   public static class KYCNotificationResponse extends JsonRpcResponse<KYCNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("KYC");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
@@ -5878,12 +5607,15 @@ public class Models {
          */
         @JsonProperty(value = "limit")
         private String limit;
+
         public enum Status {
           OK("OK"),
           FINISH("FINISH"),
           CONTINUE("CONTINUE");
+
           @JsonValue
           private final String value;
+
           Status(String value) {
             this.value = value;
           }
@@ -5914,6 +5646,13 @@ public class Models {
       @SuperBuilder
       public static class Data extends AbstractRequestData<AnyAttributes> {
         /**
+         * Your unique ID for the payout. If the MessageID is a previously initiated P2P order then the payout will be attached to that P2P order and the amount must be equal to or lower than the previously deposited amount.
+         */
+        @JsonProperty(value = "MessageID", required = true)
+        @JsonInclude
+        @NotNull
+        private String messageId;
+        /**
          * The amount to send. See format in Handling currencies. Only digits. Use dot (.) as decimal separator. If the end-user holds a balance in the merchant's system then the amount must have been deducted from that balance before calling this method.
          */
         @JsonProperty(value = "Amount", required = true)
@@ -5927,13 +5666,6 @@ public class Models {
         @JsonInclude
         @NotNull
         private String currency;
-        /**
-         * Your unique ID for the payout. If the MessageID is a previously initiated P2P order then the payout will be attached to that P2P order and the amount must be equal to or lower than the previously deposited amount.
-         */
-        @JsonProperty(value = "MessageID", required = true)
-        @JsonInclude
-        @NotNull
-        private String messageId;
       }
     }
   }
@@ -5946,19 +5678,19 @@ public class Models {
   public static class MerchantSettlementResponse extends JsonRpcResponse<MerchantSettlementResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("MerchantSettlement");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
       @Setter
       @SuperBuilder
       public static class Data implements IAdditionalProperties {
-        @Singular
-        @JsonAnySetter
-        private Map<String, Object> additionalProperties;
         /**
          * The unique reference generated for the settlement.
          */
@@ -5966,6 +5698,10 @@ public class Models {
         @JsonInclude
         @NotNull
         private String reference;
+        @Singular
+        @JsonAnySetter
+        private Map<String, Object> additionalProperties;
+
         public void addAdditionalProperty(String key, Object value) {
           this.additionalProperties.put(key, value);
         }
@@ -6021,9 +5757,6 @@ public class Models {
         @JsonInclude
         @NotNull
         private double amount;
-        @JsonProperty(value = "attributes")
-        @Valid
-        private AnyAttributes attributes;
         /**
          * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
          * <h2>Examples</h2>
@@ -6053,35 +5786,6 @@ public class Models {
         @NotNull
         private String endUserID;
         /**
-         * Your unique ID of the transaction.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>12345678</li>
-         * </ul>
-         */
-        @JsonProperty(value = "messageid", required = true)
-        @JsonInclude
-        @NotNull
-        private String messageID;
-        /**
-         * Unique ID for this notification. Each notification must only be handled once in your system.
-         */
-        @JsonProperty(value = "notificationid", required = true)
-        @JsonInclude
-        @NotNull
-        private String notificationID;
-        /**
-         * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>9594811343</li>
-         * </ul>
-         */
-        @JsonProperty(value = "orderid", required = true)
-        @JsonInclude
-        @NotNull
-        private String orderID;
-        /**
          * The time of the transaction and the GMT offset (+01 means GMT + 1 hours).
          * <h2>Examples</h2>
          * <ul>
@@ -6093,6 +5797,9 @@ public class Models {
         @JsonInclude
         @NotNull
         private String timestamp;
+        @JsonProperty(value = "attributes")
+        @Valid
+        private AnyAttributes attributes;
       }
     }
   }
@@ -6105,11 +5812,12 @@ public class Models {
   public static class PayoutConfirmationNotificationResponse extends JsonRpcResponse<PayoutConfirmationNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("PayoutConfirmation");
+      }
     }
   }
 
@@ -6141,9 +5849,6 @@ public class Models {
         @JsonInclude
         @NotNull
         private double amount;
-        @JsonProperty(value = "attributes")
-        @Valid
-        private AnyAttributes attributes;
         /**
          * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
          * <h2>Examples</h2>
@@ -6173,6 +5878,18 @@ public class Models {
         @NotNull
         private String endUserID;
         /**
+         * The time of the transaction and the GMT offset (+01 means GMT + 1 hours).
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>2014-01-30 13:28:45.652299+01</li>
+         *   <li>2014-03-31 11:50:06.46106+00</li>
+         * </ul>
+         */
+        @JsonProperty(value = "timestamp", required = true)
+        @JsonInclude
+        @NotNull
+        private String timestamp;
+        /**
          * Short code of the error
          * <h2>Examples</h2>
          * <ul>
@@ -6190,47 +5907,9 @@ public class Models {
          */
         @JsonProperty(value = "errormessage")
         private String errormessage;
-        /**
-         * Your unique ID of the transaction.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>12345678</li>
-         * </ul>
-         */
-        @JsonProperty(value = "messageid", required = true)
-        @JsonInclude
-        @NotNull
-        private String messageID;
-        /**
-         * Unique ID for this notification. Each notification must only be handled once in your system.
-         */
-        @JsonProperty(value = "notificationid", required = true)
-        @JsonInclude
-        @NotNull
-        private String notificationID;
-        /**
-         * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the request.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>9594811343</li>
-         * </ul>
-         */
-        @JsonProperty(value = "orderid", required = true)
-        @JsonInclude
-        @NotNull
-        private String orderID;
-        /**
-         * The time of the transaction and the GMT offset (+01 means GMT + 1 hours).
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>2014-01-30 13:28:45.652299+01</li>
-         *   <li>2014-03-31 11:50:06.46106+00</li>
-         * </ul>
-         */
-        @JsonProperty(value = "timestamp", required = true)
-        @JsonInclude
-        @NotNull
-        private String timestamp;
+        @JsonProperty(value = "attributes")
+        @Valid
+        private AnyAttributes attributes;
       }
     }
   }
@@ -6243,11 +5922,12 @@ public class Models {
   public static class PayoutFailedNotificationResponse extends JsonRpcResponse<PayoutFailedNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("PayoutFailed");
+      }
     }
   }
 
@@ -6290,11 +5970,12 @@ public class Models {
   public static class PendingDirectCreditNotificationResponse extends JsonRpcResponse<PendingDirectCreditNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("pending");
+      }
     }
   }
 
@@ -6320,6 +6001,12 @@ public class Models {
       @SuperBuilder
       public static class Data extends AbstractPendingNotificationData {
         /**
+         * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
+         * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
+         */
+        @JsonProperty(value = "enduserid")
+        private String endUserID;
+        /**
          * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
          * <h2>Examples</h2>
          * <ul>
@@ -6330,14 +6017,10 @@ public class Models {
         @JsonProperty(value = "accountid")
         private String accountID;
         /**
-         * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
-         */
-        @JsonProperty(value = "enduserid")
-        private String endUserID;
-        /**
          * The expected payment date for the debit. Note that this gives you an indication if the paymentDate you submitted has been adjusted eg due to a bank holiday.
-         * <p>From PendingDirectDebitNotificationData</p>
+         * From PendingDirectDebitNotificationData
+         * <p>
+         * The expected payment date for the debit. Note that this gives you an indication if the paymentDate you submitted has been adjusted eg due to a bank holiday.
          */
         @JsonProperty(value = "paymentdate")
         private String paymentdate;
@@ -6353,11 +6036,12 @@ public class Models {
   public static class PendingDirectDebitNotificationResponse extends JsonRpcResponse<PendingDirectDebitNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("pending");
+      }
     }
   }
 
@@ -6395,11 +6079,12 @@ public class Models {
   public static class PendingDirectPaymentBatchNotificationResponse extends JsonRpcResponse<PendingDirectPaymentBatchNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("pending");
+      }
     }
   }
 
@@ -6425,9 +6110,16 @@ public class Models {
       @SuperBuilder
       public static class Data extends AbstractPendingNotificationData {
         /**
+         * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
+         * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
+         */
+        @JsonProperty(value = "enduserid")
+        private String endUserID;
+        /**
          * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
-         * <p>From PendingDirectDebitNotificationData</p>
+         * From PendingDirectDebitNotificationData
          * <p>
+         * The globally unique AccountID the account was assigned in our system. The AccountID of a returning customer. Allows for a quicker payment experience in some markets, see Trustly Express.
          * <h2>Examples</h2>
          * <ul>
          *   <li>1234567890</li>
@@ -6437,20 +6129,18 @@ public class Models {
         @JsonProperty(value = "accountid")
         private String accountID;
         /**
-         * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
-         */
-        @JsonProperty(value = "enduserid")
-        private String endUserID;
-        /**
          * The expected payment date for the debit. Note that this gives you an indication if the paymentDate you submitted has been adjusted eg due to a bank holiday.
-         * <p>From PendingDirectDebitNotificationData</p>
+         * From PendingDirectDebitNotificationData
+         * <p>
+         * The expected payment date for the debit. Note that this gives you an indication if the paymentDate you submitted has been adjusted eg due to a bank holiday.
          */
         @JsonProperty(value = "paymentdate")
         private String paymentdate;
         /**
          * Flag indicating that this is for Direct Debit refund. Note that this flag is not sent unless it's for a refund. Only value will be 1.
-         * <p>From PendingRefundDirectDebitNotificationData</p>
+         * From PendingRefundDirectDebitNotificationData
+         * <p>
+         * Flag indicating that this is for Direct Debit refund. Note that this flag is not sent unless it's for a refund. Only value will be 1.
          */
         @JsonProperty(value = "refund")
         private String refund;
@@ -6466,11 +6156,12 @@ public class Models {
   public static class PendingNotificationResponse extends JsonRpcResponse<PendingNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("pending");
+      }
     }
   }
 
@@ -6501,9 +6192,11 @@ public class Models {
          */
         @JsonProperty(value = "enduserid")
         private String endUserID;
+
         /**
          * Flag indicating that this is for Direct Debit refund. Note that this flag is not sent unless it's for a refund. Only value will be 1.
          */
+        @JsonProperty(value = "refund")
         public String getRefund() {
           return "1";
         }
@@ -6519,11 +6212,12 @@ public class Models {
   public static class PendingRefundDirectDebitNotificationResponse extends JsonRpcResponse<PendingRefundDirectDebitNotificationResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
-
+      public Result() {
+        super("pending");
+      }
     }
   }
 
@@ -6534,24 +6228,12 @@ public class Models {
   @SuperBuilder
   public static class RecipientOrSenderInformation {
     /**
-     * Full address of the recipient, excluding the country.
+     * Partytype can be <code>PERSON</code> or <code>ORGANISATION</code> (if the recipient or ultimate debtor is an organisation/company).
      */
-    @JsonProperty(value = "Address")
-    private String address;
-    /**
-     * The ISO 3166-1-alpha-2 code of the country that the recipient resides in.
-     */
-    @JsonProperty(value = "CountryCode", required = true)
+    @JsonProperty(value = "Partytype", required = true)
     @JsonInclude
     @NotNull
-    private String countryCode;
-    /**
-     * Payment account number or an alternative consistent unique identifier (e.g.customer number). Note: this is not a transaction ID or similar. This identifier must stay consistent across all transactions  relating to this recipient (payee).
-     */
-    @JsonProperty(value = "CustomerID")
-    private String customerId;
-    @JsonProperty(value = "DateOfBirth")
-    private String dateOfBirth;
+    private PartyTypeKind partytype;
     /**
      * First name of the person, or the name of the organization/company.
      */
@@ -6566,17 +6248,41 @@ public class Models {
     @JsonInclude
     private String lastname;
     /**
-     * Partytype can be <code>PERSON</code> or <code>ORGANISATION</code> (if the recipient or ultimate debtor is an organisation/company).
+     * The ISO 3166-1-alpha-2 code of the country that the recipient resides in.
      */
-    @JsonProperty(value = "Partytype", required = true)
+    @JsonProperty(value = "CountryCode", required = true)
     @JsonInclude
     @NotNull
-    private PartyTypeKind partytype;
+    private String countryCode;
+    /**
+     * Payment account number or an alternative consistent unique identifier (e.g.customer number). Note: this is not a transaction ID or similar. This identifier must stay consistent across all transactions  relating to this recipient (payee).
+     */
+    @JsonProperty(value = "CustomerID")
+    private String customerId;
+    /**
+     * Full address of the recipient, excluding the country.
+     */
+    @JsonProperty(value = "Address")
+    private String address;
+    /**
+     * Date of birth (YYYY-MM-DD, ISO 8601) of the beneficiary, or organisational number for the organisation.
+     * <p>
+     * Date string in the ISO 8601 format (YYYY-MM-DD)
+     * <h2>Examples</h2>
+     * <ul>
+     *   <li>2014-04-01</li>
+     * </ul>
+     */
+    @JsonProperty(value = "DateOfBirth")
+    private String dateOfBirth;
+
     public enum PartyTypeKind {
       PERSON("PERSON"),
       ORGANISATION("ORGANISATION");
+
       @JsonValue
       private final String value;
+
       PartyTypeKind(String value) {
         this.value = value;
       }
@@ -6605,6 +6311,28 @@ public class Models {
       @SuperBuilder
       public static class Data extends AbstractRequestData<AnyAttributes> {
         /**
+         * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the charge.
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>9594811343</li>
+         * </ul>
+         */
+        @JsonProperty(value = "OrderID", required = true)
+        @JsonInclude
+        @NotNull
+        private long orderId;
+        /**
+         * Your unique ID of the transaction.
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>12345678</li>
+         * </ul>
+         */
+        @JsonProperty(value = "MessageID", required = true)
+        @JsonInclude
+        @NotNull
+        private String messageId;
+        /**
          * The amount to deposit with exactly two decimals in the currency specified by Currency. Do not use this attribute in combination with<code>suggestedMinAmount</code> and <code>suggestedMaxAmount</code>. Only digits. Use dot (.) as decimal separator.
          */
         @JsonProperty(value = "Amount", required = true)
@@ -6631,28 +6359,6 @@ public class Models {
         @JsonProperty(value = "Currency", required = true)
         @JsonInclude
         private String currency;
-        /**
-         * Your unique ID of the transaction.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>12345678</li>
-         * </ul>
-         */
-        @JsonProperty(value = "MessageID", required = true)
-        @JsonInclude
-        @NotNull
-        private String messageId;
-        /**
-         * The globally unique OrderID the charge order was assigned in our system. The order has no end-user interaction; it is merely used as a reference for the notifications delivered regarding the charge.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>9594811343</li>
-         * </ul>
-         */
-        @JsonProperty(value = "OrderID", required = true)
-        @JsonInclude
-        @NotNull
-        private long orderId;
       }
     }
   }
@@ -6665,20 +6371,19 @@ public class Models {
   public static class RefundDirectDebitResponse extends JsonRpcResponse<RefundDirectDebitResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("RefundDirectDebit");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
       @Setter
       @SuperBuilder
-      public static class Data extends WithRejection<Data.RefundDirectDebitRejected> {
-        @JsonProperty(value = "result", required = true)
-        @JsonInclude
-        @NotNull
-        private StringBoolean result;
+      public static class Data extends WithRejection<StringBoolean, Data.RefundDirectDebitRejected> {
         public enum RefundDirectDebitRejected {
           /**
            * The debit order wasn't found.
@@ -6696,8 +6401,10 @@ public class Models {
            * The currency does not match the original debit order.
            */
           ERROR_CURRENCY_FAILURE("ERROR_CURRENCY_FAILURE");
+
           @JsonValue
           private final String value;
+
           RefundDirectDebitRejected(String value) {
             this.value = value;
           }
@@ -6727,9 +6434,13 @@ public class Models {
       @Setter
       @SuperBuilder
       public static class Data extends AbstractRequestData<Data.Attributes> implements IAdditionalProperties {
-        @Singular
-        @JsonAnySetter
-        private Map<String, Object> additionalProperties;
+        /**
+         * The OrderID of the initial deposit.
+         */
+        @JsonProperty(value = "OrderID", required = true)
+        @JsonInclude
+        @NotNull
+        private String orderId;
         /**
          * The amount to refund the customer with exactly two decimals. Only digits. Use dot (.) as decimal separator.
          */
@@ -6744,13 +6455,10 @@ public class Models {
         @JsonInclude
         @NotNull
         private String currency;
-        /**
-         * The OrderID of the initial deposit.
-         */
-        @JsonProperty(value = "OrderID", required = true)
-        @JsonInclude
-        @NotNull
-        private String orderId;
+        @Singular
+        @JsonAnySetter
+        private Map<String, Object> additionalProperties;
+
         public void addAdditionalProperty(String key, Object value) {
           this.additionalProperties.put(key, value);
         }
@@ -6788,10 +6496,13 @@ public class Models {
   public static class RefundResponse extends JsonRpcResponse<RefundResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("Refund");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
@@ -6838,70 +6549,13 @@ public class Models {
       @SuperBuilder
       public static class Data extends AbstractRequestData<Data.Attributes> implements IAdditionalProperties {
         /**
-         * The account number, identifying the end-user's account in the bank. Can be either IBAN or country-specific format, see examples or read more at https://developers.trustly.com/emea/docs/registeraccount
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>6112</li>
-         *   <li>391124057</li>
-         *   <li>AUSTRIA: ^AT[0-9]{18}$</li>
-         *   <li>BELGIUM: ^BE[0-9]{14}$</li>
-         *   <li>BULGARIA: ^BG[0-9]{2}[A-Z]{4}[0-9]{4}[0-9]{2}[A-Z0-9]{8}$</li>
-         *   <li>CROATIA: ^HR[0-9]{2}[0-9]{7}[0-9]{10}$</li>
-         *   <li>CYPRUS: ^CY[0-9]{10}[0-9A-Z]{16}$</li>
-         *   <li>CZECH_REPUBLIC: ^CZ[0-9]{22}$</li>
-         *   <li>DENMARK: ^DK[0-9]{16}$</li>
-         *   <li>ESTONIA: ^EE[0-9]{18}$</li>
-         *   <li>FINLAND: ^FI[0-9]{16}$</li>
-         *   <li>FRANCE: ^FR[0-9]{12}[0-9A-Z]{11}[0-9]{2}$</li>
-         *   <li>GERMANY: ^DE[0-9]{20}$</li>
-         *   <li>GREECE: ^GR[0-9]{25}$</li>
-         *   <li>HUNGARY: ^HU[0-9]{26}$</li>
-         *   <li>IRELAND: ^IE[0-9]{2}[A-Z]{4}[0-9]{14}$</li>
-         *   <li>ITALY: ^IT[0-9]{2}[A-Z][0-9]{10}[0-9A-Z]{12}$</li>
-         *   <li>LATVIA: ^LV[0-9]{2}[A-Z]{4}[0-9A-Z]{13}$</li>
-         *   <li>LITHUANIA: ^LT[0-9]{18}$</li>
-         *   <li>LUXEMBOURG: ^LU[0-9]{18}$</li>
-         *   <li>MALTA: ^MT[0-9]{2}[A-Z]{4}[0-9]{5}[0-9A-Z]{18}$</li>
-         *   <li>NETHERLANDS: ^NL[0-9]{2}[A-Z]{4}[0-9]{10}$</li>
-         *   <li>NORWAY: ^NO[0-9]{13}$</li>
-         *   <li>POLAND: ^PL[0-9]{26}$</li>
-         *   <li>PORTUGAL: ^PT[0-9]{23}$</li>
-         *   <li>ROMANIA: ^RO[0-9]{2}[A-Z]{4}[0-9A-Z]{16}$</li>
-         *   <li>SLOVAKIA: ^SK[0-9]{22}$</li>
-         *   <li>SLOVENIA: ^SI56[0-9]{15}$</li>
-         *   <li>SPAIN: ^ES[0-9]{22}$</li>
-         *   <li>SWEDEN:* [0-9]{1,15}$</li>
-         *   <li>UNITED_KINGDOM: ^[0-9]{8}$</li>
-         * </ul>
+         * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
+         * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
-        @JsonProperty(value = "AccountNumber", required = true)
+        @JsonProperty(value = "EndUserID", required = true)
         @JsonInclude
         @NotNull
-        private String accountNumber;
-        @Singular
-        @JsonAnySetter
-        private Map<String, Object> additionalProperties;
-        /**
-         * The amount to send with exactly two decimals. Only digits. Use dot (.) as decimal separator. If the end-user holds a balance in the merchant's system then the amount must have been deducted from that balance before calling this method.
-         */
-        @JsonProperty(value = "Amount", required = true)
-        @JsonInclude
-        @NotNull
-        private String amount;
-        /**
-         * The bank number identifying the end-user's bank in the given clearing house. For bank accounts in IBAN format you should just provide an empty string (""). For non-IBAN format, see examples. The BankNumber for Swedish bank accounts should be the local "clearing number", and the AccountNumber parameter should contain the rest of the account number. Most Swedish banks have a 4-digit clearing number, but a 5-digit clearing number is used for Swedbank accounts when the clearing number starts with "8". Nordea accounts where the account number is the same as the person's national identification number always has "3300" as the clearing number.
-         * <p>
-         * IBAN for Swedish bank accounts is supported upon request. When making API calls with Swedish IBAN, ensure to include the Clearinghouse attribute as "IBAN" instead of "SWEDEN". See more at https://developers.trustly.com/emea/docs/registeraccount
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>Sweden: ^[0-9]{4,5}$</li>
-         *   <li>United Kingdom: ^[0-9]{6}$</li>
-         * </ul>
-         */
-        @JsonProperty(value = "BankNumber", required = true)
-        @JsonInclude
-        @NotNull
-        private String bankNumber;
+        private String endUserId;
         /**
          * The clearing house of the end-user's bank account. Typically the name of a country in uppercase letters. See examples or table at https://developers.trustly.com/emea/docs/registeraccount.
          * <h2>Examples</h2>
@@ -6942,6 +6596,99 @@ public class Models {
         @NotNull
         private String clearingHouse;
         /**
+         * The bank number identifying the end-user's bank in the given clearing house. For bank accounts in IBAN format you should just provide an empty string (""). For non-IBAN format, see examples. The BankNumber for Swedish bank accounts should be the local "clearing number", and the AccountNumber parameter should contain the rest of the account number. Most Swedish banks have a 4-digit clearing number, but a 5-digit clearing number is used for Swedbank accounts when the clearing number starts with "8". Nordea accounts where the account number is the same as the person's national identification number always has "3300" as the clearing number.
+         * <p>
+         * IBAN for Swedish bank accounts is supported upon request. When making API calls with Swedish IBAN, ensure to include the Clearinghouse attribute as "IBAN" instead of "SWEDEN". See more at https://developers.trustly.com/emea/docs/registeraccount
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>Sweden: ^[0-9]{4,5}$</li>
+         *   <li>United Kingdom: ^[0-9]{6}$</li>
+         * </ul>
+         */
+        @JsonProperty(value = "BankNumber", required = true)
+        @JsonInclude
+        @NotNull
+        private String bankNumber;
+        /**
+         * The account number, identifying the end-user's account in the bank. Can be either IBAN or country-specific format, see examples or read more at https://developers.trustly.com/emea/docs/registeraccount
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>6112</li>
+         *   <li>391124057</li>
+         *   <li>AUSTRIA: ^AT[0-9]{18}$</li>
+         *   <li>BELGIUM: ^BE[0-9]{14}$</li>
+         *   <li>BULGARIA: ^BG[0-9]{2}[A-Z]{4}[0-9]{4}[0-9]{2}[A-Z0-9]{8}$</li>
+         *   <li>CROATIA: ^HR[0-9]{2}[0-9]{7}[0-9]{10}$</li>
+         *   <li>CYPRUS: ^CY[0-9]{10}[0-9A-Z]{16}$</li>
+         *   <li>CZECH_REPUBLIC: ^CZ[0-9]{22}$</li>
+         *   <li>DENMARK: ^DK[0-9]{16}$</li>
+         *   <li>ESTONIA: ^EE[0-9]{18}$</li>
+         *   <li>FINLAND: ^FI[0-9]{16}$</li>
+         *   <li>FRANCE: ^FR[0-9]{12}[0-9A-Z]{11}[0-9]{2}$</li>
+         *   <li>GERMANY: ^DE[0-9]{20}$</li>
+         *   <li>GREECE: ^GR[0-9]{25}$</li>
+         *   <li>HUNGARY: ^HU[0-9]{26}$</li>
+         *   <li>IRELAND: ^IE[0-9]{2}[A-Z]{4}[0-9]{14}$</li>
+         *   <li>ITALY: ^IT[0-9]{2}[A-Z][0-9]{10}[0-9A-Z]{12}$</li>
+         *   <li>LATVIA: ^LV[0-9]{2}[A-Z]{4}[0-9A-Z]{13}$</li>
+         *   <li>LITHUANIA: ^LT[0-9]{18}$</li>
+         *   <li>LUXEMBOURG: ^LU[0-9]{18}$</li>
+         *   <li>MALTA: ^MT[0-9]{2}[A-Z]{4}[0-9]{5}[0-9A-Z]{18}$</li>
+         *   <li>NETHERLANDS: ^NL[0-9]{2}[A-Z]{4}[0-9]{10}$</li>
+         *   <li>NORWAY: ^NO[0-9]{13}$</li>
+         *   <li>POLAND: ^PL[0-9]{26}$</li>
+         *   <li>PORTUGAL: ^PT[0-9]{23}$</li>
+         *   <li>ROMANIA: ^RO[0-9]{2}[A-Z]{4}[0-9A-Z]{16}$</li>
+         *   <li>SLOVAKIA: ^SK[0-9]{22}$</li>
+         *   <li>SLOVENIA: ^SI56[0-9]{15}$</li>
+         *   <li>SPAIN: ^ES[0-9]{22}$</li>
+         *   <li>SWEDEN:* [0-9]{1,15}$</li>
+         *   <li>UNITED_KINGDOM: ^[0-9]{8}$</li>
+         * </ul>
+         */
+        @JsonProperty(value = "AccountNumber", required = true)
+        @JsonInclude
+        @NotNull
+        private String accountNumber;
+        /**
+         * First name of the person, or the name of the organization/company.
+         */
+        @JsonProperty(value = "Firstname", required = true)
+        @JsonInclude
+        @NotNull
+        private String firstname;
+        /**
+         * Last name of the person (NULL/empty for organization/company).
+         */
+        @JsonProperty(value = "Lastname", required = true)
+        @JsonInclude
+        private String lastname;
+        /**
+         * The URL to which notifications for this should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>https://example.com/trustly/notification/a2b63j23dj23883jhfhfh</li>
+         * </ul>
+         */
+        @JsonProperty(value = "NotificationURL", required = true)
+        @JsonInclude
+        @NotNull
+        private String notificationUrl;
+        /**
+         * Your unique ID for the payout. If the MessageID is a previously initiated P2P order then the payout will be attached to that P2P order and the amount must be equal to or lower than the previously deposited amount.
+         */
+        @JsonProperty(value = "MessageID", required = true)
+        @JsonInclude
+        @NotNull
+        private String messageId;
+        /**
+         * The amount to send with exactly two decimals. Only digits. Use dot (.) as decimal separator. If the end-user holds a balance in the merchant's system then the amount must have been deducted from that balance before calling this method.
+         */
+        @JsonProperty(value = "Amount", required = true)
+        @JsonInclude
+        @NotNull
+        private String amount;
+        /**
          * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
          * <h2>Examples</h2>
          * <ul>
@@ -6961,45 +6708,10 @@ public class Models {
         @JsonProperty(value = "Currency", required = true)
         @JsonInclude
         private String currency;
-        /**
-         * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
-         */
-        @JsonProperty(value = "EndUserID", required = true)
-        @JsonInclude
-        @NotNull
-        private String endUserId;
-        /**
-         * First name of the person, or the name of the organization/company.
-         */
-        @JsonProperty(value = "Firstname", required = true)
-        @JsonInclude
-        @NotNull
-        private String firstname;
-        /**
-         * Last name of the person (NULL/empty for organization/company).
-         */
-        @JsonProperty(value = "Lastname", required = true)
-        @JsonInclude
-        private String lastname;
-        /**
-         * Your unique ID for the payout. If the MessageID is a previously initiated P2P order then the payout will be attached to that P2P order and the amount must be equal to or lower than the previously deposited amount.
-         */
-        @JsonProperty(value = "MessageID", required = true)
-        @JsonInclude
-        @NotNull
-        private String messageId;
-        /**
-         * The URL to which notifications for this should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>https://example.com/trustly/notification/a2b63j23dj23883jhfhfh</li>
-         * </ul>
-         */
-        @JsonProperty(value = "NotificationURL", required = true)
-        @JsonInclude
-        @NotNull
-        private String notificationUrl;
+        @Singular
+        @JsonAnySetter
+        private Map<String, Object> additionalProperties;
+
         public void addAdditionalProperty(String key, Object value) {
           this.additionalProperties.put(key, value);
         }
@@ -7016,58 +6728,14 @@ public class Models {
         @SuperBuilder
         public static class Attributes extends AbstractRequestDataAttributes {
           /**
-           * The entire shipping address.
-           * This attribute should only be used if you are unable to provide the shipping address information in the 5 separate properties: <code>AddressCountry, </code>AddressCity<code>, </code>AddressPostalCode<code>, </code>AddressLine1, <code>AddressLine2</code>
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>Birgerstreet 14, SE-11411, Stockholm, Sweden</li>
-           * </ul>
+           * The text to show on the end-user's bank statement after Trustly's own 10 digit reference (which always will be displayed first). The reference must let the end user identify the merchant based on this value. So the ShopperStatement should contain either your brand name, website name, or company name.
+           * <p>
+           * If possible, try to keep this text as short as possible to maximise the chance that the full reference will fit into the reference field on the customer's bank since some banks allow only a limited number of characters. If the full ShopperStatement does not fit into the reference it will be truncated from the end.
            */
-          @JsonProperty(value = "Address")
-          private String address;
-          /**
-           * The city of the recipient address.
-           */
-          @JsonProperty(value = "AddressCity")
-          private String addressCity;
-          /**
-           * The ISO 3166-1-alpha-2 code of the recipient address country.
-           */
-          @JsonProperty(value = "AddressCountry")
-          private String addressCountry;
-          /**
-           * Recipient address street
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>Main Street 1</li>
-           * </ul>
-           */
-          @JsonProperty(value = "AddressLine1")
-          private String addressLine1;
-          /**
-           * Additional address information of the recipient.
-           */
-          @JsonProperty(value = "AddressLine2")
-          private String addressLine2;
-          /**
-           * The postalcode of the recipient address.
-           */
-          @JsonProperty(value = "AddressPostalCode")
-          private String addressPostalCode;
-          /**
-           * The end-user's date of birth.
-           */
-          @JsonProperty(value = "DateOfBirth")
-          private String dateOfBirth;
-          /**
-           * The email address of the end user.
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>test@trustly.com</li>
-           * </ul>
-           */
-          @JsonProperty(value = "Email")
-          private String email;
+          @JsonProperty(value = "ShopperStatement", required = true)
+          @JsonInclude
+          @NotNull
+          private String shopperStatement;
           /**
            * The ExternalReference is a reference set by the merchant for any purpose and does not need to be unique for every API call. For example, it can be used for invoice references, OCR numbers and also for offering end users the option to part-pay an invoice using the same ExternalReference. The ExternalReference will be included in version 1.2 of the settlement report, <code>ViewAutomaticSettlementDetailsCSV</code>.
            * <h2>Examples</h2>
@@ -7077,27 +6745,6 @@ public class Models {
            */
           @JsonProperty(value = "ExternalReference")
           private String externalReference;
-          /**
-           * VISA category codes describing the merchant's nature of business.
-           * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master processing account.  It is also mandatory for E-wallets used directly in a merchant's checkout.
-           * Mandatory attributes for Trustly Partners that are using Express account. It is also mandatory for E-wallets used directly in a merchant's checkout, whereby the purpose of a Trustly transaction is to pay for goods/services by placing funds on the payer's e-money account ("funding stage") following an immediate transfer into the e-money account of the payee ( "payment" stage).
-           */
-          @JsonProperty(value = "MerchantCategoryCode")
-          private String merchantCategoryCode;
-          /**
-           * The mobile phone number to the end-user in international format. This is used for KYC and AML routines.
-           */
-          @JsonProperty(value = "MobilePhone")
-          private String mobilePhone;
-          /**
-           * The end-user's social security number / personal number / birth number / etc.  Useful for some banks for identifying transactions and KYC/AML. If a Swedish personid ("personnummer") is provided, it will be pre-filled when the user logs in to their bank.
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>790131-1234</li>
-           * </ul>
-           */
-          @JsonProperty(value = "NationalIdentificationNumber")
-          private String nationalIdentificationNumber;
           /**
            * Human-readable identifier of the consumer-facing merchant (e.g. legal name or trade name)
            * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master processing account.  It is also mandatory for E-wallets used directly in a merchant's checkout.
@@ -7113,20 +6760,85 @@ public class Models {
           @JsonProperty(value = "PSPMerchantURL")
           private String pspMerchantUrl;
           /**
+           * VISA category codes describing the merchant's nature of business.
+           * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master processing account.  It is also mandatory for E-wallets used directly in a merchant's checkout.
+           * Mandatory attributes for Trustly Partners that are using Express account. It is also mandatory for E-wallets used directly in a merchant's checkout, whereby the purpose of a Trustly transaction is to pay for goods/services by placing funds on the payer's e-money account ("funding stage") following an immediate transfer into the e-money account of the payee ( "payment" stage).
+           */
+          @JsonProperty(value = "MerchantCategoryCode")
+          private String merchantCategoryCode;
+          /**
            * Information about the Payer (ultimate debtor). This is required for some merchants and partners. SenderInformation is mandatory to send in Attributes{} for money transfer services (including remittance houses), e-wallets, prepaid cards, as well as for Trustly Partners that are using Express Merchant Onboarding and aggregate traffic under a master processing account (other cases may also apply).
            */
           @JsonProperty(value = "SenderInformation")
           @Valid
           private SenderInformation senderInformation;
           /**
-           * The text to show on the end-user's bank statement after Trustly's own 10 digit reference (which always will be displayed first). The reference must let the end user identify the merchant based on this value. So the ShopperStatement should contain either your brand name, website name, or company name.
-           * <p>
-           * If possible, try to keep this text as short as possible to maximise the chance that the full reference will fit into the reference field on the customer's bank since some banks allow only a limited number of characters. If the full ShopperStatement does not fit into the reference it will be truncated from the end.
+           * The end-user's date of birth.
            */
-          @JsonProperty(value = "ShopperStatement", required = true)
-          @JsonInclude
-          @NotNull
-          private String shopperStatement;
+          @JsonProperty(value = "DateOfBirth")
+          private String dateOfBirth;
+          /**
+           * The mobile phone number to the end-user in international format. This is used for KYC and AML routines.
+           */
+          @JsonProperty(value = "MobilePhone")
+          private String mobilePhone;
+          /**
+           * The end-user's social security number / personal number / birth number / etc.  Useful for some banks for identifying transactions and KYC/AML. If a Swedish personid ("personnummer") is provided, it will be pre-filled when the user logs in to their bank.
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>790131-1234</li>
+           * </ul>
+           */
+          @JsonProperty(value = "NationalIdentificationNumber")
+          private String nationalIdentificationNumber;
+          /**
+           * The ISO 3166-1-alpha-2 code of the recipient address country.
+           */
+          @JsonProperty(value = "AddressCountry")
+          private String addressCountry;
+          /**
+           * The postalcode of the recipient address.
+           */
+          @JsonProperty(value = "AddressPostalCode")
+          private String addressPostalCode;
+          /**
+           * The city of the recipient address.
+           */
+          @JsonProperty(value = "AddressCity")
+          private String addressCity;
+          /**
+           * Recipient address street
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>Main Street 1</li>
+           * </ul>
+           */
+          @JsonProperty(value = "AddressLine1")
+          private String addressLine1;
+          /**
+           * Additional address information of the recipient.
+           */
+          @JsonProperty(value = "AddressLine2")
+          private String addressLine2;
+          /**
+           * The entire shipping address.
+           * This attribute should only be used if you are unable to provide the shipping address information in the 5 separate properties: <code>AddressCountry, </code>AddressCity<code>, </code>AddressPostalCode<code>, </code>AddressLine1, <code>AddressLine2</code>
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>Birgerstreet 14, SE-11411, Stockholm, Sweden</li>
+           * </ul>
+           */
+          @JsonProperty(value = "Address")
+          private String address;
+          /**
+           * The email address of the end user.
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>test@trustly.com</li>
+           * </ul>
+           */
+          @JsonProperty(value = "Email")
+          private String email;
         }
       }
     }
@@ -7140,10 +6852,13 @@ public class Models {
   public static class RegisterAccountPayoutResponse extends JsonRpcResponse<RegisterAccountPayoutResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("RegisterAccountPayout");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
@@ -7194,6 +6909,65 @@ public class Models {
       @SuperBuilder
       public static class Data extends AbstractRequestData<Data.Attributes> {
         /**
+         * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
+         * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
+         */
+        @JsonProperty(value = "EndUserID")
+        private String endUserId;
+        /**
+         * The clearing house of the end-user's bank account. Typically the name of a country in uppercase letters. See examples or table at https://developers.trustly.com/emea/docs/registeraccount.
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>AUSTRIA</li>
+         *   <li>BELGIUM</li>
+         *   <li>BULGARIA</li>
+         *   <li>CROATIA</li>
+         *   <li>CYPRUS</li>
+         *   <li>CZECH_REPUBLIC</li>
+         *   <li>DENMARK</li>
+         *   <li>ESTONIA</li>
+         *   <li>FINLAND</li>
+         *   <li>FRANCE</li>
+         *   <li>GERMANY</li>
+         *   <li>GREECE</li>
+         *   <li>HUNGARY</li>
+         *   <li>IRELAND</li>
+         *   <li>ITALY</li>
+         *   <li>LATVIA</li>
+         *   <li>LITHUANIA</li>
+         *   <li>LUXEMBOURG</li>
+         *   <li>MALTA</li>
+         *   <li>NETHERLANDS</li>
+         *   <li>NORWAY</li>
+         *   <li>POLAND</li>
+         *   <li>PORTUGAL</li>
+         *   <li>ROMANIA</li>
+         *   <li>SLOVAKIA</li>
+         *   <li>SLOVENIA</li>
+         *   <li>SPAIN</li>
+         *   <li>SWEDEN</li>
+         *   <li>UNITED_KINGDOM</li>
+         * </ul>
+         */
+        @JsonProperty(value = "ClearingHouse", required = true)
+        @JsonInclude
+        @NotNull
+        private String clearingHouse;
+        /**
+         * The bank number identifying the end-user's bank in the given clearing house. For bank accounts in IBAN format you should just provide an empty string (""). For non-IBAN format, see examples. The BankNumber for Swedish bank accounts should be the local "clearing number", and the AccountNumber parameter should contain the rest of the account number. Most Swedish banks have a 4-digit clearing number, but a 5-digit clearing number is used for Swedbank accounts when the clearing number starts with "8". Nordea accounts where the account number is the same as the person's national identification number always has "3300" as the clearing number.
+         * <p>
+         * IBAN for Swedish bank accounts is supported upon request. When making API calls with Swedish IBAN, ensure to include the Clearinghouse attribute as "IBAN" instead of "SWEDEN". See more at https://developers.trustly.com/emea/docs/registeraccount
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>Sweden: ^[0-9]{4,5}$</li>
+         *   <li>United Kingdom: ^[0-9]{6}$</li>
+         * </ul>
+         */
+        @JsonProperty(value = "BankNumber", required = true)
+        @JsonInclude
+        @NotNull
+        private String bankNumber;
+        /**
          * The account number, identifying the end-user's account in the bank. Can be either IBAN or country-specific format, see examples or read more at https://developers.trustly.com/emea/docs/registeraccount
          * <h2>Examples</h2>
          * <ul>
@@ -7235,65 +7009,6 @@ public class Models {
         @NotNull
         private String accountNumber;
         /**
-         * The bank number identifying the end-user's bank in the given clearing house. For bank accounts in IBAN format you should just provide an empty string (""). For non-IBAN format, see examples. The BankNumber for Swedish bank accounts should be the local "clearing number", and the AccountNumber parameter should contain the rest of the account number. Most Swedish banks have a 4-digit clearing number, but a 5-digit clearing number is used for Swedbank accounts when the clearing number starts with "8". Nordea accounts where the account number is the same as the person's national identification number always has "3300" as the clearing number.
-         * <p>
-         * IBAN for Swedish bank accounts is supported upon request. When making API calls with Swedish IBAN, ensure to include the Clearinghouse attribute as "IBAN" instead of "SWEDEN". See more at https://developers.trustly.com/emea/docs/registeraccount
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>Sweden: ^[0-9]{4,5}$</li>
-         *   <li>United Kingdom: ^[0-9]{6}$</li>
-         * </ul>
-         */
-        @JsonProperty(value = "BankNumber", required = true)
-        @JsonInclude
-        @NotNull
-        private String bankNumber;
-        /**
-         * The clearing house of the end-user's bank account. Typically the name of a country in uppercase letters. See examples or table at https://developers.trustly.com/emea/docs/registeraccount.
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>AUSTRIA</li>
-         *   <li>BELGIUM</li>
-         *   <li>BULGARIA</li>
-         *   <li>CROATIA</li>
-         *   <li>CYPRUS</li>
-         *   <li>CZECH_REPUBLIC</li>
-         *   <li>DENMARK</li>
-         *   <li>ESTONIA</li>
-         *   <li>FINLAND</li>
-         *   <li>FRANCE</li>
-         *   <li>GERMANY</li>
-         *   <li>GREECE</li>
-         *   <li>HUNGARY</li>
-         *   <li>IRELAND</li>
-         *   <li>ITALY</li>
-         *   <li>LATVIA</li>
-         *   <li>LITHUANIA</li>
-         *   <li>LUXEMBOURG</li>
-         *   <li>MALTA</li>
-         *   <li>NETHERLANDS</li>
-         *   <li>NORWAY</li>
-         *   <li>POLAND</li>
-         *   <li>PORTUGAL</li>
-         *   <li>ROMANIA</li>
-         *   <li>SLOVAKIA</li>
-         *   <li>SLOVENIA</li>
-         *   <li>SPAIN</li>
-         *   <li>SWEDEN</li>
-         *   <li>UNITED_KINGDOM</li>
-         * </ul>
-         */
-        @JsonProperty(value = "ClearingHouse", required = true)
-        @JsonInclude
-        @NotNull
-        private String clearingHouse;
-        /**
-         * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
-         * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
-         */
-        @JsonProperty(value = "EndUserID")
-        private String endUserId;
-        /**
          * First name of the person, or the name of the organization/company.
          */
         @JsonProperty(value = "Firstname", required = true)
@@ -7306,6 +7021,7 @@ public class Models {
         @JsonProperty(value = "Lastname", required = true)
         @JsonInclude
         private String lastname;
+
         @Getter
         @Jacksonized
         @RequiredArgsConstructor
@@ -7313,54 +7029,10 @@ public class Models {
         @SuperBuilder
         public static class Attributes extends AbstractRequestDataAttributes {
           /**
-           * The entire shipping address.
-           * This attribute should only be used if you are unable to provide the shipping address information in the 5 separate properties: <code>AddressCountry, </code>AddressCity<code>, </code>AddressPostalCode<code>, </code>AddressLine1, <code>AddressLine2</code>
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>Birgerstreet 14, SE-11411, Stockholm, Sweden</li>
-           * </ul>
-           */
-          @JsonProperty(value = "Address")
-          private String address;
-          /**
-           * The city of the recipient address.
-           */
-          @JsonProperty(value = "AddressCity")
-          private String addressCity;
-          /**
-           * The ISO 3166-1-alpha-2 code of the recipient address country.
-           */
-          @JsonProperty(value = "AddressCountry")
-          private String addressCountry;
-          /**
-           * The ISO 3166-1-alpha-2 code of the recipient address country.
-           */
-          @JsonProperty(value = "AddressLine1")
-          private String addressLine1;
-          /**
-           * The ISO 3166-1-alpha-2 code of the recipient address country.
-           */
-          @JsonProperty(value = "AddressLine2")
-          private String addressLine2;
-          /**
-           * The postalcode of the recipient address.
-           */
-          @JsonProperty(value = "AddressPostalCode")
-          private String addressPostalCode;
-          /**
            * The end-user's date of birth.
            */
           @JsonProperty(value = "DateOfBirth")
           private String dateOfBirth;
-          /**
-           * The email address of the end user.
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>test@trustly.com</li>
-           * </ul>
-           */
-          @JsonProperty(value = "Email")
-          private String email;
           /**
            * The mobile phone number to the end-user in international format. This is used for KYC and AML routines.
            */
@@ -7375,6 +7047,50 @@ public class Models {
            */
           @JsonProperty(value = "NationalIdentificationNumber")
           private String nationalIdentificationNumber;
+          /**
+           * The ISO 3166-1-alpha-2 code of the recipient address country.
+           */
+          @JsonProperty(value = "AddressCountry")
+          private String addressCountry;
+          /**
+           * The postalcode of the recipient address.
+           */
+          @JsonProperty(value = "AddressPostalCode")
+          private String addressPostalCode;
+          /**
+           * The city of the recipient address.
+           */
+          @JsonProperty(value = "AddressCity")
+          private String addressCity;
+          /**
+           * The ISO 3166-1-alpha-2 code of the recipient address country.
+           */
+          @JsonProperty(value = "AddressLine1")
+          private String addressLine1;
+          /**
+           * The ISO 3166-1-alpha-2 code of the recipient address country.
+           */
+          @JsonProperty(value = "AddressLine2")
+          private String addressLine2;
+          /**
+           * The entire shipping address.
+           * This attribute should only be used if you are unable to provide the shipping address information in the 5 separate properties: <code>AddressCountry, </code>AddressCity<code>, </code>AddressPostalCode<code>, </code>AddressLine1, <code>AddressLine2</code>
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>Birgerstreet 14, SE-11411, Stockholm, Sweden</li>
+           * </ul>
+           */
+          @JsonProperty(value = "Address")
+          private String address;
+          /**
+           * The email address of the end user.
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>test@trustly.com</li>
+           * </ul>
+           */
+          @JsonProperty(value = "Email")
+          private String email;
         }
       }
     }
@@ -7388,10 +7104,13 @@ public class Models {
   public static class RegisterAccountResponse extends JsonRpcResponse<RegisterAccountResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("RegisterAccount");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
@@ -7408,19 +7127,6 @@ public class Models {
          */
         @JsonProperty(value = "accountid")
         private String accountID;
-        @Singular
-        @JsonAnySetter
-        private Map<String, Object> additionalProperties;
-        /**
-         * The bank for this account
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>SEB</li>
-         *   <li>Skandiabanken</li>
-         * </ul>
-         */
-        @JsonProperty(value = "bank")
-        private String bank;
         /**
          * The clearing house of the end-user's bank account. Typically the name of a country in uppercase letters. See examples or table at https://developers.trustly.com/emea/docs/registeraccount.
          * <h2>Examples</h2>
@@ -7459,6 +7165,16 @@ public class Models {
         @JsonProperty(value = "clearinghouse")
         private String clearingHouse;
         /**
+         * The bank for this account
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>SEB</li>
+         *   <li>Skandiabanken</li>
+         * </ul>
+         */
+        @JsonProperty(value = "bank")
+        private String bank;
+        /**
          * A text that is safe to show the enduser for identifying the account. Do not parse this text since it will be a different format for different accounts.
          * <h2>Examples</h2>
          * <ul>
@@ -7467,6 +7183,10 @@ public class Models {
          */
         @JsonProperty(value = "descriptor")
         private String descriptor;
+        @Singular
+        @JsonAnySetter
+        private Map<String, Object> additionalProperties;
+
         public void addAdditionalProperty(String key, Object value) {
           this.additionalProperties.put(key, value);
         }
@@ -7482,18 +7202,12 @@ public class Models {
   @SuperBuilder
   @Jacksonized
   @Getter
-  @RequiredArgsConstructor
   @Setter
   public static class ResponseResult<TData> {
-    @JsonProperty(value = "data", required = true)
-    @JsonInclude
-    @NotNull
-    @Valid
-    private TData data;
     @JsonProperty(value = "method", required = true)
     @JsonInclude
     @NotNull
-    private String method;
+    private final String method;
     @JsonProperty(value = "signature", required = true)
     @JsonInclude
     @NotNull
@@ -7502,6 +7216,15 @@ public class Models {
     @JsonInclude
     @NotNull
     private String UUID;
+    @JsonProperty(value = "data", required = true)
+    @JsonInclude
+    @NotNull
+    @Valid
+    private TData data;
+
+    public ResponseResult(@JsonProperty(value = "method", required = true) String method) {
+      this.method = method;
+    }
   }
 
   @Getter
@@ -7529,6 +7252,17 @@ public class Models {
       @SuperBuilder
       public static class Data extends AbstractRequestData<Data.Attributes> {
         /**
+         * The URL to which notifications for this should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>https://example.com/trustly/notification/a2b63j23dj23883jhfhfh</li>
+         * </ul>
+         */
+        @JsonProperty(value = "NotificationURL", required = true)
+        @JsonInclude
+        @NotNull
+        private String notificationUrl;
+        /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
@@ -7547,23 +7281,26 @@ public class Models {
         @JsonInclude
         @NotNull
         private String messageId;
-        /**
-         * The URL to which notifications for this should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>https://example.com/trustly/notification/a2b63j23dj23883jhfhfh</li>
-         * </ul>
-         */
-        @JsonProperty(value = "NotificationURL", required = true)
-        @JsonInclude
-        @NotNull
-        private String notificationUrl;
+
         @Getter
         @Jacksonized
         @RequiredArgsConstructor
         @Setter
         @SuperBuilder
         public static class Attributes extends AbstractRequestDataAttributes {
+          /**
+           * First name of the person, or the name of the organization/company.
+           */
+          @JsonProperty(value = "Firstname", required = true)
+          @JsonInclude
+          @NotNull
+          private String firstname;
+          /**
+           * Last name of the person (NULL/empty for organization/company).
+           */
+          @JsonProperty(value = "Lastname", required = true)
+          @JsonInclude
+          private String lastname;
           /**
            * The ISO 3166-1-alpha-2 code of the end-user's country. This will be used for pre-selecting the country for the end-user in the iframe.
            * Note: This will only have an effect for new end-users. If an end-user has done a previous order (with the same EndUserID), the country that was last used will be pre-selected.
@@ -7573,10 +7310,19 @@ public class Models {
           @NotNull
           private String country;
           /**
-           * The end-user's date of birth.
+           * The end-users localization preference in the format language[_territory]. Language is the ISO 639-1 code and territory the ISO 3166-1-alpha-2 code.
            */
-          @JsonProperty(value = "DateOfBirth")
-          private String dateOfBirth;
+          @JsonProperty(value = "Locale", required = true)
+          @JsonInclude
+          @NotNull
+          private String locale;
+          /**
+           * The text to show on the end-user's bank statement after Trustly's own 10 digit reference (which always will be displayed first). The reference must let the end user identify the merchant based on this value. So the ShopperStatement should contain either your brand name, website name, or company name.
+           * <p>
+           * If possible, try to keep this text as short as possible to maximise the chance that the full reference will fit into the reference field on the customer's bank since some banks allow only a limited number of characters. If the full ShopperStatement does not fit into the reference it will be truncated from the end.
+           */
+          @JsonProperty(value = "ShopperStatement")
+          private String shopperStatement;
           /**
            * The email address of the end user.
            * <h2>Examples</h2>
@@ -7587,6 +7333,23 @@ public class Models {
           @JsonProperty(value = "Email")
           private String email;
           /**
+           * The mobile phone number to the end-user in international format. This is used for KYC and AML routines.
+           */
+          @JsonProperty(value = "MobilePhone")
+          private String mobilePhone;
+          /**
+           * The IP-address of the end-user.
+           */
+          @JsonProperty(value = "IP")
+          private String ip;
+          /**
+           * The URL to which the end-user should be redirected after a successful deposit.  Do not put any logic on that page since it's not guaranteed that the end-user will in fact visit it.
+           */
+          @JsonProperty(value = "SuccessURL", required = true)
+          @JsonInclude
+          @NotNull
+          private String successUrl;
+          /**
            * The URL to which the end-user should be redirected after a failed  deposit. Do not put any logic on that page since it's not guaranteed that the end-user will in fact visit it.
            */
           @JsonProperty(value = "FailURL", required = true)
@@ -7594,42 +7357,15 @@ public class Models {
           @NotNull
           private String failUrl;
           /**
-           * First name of the person, or the name of the organization/company.
+           * The TemplateURL should be used if you want to design your own payment page but have it hosted on Trustly's side. The URL of your template page should be provided in this attribute in every Deposit API call. Our system will then fetch the content of your template page, insert the Trustly iframe into it and host the entire page on Trustly’s side. In the response to the Deposit request, you will receive a URL to the hosted template page which you should redirect the user to (the hosted page cannot be put inside an iframe).
            */
-          @JsonProperty(value = "Firstname", required = true)
-          @JsonInclude
-          @NotNull
-          private String firstname;
+          @JsonProperty(value = "TemplateURL")
+          private String templateUrl;
           /**
-           * The IP-address of the end-user.
+           * The html target/frame-name of the SuccessURL. Only _top, _self and _parent are supported.
            */
-          @JsonProperty(value = "IP")
-          private String ip;
-          /**
-           * Last name of the person (NULL/empty for organization/company).
-           */
-          @JsonProperty(value = "Lastname", required = true)
-          @JsonInclude
-          private String lastname;
-          /**
-           * The end-users localization preference in the format language[_territory]. Language is the ISO 639-1 code and territory the ISO 3166-1-alpha-2 code.
-           */
-          @JsonProperty(value = "Locale", required = true)
-          @JsonInclude
-          @NotNull
-          private String locale;
-          /**
-           * VISA category codes describing the merchant's nature of business.
-           * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master processing account.  It is also mandatory for E-wallets used directly in a merchant's checkout.
-           * Mandatory attributes for Trustly Partners that are using Express account. It is also mandatory for E-wallets used directly in a merchant's checkout, whereby the purpose of a Trustly transaction is to pay for goods/services by placing funds on the payer's e-money account ("funding stage") following an immediate transfer into the e-money account of the payee ( "payment" stage).
-           */
-          @JsonProperty(value = "MerchantCategoryCode")
-          private String merchantCategoryCode;
-          /**
-           * The mobile phone number to the end-user in international format. This is used for KYC and AML routines.
-           */
-          @JsonProperty(value = "MobilePhone")
-          private String mobilePhone;
+          @JsonProperty(value = "URLTarget")
+          private UrlTarget urlTarget;
           /**
            * The end-user's social security number / personal number / birth number / etc.  Useful for some banks for identifying transactions and KYC/AML. If a Swedish personid ("personnummer") is provided, it will be pre-filled when the user logs in to their bank.
            * <h2>Examples</h2>
@@ -7639,6 +7375,33 @@ public class Models {
            */
           @JsonProperty(value = "NationalIdentificationNumber")
           private String nationalIdentificationNumber;
+          /**
+           * This attribute disables the possibility to change/type in national identification number when logging in to a Swedish bank. If this attribute is sent, the attribute NationalIdentificationNumber needs to be correctly included in the request.  Note: This is only available for Swedish banks.
+           */
+          @JsonProperty(value = "UnchangeableNationalIdentificationNumber")
+          private String unchangeableNationalIdentificationNumber;
+          /**
+           * If you are using Trustly from within your native iOS app, this attribute should be sent so that we can redirect the users back to your app in case an external app is used for authentication (for example Mobile Bank ID in Sweden).
+           */
+          @JsonProperty(value = "URLScheme")
+          private String urlScheme;
+          /**
+           * When rendering the Trustly Checkout in a native app you are required to pass your application's url as an attribute to the order initiation request. By doing so, Trustly can redirect users back to your app after using external identification apps such as Mobile BankID: Please visit documentation site for more information. It must not be included for transactions that are not originating from an app.
+           * <p>
+           * NOTE! This value is only used for redirecting users back to the native app within the flows. See also SuccessURL and FailURL descriptions.
+           */
+          @JsonProperty(value = "ReturnToAppURL")
+          private String returnToAppUrl;
+          /**
+           * Only for Trustly Direct Debit. Request a direct debit mandate from the selected account. 1 or 0. See section "Direct Debit Mandates" for details. If this is set to 1, then <code>email</code> is required.
+           */
+          @JsonProperty(value = "RequestDirectDebitMandate")
+          private NumberBoolean requestDirectDebitMandate;
+          /**
+           * The end-user's date of birth.
+           */
+          @JsonProperty(value = "DateOfBirth")
+          private String dateOfBirth;
           /**
            * Human-readable identifier of the consumer-facing merchant (e.g. legal name or trade name)
            * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master processing account.  It is also mandatory for E-wallets used directly in a merchant's checkout.
@@ -7654,51 +7417,12 @@ public class Models {
           @JsonProperty(value = "PSPMerchantURL")
           private String pspMerchantUrl;
           /**
-           * Only for Trustly Direct Debit. Request a direct debit mandate from the selected account. 1 or 0. See section "Direct Debit Mandates" for details. If this is set to 1, then <code>email</code> is required.
+           * VISA category codes describing the merchant's nature of business.
+           * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master processing account.  It is also mandatory for E-wallets used directly in a merchant's checkout.
+           * Mandatory attributes for Trustly Partners that are using Express account. It is also mandatory for E-wallets used directly in a merchant's checkout, whereby the purpose of a Trustly transaction is to pay for goods/services by placing funds on the payer's e-money account ("funding stage") following an immediate transfer into the e-money account of the payee ( "payment" stage).
            */
-          @JsonProperty(value = "RequestDirectDebitMandate")
-          private NumberBoolean requestDirectDebitMandate;
-          /**
-           * When rendering the Trustly Checkout in a native app you are required to pass your application's url as an attribute to the order initiation request. By doing so, Trustly can redirect users back to your app after using external identification apps such as Mobile BankID: Please visit documentation site for more information. It must not be included for transactions that are not originating from an app.
-           * <p>
-           * NOTE! This value is only used for redirecting users back to the native app within the flows. See also SuccessURL and FailURL descriptions.
-           */
-          @JsonProperty(value = "ReturnToAppURL")
-          private String returnToAppUrl;
-          /**
-           * The text to show on the end-user's bank statement after Trustly's own 10 digit reference (which always will be displayed first). The reference must let the end user identify the merchant based on this value. So the ShopperStatement should contain either your brand name, website name, or company name.
-           * <p>
-           * If possible, try to keep this text as short as possible to maximise the chance that the full reference will fit into the reference field on the customer's bank since some banks allow only a limited number of characters. If the full ShopperStatement does not fit into the reference it will be truncated from the end.
-           */
-          @JsonProperty(value = "ShopperStatement")
-          private String shopperStatement;
-          /**
-           * The URL to which the end-user should be redirected after a successful deposit.  Do not put any logic on that page since it's not guaranteed that the end-user will in fact visit it.
-           */
-          @JsonProperty(value = "SuccessURL", required = true)
-          @JsonInclude
-          @NotNull
-          private String successUrl;
-          /**
-           * The TemplateURL should be used if you want to design your own payment page but have it hosted on Trustly's side. The URL of your template page should be provided in this attribute in every Deposit API call. Our system will then fetch the content of your template page, insert the Trustly iframe into it and host the entire page on Trustly’s side. In the response to the Deposit request, you will receive a URL to the hosted template page which you should redirect the user to (the hosted page cannot be put inside an iframe).
-           */
-          @JsonProperty(value = "TemplateURL")
-          private String templateUrl;
-          /**
-           * This attribute disables the possibility to change/type in national identification number when logging in to a Swedish bank. If this attribute is sent, the attribute NationalIdentificationNumber needs to be correctly included in the request.  Note: This is only available for Swedish banks.
-           */
-          @JsonProperty(value = "UnchangeableNationalIdentificationNumber")
-          private String unchangeableNationalIdentificationNumber;
-          /**
-           * If you are using Trustly from within your native iOS app, this attribute should be sent so that we can redirect the users back to your app in case an external app is used for authentication (for example Mobile Bank ID in Sweden).
-           */
-          @JsonProperty(value = "URLScheme")
-          private String urlScheme;
-          /**
-           * The html target/frame-name of the SuccessURL. Only _top, _self and _parent are supported.
-           */
-          @JsonProperty(value = "URLTarget")
-          private UrlTarget urlTarget;
+          @JsonProperty(value = "MerchantCategoryCode")
+          private String merchantCategoryCode;
         }
       }
     }
@@ -7712,10 +7436,13 @@ public class Models {
   public static class SelectAccountResponse extends JsonRpcResponse<SelectAccountResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("SelectAccount");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
@@ -7774,7 +7501,9 @@ public class Models {
       @SuperBuilder
       public static class Data extends AbstractRequestData<Data.Attributes> {
         /**
-         * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>, If the value is specified (i.e. not "null"), the system will only search for a settlement executed in that particular currency. If unspecified, settlements executed in any currency are included in the report.
+         * If the value is specified (i.e. not "null"), the system will only search for a settlement executed in that particular currency. If unspecified, settlements executed in any currency are included in the report.
+         * <p>
+         * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
          * <h2>Examples</h2>
          * <ul>
          *   <li>BGN</li>
@@ -7800,6 +7529,7 @@ public class Models {
         @JsonInclude
         @NotNull
         private String settlementDate;
+
         @Getter
         @Jacksonized
         @RequiredArgsConstructor
@@ -7813,13 +7543,16 @@ public class Models {
           @JsonInclude
           @NotNull
           private ApiVersion apiVersion;
+
           /**
            * Required. The APIVersion. Must be "1.2". We also have older versions of the report, but those should not be implemented by new merchants.
            */
           public enum ApiVersion {
             _1_2("1.2");
+
             @JsonValue
             private final String value;
+
             ApiVersion(String value) {
               this.value = value;
             }
@@ -7837,10 +7570,13 @@ public class Models {
   public static class SettlementReportResponse extends JsonRpcResponse<SettlementReportResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("SettlementReport");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
@@ -7882,21 +7618,6 @@ public class Models {
     @JsonProperty(value = "datestamp")
     private String datestamp;
     /**
-     * Contains the ExternalReference value for Deposit, Charge, and Refund transactions if provided. Otherwise empty.
-     */
-    @JsonProperty(value = "externalReference")
-    private String externalReference;
-    /**
-     * The amount that the end user paid, if the currency is different from the requested deposit currency. For transactions where the payment currency is the same as the requested currency, this field will be empty.
-     */
-    @JsonProperty(value = "fxPaymentAmount")
-    private double fxPaymentAmount;
-    /**
-     * The currency that the user paid with, if the currency is different from the requested deposit currency. For transactions where the payment currency is the same as the requested currency, this field will be empty.
-     */
-    @JsonProperty(value = "fxPaymentCurrency")
-    private String fxPaymentCurrency;
-    /**
      * MessageID of the order associated with the transaction, if available.
      */
     @JsonProperty(value = "messageId")
@@ -7917,11 +7638,6 @@ public class Models {
     @JsonProperty(value = "orderTypeString")
     private String orderTypeString;
     /**
-     * The 10 digit reference that will show up on the merchant's bank statement for this automatic settlement batch. The same value will be sent on every row in the report.
-     */
-    @JsonProperty(value = "settlementBankWithdrawalId")
-    private String settlementBankWithdrawalId;
-    /**
      * The sum of all amounts of the respective currency within the report.
      */
     @JsonProperty(value = "total")
@@ -7931,6 +7647,27 @@ public class Models {
      */
     @JsonProperty(value = "username")
     private String username;
+    /**
+     * The amount that the end user paid, if the currency is different from the requested deposit currency. For transactions where the payment currency is the same as the requested currency, this field will be empty.
+     */
+    @JsonProperty(value = "fxPaymentAmount")
+    private double fxPaymentAmount;
+    /**
+     * The currency that the user paid with, if the currency is different from the requested deposit currency. For transactions where the payment currency is the same as the requested currency, this field will be empty.
+     */
+    @JsonProperty(value = "fxPaymentCurrency")
+    private String fxPaymentCurrency;
+    /**
+     * The 10 digit reference that will show up on the merchant's bank statement for this automatic settlement batch. The same value will be sent on every row in the report.
+     */
+    @JsonProperty(value = "settlementBankWithdrawalId")
+    private String settlementBankWithdrawalId;
+    /**
+     * Contains the ExternalReference value for Deposit, Charge, and Refund transactions if provided. Otherwise empty.
+     */
+    @JsonProperty(value = "externalReference")
+    private String externalReference;
+
     /**
      * The type of the order associated with the transaction, if available.Text See list of possible orderypes in the table below.
      */
@@ -7954,8 +7691,10 @@ public class Models {
       FX("FX"),
       FLOAT_ADJUSTMENT("Float Adjustment"),
       AUTOMATIC_FLOAT_ADJUSTMENT("Automatic Float Adjustment");
+
       @JsonValue
       private final String value;
+
       OrderType(String value) {
         this.value = value;
       }
@@ -7984,6 +7723,15 @@ public class Models {
       @SuperBuilder
       public static class Data extends AbstractRequestData<Data.Attributes> {
         /**
+         * The URL to which notifications for this should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
+         * <h2>Examples</h2>
+         * <ul>
+         *   <li>https://example.com/trustly/notification/a2b63j23dj23883jhfhfh</li>
+         * </ul>
+         */
+        @JsonProperty(value = "NotificationURL")
+        private String notificationUrl;
+        /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
          */
@@ -7998,15 +7746,7 @@ public class Models {
          */
         @JsonProperty(value = "MessageID")
         private String messageId;
-        /**
-         * The URL to which notifications for this should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
-         * <h2>Examples</h2>
-         * <ul>
-         *   <li>https://example.com/trustly/notification/a2b63j23dj23883jhfhfh</li>
-         * </ul>
-         */
-        @JsonProperty(value = "NotificationURL")
-        private String notificationUrl;
+
         /**
          * https://eu.developers.trustly.com/doc/reference/swish
          */
@@ -8017,10 +7757,28 @@ public class Models {
         @SuperBuilder
         public static class Attributes extends AbstractRequestDataAttributes {
           /**
-           * Minimum age (in years) that the individual connected to the payerAlias has to be in order for the payment to be accepted. Value has to be in the range of 1 to 99.
+           * The Swish number of the payee.
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>1231181189</li>
+           * </ul>
            */
-          @JsonProperty(value = "AgeLimit")
-          private String ageLimit;
+          @JsonProperty(value = "MerchantSwishNumber", required = true)
+          @JsonInclude
+          @NotNull
+          private String merchantSwishNumber;
+          @JsonProperty(value = "UseMobile")
+          private StringBoolean useMobile;
+          /**
+           * The URL to which the end-user should be redirected after a successful deposit.  Do not put any logic on that page since it's not guaranteed that the end-user will in fact visit it.
+           */
+          @JsonProperty(value = "SuccessURL")
+          private String successUrl;
+          /**
+           * The URL to which the end-user should be redirected after a failed  deposit. Do not put any logic on that page since it's not guaranteed that the end-user will in fact visit it.
+           */
+          @JsonProperty(value = "FailURL")
+          private String failUrl;
           /**
            * The amount to deposit with exactly two decimals in the currency specified by Currency. Do not use this attribute in combination with<code>suggestedMinAmount</code> and <code>suggestedMaxAmount</code>. Only digits. Use dot (.) as decimal separator.
            */
@@ -8049,22 +7807,6 @@ public class Models {
           @JsonInclude
           private String currency;
           /**
-           * The URL to which the end-user should be redirected after a failed  deposit. Do not put any logic on that page since it's not guaranteed that the end-user will in fact visit it.
-           */
-          @JsonProperty(value = "FailURL")
-          private String failUrl;
-          /**
-           * The Swish number of the payee.
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>1231181189</li>
-           * </ul>
-           */
-          @JsonProperty(value = "MerchantSwishNumber", required = true)
-          @JsonInclude
-          @NotNull
-          private String merchantSwishNumber;
-          /**
            * Merchant supplies a message about the payment/order. Max 50 characters. Common allowed characters are the letters a-ö, A-Ö, the numbers 0-9, and special characters !?(),.-:;
            * <h2>Examples</h2>
            * <ul>
@@ -8088,12 +7830,10 @@ public class Models {
           @JsonProperty(value = "NationalIdentificationNumber")
           private String nationalIdentificationNumber;
           /**
-           * The URL to which the end-user should be redirected after a successful deposit.  Do not put any logic on that page since it's not guaranteed that the end-user will in fact visit it.
+           * Minimum age (in years) that the individual connected to the payerAlias has to be in order for the payment to be accepted. Value has to be in the range of 1 to 99.
            */
-          @JsonProperty(value = "SuccessURL")
-          private String successUrl;
-          @JsonProperty(value = "UseMobile")
-          private StringBoolean useMobile;
+          @JsonProperty(value = "AgeLimit")
+          private String ageLimit;
         }
       }
     }
@@ -8107,10 +7847,13 @@ public class Models {
   public static class SwishResponse extends JsonRpcResponse<SwishResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("Swish");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
@@ -8128,13 +7871,13 @@ public class Models {
         @JsonInclude
         @NotNull
         private String orderID;
-        @JsonProperty(value = "qrcode")
-        private String qrcode;
         /**
          * The URL that should be loaded so that the end-user can continue with the interactive process. Please see our general guidelines around iFraming, nativeApps etc for best usability. In general, never iFrame the url for mobile devices.
          */
         @JsonProperty(value = "url")
         private String URL;
+        @JsonProperty(value = "qrcode")
+        private String qrcode;
       }
     }
   }
@@ -8161,25 +7904,16 @@ public class Models {
       @SuperBuilder
       public static class Data extends AbstractRequestData<Data.Attributes> {
         /**
-         * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
+         * The URL to which notifications for this should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
          * <h2>Examples</h2>
          * <ul>
-         *   <li>BGN</li>
-         *   <li>CZK</li>
-         *   <li>DKK</li>
-         *   <li>EUR</li>
-         *   <li>GBP</li>
-         *   <li>HRK</li>
-         *   <li>HUF</li>
-         *   <li>NOK</li>
-         *   <li>PLN</li>
-         *   <li>RON</li>
-         *   <li>SEK</li>
+         *   <li>https://example.com/trustly/notification/a2b63j23dj23883jhfhfh</li>
          * </ul>
          */
-        @JsonProperty(value = "Currency", required = true)
+        @JsonProperty(value = "NotificationURL", required = true)
         @JsonInclude
-        private String currency;
+        @NotNull
+        private String notificationUrl;
         /**
          * ID, username, hash or anything uniquely identifying the end-user requesting the deposit.
          * Preferably the same ID/username as used in the merchant's own backoffice in order to simplify for the merchant's support department.
@@ -8200,16 +7934,26 @@ public class Models {
         @NotNull
         private String messageId;
         /**
-         * The URL to which notifications for this should be sent to. This URL should be hard to guess and not contain a ? ("question mark").
+         * The ISO 4217 code of the currency. See <a href="https://eu.developers.trustly.com/doc/reference/handling-currencies">documentation</a>
          * <h2>Examples</h2>
          * <ul>
-         *   <li>https://example.com/trustly/notification/a2b63j23dj23883jhfhfh</li>
+         *   <li>BGN</li>
+         *   <li>CZK</li>
+         *   <li>DKK</li>
+         *   <li>EUR</li>
+         *   <li>GBP</li>
+         *   <li>HRK</li>
+         *   <li>HUF</li>
+         *   <li>NOK</li>
+         *   <li>PLN</li>
+         *   <li>RON</li>
+         *   <li>SEK</li>
          * </ul>
          */
-        @JsonProperty(value = "NotificationURL", required = true)
+        @JsonProperty(value = "Currency", required = true)
         @JsonInclude
-        @NotNull
-        private String notificationUrl;
+        private String currency;
+
         @Getter
         @Jacksonized
         @RequiredArgsConstructor
@@ -8217,25 +7961,146 @@ public class Models {
         @SuperBuilder
         public static class Attributes extends AbstractRequestDataAttributes {
           /**
-           * The entire shipping address.
-           * This attribute should only be used if you are unable to provide the shipping address information in the 5 separate properties: <code>AddressCountry, </code>AddressCity<code>, </code>AddressPostalCode<code>, </code>AddressLine1, <code>AddressLine2</code>
+           * First name of the person, or the name of the organization/company.
+           */
+          @JsonProperty(value = "Firstname", required = true)
+          @JsonInclude
+          @NotNull
+          private String firstname;
+          /**
+           * Last name of the person (NULL/empty for organization/company).
+           */
+          @JsonProperty(value = "Lastname", required = true)
+          @JsonInclude
+          private String lastname;
+          /**
+           * The ISO 3166-1-alpha-2 code of the end-user's country. This will be used for pre-selecting the country for the end-user in the iframe.
+           * Note: This will only have an effect for new end-users. If an end-user has done a previous order (with the same EndUserID), the country that was last used will be pre-selected.
+           */
+          @JsonProperty(value = "Country", required = true)
+          @JsonInclude
+          @NotNull
+          private String country;
+          /**
+           * The end-users localization preference in the format language[_territory]. Language is the ISO 639-1 code and territory the ISO 3166-1-alpha-2 code.
+           */
+          @JsonProperty(value = "Locale", required = true)
+          @JsonInclude
+          @NotNull
+          private String locale;
+          /**
+           * The text to show on the end-user's bank statement after Trustly's own 10 digit reference (which always will be displayed first). The reference must let the end user identify the merchant based on this value. So the ShopperStatement should contain either your brand name, website name, or company name.
+           * <p>
+           * If possible, try to keep this text as short as possible to maximise the chance that the full reference will fit into the reference field on the customer's bank since some banks allow only a limited number of characters. If the full ShopperStatement does not fit into the reference it will be truncated from the end.
+           */
+          @JsonProperty(value = "ShopperStatement", required = true)
+          @JsonInclude
+          @NotNull
+          private String shopperStatement;
+          /**
+           * The email address of the end user.
            * <h2>Examples</h2>
            * <ul>
-           *   <li>Birgerstreet 14, SE-11411, Stockholm, Sweden</li>
+           *   <li>test@trustly.com</li>
            * </ul>
            */
-          @JsonProperty(value = "Address")
-          private String address;
+          @JsonProperty(value = "Email")
+          private String email;
           /**
-           * The city of the recipient address.
+           * The mobile phone number to the end-user in international format. This is used for KYC and AML routines.
            */
-          @JsonProperty(value = "AddressCity")
-          private String addressCity;
+          @JsonProperty(value = "MobilePhone")
+          private String mobilePhone;
+          /**
+           * The IP-address of the end-user.
+           */
+          @JsonProperty(value = "IP")
+          private String ip;
+          /**
+           * The URL to which the end-user should be redirected after a successful deposit.  Do not put any logic on that page since it's not guaranteed that the end-user will in fact visit it.
+           */
+          @JsonProperty(value = "SuccessURL", required = true)
+          @JsonInclude
+          @NotNull
+          private String successUrl;
+          /**
+           * The URL to which the end-user should be redirected after a failed  deposit. Do not put any logic on that page since it's not guaranteed that the end-user will in fact visit it.
+           */
+          @JsonProperty(value = "FailURL", required = true)
+          @JsonInclude
+          @NotNull
+          private String failUrl;
+          /**
+           * The TemplateURL should be used if you want to design your own payment page but have it hosted on Trustly's side. The URL of your template page should be provided in this attribute in every Deposit API call. Our system will then fetch the content of your template page, insert the Trustly iframe into it and host the entire page on Trustly’s side. In the response to the Deposit request, you will receive a URL to the hosted template page which you should redirect the user to (the hosted page cannot be put inside an iframe).
+           */
+          @JsonProperty(value = "TemplateURL")
+          private String templateUrl;
+          /**
+           * The html target/frame-name of the SuccessURL. Only _top, _self and _parent are supported.
+           */
+          @JsonProperty(value = "URLTarget")
+          private UrlTarget urlTarget;
+          /**
+           * The end-user's social security number / personal number / birth number / etc.  Useful for some banks for identifying transactions and KYC/AML. If a Swedish personid ("personnummer") is provided, it will be pre-filled when the user logs in to their bank.
+           * <h2>Examples</h2>
+           * <ul>
+           *   <li>790131-1234</li>
+           * </ul>
+           */
+          @JsonProperty(value = "NationalIdentificationNumber")
+          private String nationalIdentificationNumber;
+          /**
+           * This attribute disables the possibility to change/type in national identification number when logging in to a Swedish bank. If this attribute is sent, the attribute NationalIdentificationNumber needs to be correctly included in the request.  Note: This is only available for Swedish banks.
+           */
+          @JsonProperty(value = "UnchangeableNationalIdentificationNumber")
+          private String unchangeableNationalIdentificationNumber;
+          /**
+           * If you are using Trustly from within your native iOS app, this attribute should be sent so that we can redirect the users back to your app in case an external app is used for authentication (for example Mobile Bank ID in Sweden).
+           */
+          @JsonProperty(value = "URLScheme")
+          private String urlScheme;
+          /**
+           * When rendering the Trustly Checkout in a native app you are required to pass your application's url as an attribute to the order initiation request. By doing so, Trustly can redirect users back to your app after using external identification apps such as Mobile BankID: Please visit documentation site for more information. It must not be included for transactions that are not originating from an app.
+           * <p>
+           * NOTE! This value is only used for redirecting users back to the native app within the flows. See also SuccessURL and FailURL descriptions.
+           */
+          @JsonProperty(value = "ReturnToAppURL")
+          private String returnToAppUrl;
+          /**
+           * The minimum amount the end-user is allowed to deposit in the currency specified by Currency.Only digits. Use dot (.) as decimal separator.
+           */
+          @JsonProperty(value = "SuggestedMinAmount")
+          private String suggestedMinAmount;
+          /**
+           * The maximum amount the end-user is allowed to deposit in the currency specified by Currency. Only digits. Use dot (.) as decimal separator.
+           */
+          @JsonProperty(value = "SuggestedMaxAmount")
+          private String suggestedMaxAmount;
+          /**
+           * Sets a fixed withdrawal amount which cannot be changed by the end-user in the Trustly iframe. If this attribute is not sent, the end-user will be asked to select the withdrawal amount in the Trustly iframe. Do not use in combination with <code>suggestedMinAmount</code> and <code>suggestedMaxAmount</code>. Use dot(.) as decimal separator.
+           */
+          @JsonProperty(value = "SuggestedAmount")
+          private String suggestedAmount;
+          /**
+           * The end-user's date of birth.
+           */
+          @JsonProperty(value = "DateOfBirth")
+          private String dateOfBirth;
           /**
            * The ISO 3166-1-alpha-2 code of the recipient address country.
            */
           @JsonProperty(value = "AddressCountry")
           private String addressCountry;
+          /**
+           * The postalcode of the recipient address.
+           */
+          @JsonProperty(value = "AddressPostalCode")
+          private String addressPostalCode;
+          /**
+           * The city of the recipient address.
+           */
+          @JsonProperty(value = "AddressCity")
+          private String addressCity;
           /**
            * Recipient address street
            * <h2>Examples</h2>
@@ -8251,32 +8116,15 @@ public class Models {
           @JsonProperty(value = "AddressLine2")
           private String addressLine2;
           /**
-           * The postalcode of the recipient address.
-           */
-          @JsonProperty(value = "AddressPostalCode")
-          private String addressPostalCode;
-          /**
-           * The ISO 3166-1-alpha-2 code of the end-user's country. This will be used for pre-selecting the country for the end-user in the iframe.
-           * Note: This will only have an effect for new end-users. If an end-user has done a previous order (with the same EndUserID), the country that was last used will be pre-selected.
-           */
-          @JsonProperty(value = "Country", required = true)
-          @JsonInclude
-          @NotNull
-          private String country;
-          /**
-           * The end-user's date of birth.
-           */
-          @JsonProperty(value = "DateOfBirth")
-          private String dateOfBirth;
-          /**
-           * The email address of the end user.
+           * The entire shipping address.
+           * This attribute should only be used if you are unable to provide the shipping address information in the 5 separate properties: <code>AddressCountry, </code>AddressCity<code>, </code>AddressPostalCode<code>, </code>AddressLine1, <code>AddressLine2</code>
            * <h2>Examples</h2>
            * <ul>
-           *   <li>test@trustly.com</li>
+           *   <li>Birgerstreet 14, SE-11411, Stockholm, Sweden</li>
            * </ul>
            */
-          @JsonProperty(value = "Email")
-          private String email;
+          @JsonProperty(value = "Address")
+          private String address;
           /**
            * The ExternalReference is a reference set by the merchant for any purpose and does not need to be unique for every API call. For example, it can be used for invoice references, OCR numbers and also for offering end users the option to part-pay an invoice using the same ExternalReference. The ExternalReference will be included in version 1.2 of the settlement report, <code>ViewAutomaticSettlementDetailsCSV</code>.
            * <h2>Examples</h2>
@@ -8286,59 +8134,6 @@ public class Models {
            */
           @JsonProperty(value = "ExternalReference")
           private String externalReference;
-          /**
-           * The URL to which the end-user should be redirected after a failed  deposit. Do not put any logic on that page since it's not guaranteed that the end-user will in fact visit it.
-           */
-          @JsonProperty(value = "FailURL", required = true)
-          @JsonInclude
-          @NotNull
-          private String failUrl;
-          /**
-           * First name of the person, or the name of the organization/company.
-           */
-          @JsonProperty(value = "Firstname", required = true)
-          @JsonInclude
-          @NotNull
-          private String firstname;
-          /**
-           * The IP-address of the end-user.
-           */
-          @JsonProperty(value = "IP")
-          private String ip;
-          /**
-           * Last name of the person (NULL/empty for organization/company).
-           */
-          @JsonProperty(value = "Lastname", required = true)
-          @JsonInclude
-          private String lastname;
-          /**
-           * The end-users localization preference in the format language[_territory]. Language is the ISO 639-1 code and territory the ISO 3166-1-alpha-2 code.
-           */
-          @JsonProperty(value = "Locale", required = true)
-          @JsonInclude
-          @NotNull
-          private String locale;
-          /**
-           * VISA category codes describing the merchant's nature of business.
-           * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master processing account.  It is also mandatory for E-wallets used directly in a merchant's checkout.
-           * Mandatory attributes for Trustly Partners that are using Express account. It is also mandatory for E-wallets used directly in a merchant's checkout, whereby the purpose of a Trustly transaction is to pay for goods/services by placing funds on the payer's e-money account ("funding stage") following an immediate transfer into the e-money account of the payee ( "payment" stage).
-           */
-          @JsonProperty(value = "MerchantCategoryCode")
-          private String merchantCategoryCode;
-          /**
-           * The mobile phone number to the end-user in international format. This is used for KYC and AML routines.
-           */
-          @JsonProperty(value = "MobilePhone")
-          private String mobilePhone;
-          /**
-           * The end-user's social security number / personal number / birth number / etc.  Useful for some banks for identifying transactions and KYC/AML. If a Swedish personid ("personnummer") is provided, it will be pre-filled when the user logs in to their bank.
-           * <h2>Examples</h2>
-           * <ul>
-           *   <li>790131-1234</li>
-           * </ul>
-           */
-          @JsonProperty(value = "NationalIdentificationNumber")
-          private String nationalIdentificationNumber;
           /**
            * Human-readable identifier of the consumer-facing merchant (e.g. legal name or trade name)
            * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master processing account.  It is also mandatory for E-wallets used directly in a merchant's checkout.
@@ -8354,69 +8149,18 @@ public class Models {
           @JsonProperty(value = "PSPMerchantURL")
           private String pspMerchantUrl;
           /**
-           * When rendering the Trustly Checkout in a native app you are required to pass your application's url as an attribute to the order initiation request. By doing so, Trustly can redirect users back to your app after using external identification apps such as Mobile BankID: Please visit documentation site for more information. It must not be included for transactions that are not originating from an app.
-           * <p>
-           * NOTE! This value is only used for redirecting users back to the native app within the flows. See also SuccessURL and FailURL descriptions.
+           * VISA category codes describing the merchant's nature of business.
+           * Note: Mandatory attribute for Trustly Partners that are using Express Merchant Onboarding (EMO) and aggregate traffic under a master processing account.  It is also mandatory for E-wallets used directly in a merchant's checkout.
+           * Mandatory attributes for Trustly Partners that are using Express account. It is also mandatory for E-wallets used directly in a merchant's checkout, whereby the purpose of a Trustly transaction is to pay for goods/services by placing funds on the payer's e-money account ("funding stage") following an immediate transfer into the e-money account of the payee ( "payment" stage).
            */
-          @JsonProperty(value = "ReturnToAppURL")
-          private String returnToAppUrl;
+          @JsonProperty(value = "MerchantCategoryCode")
+          private String merchantCategoryCode;
           /**
            * Information about the Payer (ultimate debtor). This is required for some merchants and partners. SenderInformation is mandatory to send in Attributes{} for money transfer services (including remittance houses), e-wallets, prepaid cards, as well as for Trustly Partners that are using Express Merchant Onboarding and aggregate traffic under a master processing account (other cases may also apply).
            */
           @JsonProperty(value = "SenderInformation")
           @Valid
           private SenderInformation senderInformation;
-          /**
-           * The text to show on the end-user's bank statement after Trustly's own 10 digit reference (which always will be displayed first). The reference must let the end user identify the merchant based on this value. So the ShopperStatement should contain either your brand name, website name, or company name.
-           * <p>
-           * If possible, try to keep this text as short as possible to maximise the chance that the full reference will fit into the reference field on the customer's bank since some banks allow only a limited number of characters. If the full ShopperStatement does not fit into the reference it will be truncated from the end.
-           */
-          @JsonProperty(value = "ShopperStatement", required = true)
-          @JsonInclude
-          @NotNull
-          private String shopperStatement;
-          /**
-           * The URL to which the end-user should be redirected after a successful deposit.  Do not put any logic on that page since it's not guaranteed that the end-user will in fact visit it.
-           */
-          @JsonProperty(value = "SuccessURL", required = true)
-          @JsonInclude
-          @NotNull
-          private String successUrl;
-          /**
-           * Sets a fixed withdrawal amount which cannot be changed by the end-user in the Trustly iframe. If this attribute is not sent, the end-user will be asked to select the withdrawal amount in the Trustly iframe. Do not use in combination with <code>suggestedMinAmount</code> and <code>suggestedMaxAmount</code>. Use dot(.) as decimal separator.
-           */
-          @JsonProperty(value = "SuggestedAmount")
-          private String suggestedAmount;
-          /**
-           * The maximum amount the end-user is allowed to deposit in the currency specified by Currency. Only digits. Use dot (.) as decimal separator.
-           */
-          @JsonProperty(value = "SuggestedMaxAmount")
-          private String suggestedMaxAmount;
-          /**
-           * The minimum amount the end-user is allowed to deposit in the currency specified by Currency.Only digits. Use dot (.) as decimal separator.
-           */
-          @JsonProperty(value = "SuggestedMinAmount")
-          private String suggestedMinAmount;
-          /**
-           * The TemplateURL should be used if you want to design your own payment page but have it hosted on Trustly's side. The URL of your template page should be provided in this attribute in every Deposit API call. Our system will then fetch the content of your template page, insert the Trustly iframe into it and host the entire page on Trustly’s side. In the response to the Deposit request, you will receive a URL to the hosted template page which you should redirect the user to (the hosted page cannot be put inside an iframe).
-           */
-          @JsonProperty(value = "TemplateURL")
-          private String templateUrl;
-          /**
-           * This attribute disables the possibility to change/type in national identification number when logging in to a Swedish bank. If this attribute is sent, the attribute NationalIdentificationNumber needs to be correctly included in the request.  Note: This is only available for Swedish banks.
-           */
-          @JsonProperty(value = "UnchangeableNationalIdentificationNumber")
-          private String unchangeableNationalIdentificationNumber;
-          /**
-           * If you are using Trustly from within your native iOS app, this attribute should be sent so that we can redirect the users back to your app in case an external app is used for authentication (for example Mobile Bank ID in Sweden).
-           */
-          @JsonProperty(value = "URLScheme")
-          private String urlScheme;
-          /**
-           * The html target/frame-name of the SuccessURL. Only _top, _self and _parent are supported.
-           */
-          @JsonProperty(value = "URLTarget")
-          private UrlTarget urlTarget;
         }
       }
     }
@@ -8430,10 +8174,13 @@ public class Models {
   public static class WithdrawResponse extends JsonRpcResponse<WithdrawResponse.Result> {
     @Getter
     @Jacksonized
-    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
+      public Result() {
+        super("Withdraw");
+      }
+
       @Getter
       @Jacksonized
       @RequiredArgsConstructor
@@ -8467,7 +8214,10 @@ public class Models {
   @RequiredArgsConstructor
   @Setter
   @SuperBuilder
-  public static class WithRejection<TRejected> {
+  public static class WithRejection<TResult, TRejected> {
+    @JsonProperty(value = "result")
+    @Valid
+    private TResult result;
     @JsonProperty(value = "rejected")
     @Valid
     private TRejected rejected;
@@ -8514,19 +8264,13 @@ public class Models {
      * The specified account is not valid, eg sending funds to it is not possible.
      */
     INVALID_ACCOUNT("INVALID_ACCOUNT");
+
     @JsonValue
     private final String value;
+
     CreditRefundDirectDebitCancelReason(String value) {
       this.value = value;
     }
-  }
-
-  public interface IAbstractKYCNotificationData {
-    KYCNotificationDataAttributes getAttributes();
-    String getKycentityid();
-    String getMessageID();
-    String getNotificationID();
-    String getOrderID();
   }
 
   public interface IAdditionalProperties {
@@ -8543,8 +8287,10 @@ public class Models {
      * 1 for true
      */
     TRUE(1);
+
     @JsonValue
     private final int value;
+
     NumberBoolean(int value) {
       this.value = value;
     }
@@ -8553,8 +8299,10 @@ public class Models {
   public enum StringBoolean {
     FALSE("0"),
     TRUE("1");
+
     @JsonValue
     private final String value;
+
     StringBoolean(String value) {
       this.value = value;
     }
@@ -8567,11 +8315,12 @@ public class Models {
     TOP("_top"),
     SELF("_self"),
     PARENT("_parent");
+
     @JsonValue
     private final String value;
+
     UrlTarget(String value) {
       this.value = value;
     }
   }
 }
-
