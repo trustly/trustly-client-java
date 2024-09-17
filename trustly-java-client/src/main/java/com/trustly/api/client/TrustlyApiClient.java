@@ -69,7 +69,6 @@ public class TrustlyApiClient implements Closeable {
 
   private static class NotificationMeta<
     TCallback extends JsonRpcNotification<? extends JsonRpcNotificationParams<TCallbackData>>,
-//    TCallbackParams extends ,
     TCallbackData,
 
     TAckData extends Models.NotificationResponseDataBase<TAckStatus>,

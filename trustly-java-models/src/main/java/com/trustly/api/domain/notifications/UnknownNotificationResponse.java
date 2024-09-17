@@ -22,7 +22,7 @@ public class UnknownNotificationResponse extends Models.JsonRpcResponse<UnknownN
   public static class Result extends Models.ResponseResult<UnknownNotificationAckData> {
 
     public Result(@JsonProperty(value = "method", required = true) String method) {
-      super(method);
+      super.setMethod(method);
     }
   }
 }

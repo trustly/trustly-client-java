@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.Singular;
 
-@Generated(value = "omnigen", date = "2024-08-27T08:58:53.872Z")
+@Generated(value = "omnigen", date = "2024-09-06T06:45:43.834Z")
 @SuppressWarnings("unused")
 public class Models {
   @Getter
@@ -636,7 +636,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<List<Result.DataEntry>> {
       public Result() {
-        super("AccountLedger");
+        super.method = "AccountLedger";
       }
 
       @Getter
@@ -862,7 +862,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("account");
+        super.method = "account";
       }
     }
   }
@@ -944,7 +944,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("account");
+        super.method = "account";
       }
     }
   }
@@ -1094,7 +1094,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("AccountPayout");
+        super.method = "AccountPayout";
       }
 
       @Getter
@@ -1209,7 +1209,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("ApproveWithdrawal");
+        super.method = "ApproveWithdrawal";
       }
 
       @Getter
@@ -1274,7 +1274,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<List<Result.DataEntry>> {
       public Result() {
-        super("Balance");
+        super.method = "Balance";
       }
 
       @Getter
@@ -1341,7 +1341,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("CancelCharge");
+        super.method = "CancelCharge";
       }
 
       /**
@@ -1444,7 +1444,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("cancel");
+        super.method = "cancel";
       }
     }
   }
@@ -1497,7 +1497,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("CancelDirectDebitMandate");
+        super.method = "CancelDirectDebitMandate";
       }
 
       @Getter
@@ -1606,7 +1606,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("cancel");
+        super.method = "cancel";
       }
     }
   }
@@ -1659,7 +1659,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("CancelDirectDebit");
+        super.method = "CancelDirectDebit";
       }
 
       @Getter
@@ -1730,7 +1730,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("cancel");
+        super.method = "cancel";
       }
     }
   }
@@ -1839,7 +1839,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("cancel");
+        super.method = "cancel";
       }
     }
   }
@@ -2022,7 +2022,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("cancel");
+        super.method = "cancel";
       }
     }
   }
@@ -2107,7 +2107,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("cancel");
+        super.method = "cancel";
       }
     }
   }
@@ -2200,7 +2200,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("cancel");
+        super.method = "cancel";
       }
     }
   }
@@ -2387,7 +2387,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("Charge");
+        super.method = "Charge";
       }
 
       @Getter
@@ -2628,7 +2628,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("CreateAccount");
+        super.method = "CreateAccount";
       }
 
       @Getter
@@ -2769,7 +2769,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("credit");
+        super.method = "credit";
       }
     }
   }
@@ -2848,7 +2848,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("credit");
+        super.method = "credit";
       }
     }
   }
@@ -2963,7 +2963,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("credit");
+        super.method = "credit";
       }
     }
   }
@@ -3049,7 +3049,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("credit");
+        super.method = "credit";
       }
     }
   }
@@ -3117,7 +3117,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("credit");
+        super.method = "credit";
       }
     }
   }
@@ -3209,7 +3209,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<DebitNotificationResponseData> {
       public Result() {
-        super("debit");
+        super.method = "debit";
       }
     }
   }
@@ -3310,7 +3310,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<DebitNotificationResponseData> {
       public Result() {
-        super("debit");
+        super.method = "debit";
       }
     }
   }
@@ -3428,7 +3428,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<DebitNotificationResponseData> {
       public Result() {
-        super("debit");
+        super.method = "debit";
       }
     }
   }
@@ -3523,7 +3523,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<DebitNotificationResponseData> {
       public Result() {
-        super("debit");
+        super.method = "debit";
       }
     }
   }
@@ -3576,7 +3576,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("DenyWithdrawal");
+        super.method = "DenyWithdrawal";
       }
 
       @Getter
@@ -3950,7 +3950,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("Deposit");
+        super.method = "Deposit";
       }
 
       @Getter
@@ -4138,7 +4138,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("DirectCredit");
+        super.method = "DirectCredit";
       }
 
       @Getter
@@ -4456,7 +4456,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("DirectDebitMandate");
+        super.method = "DirectDebitMandate";
       }
 
       @Getter
@@ -4651,7 +4651,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("DirectDebit");
+        super.method = "DirectDebit";
       }
 
       @Getter
@@ -4840,7 +4840,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("DirectPaymentBatch");
+        super.method = "DirectPaymentBatch";
       }
 
       /**
@@ -4954,7 +4954,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<List<Result.DataEntry>> {
       public Result() {
-        super("GetWithdrawals");
+        super.method = "GetWithdrawals";
       }
 
       @Getter
@@ -5253,7 +5253,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("ImportDirectDebitMandate");
+        super.method = "ImportDirectDebitMandate";
       }
 
       @Getter
@@ -5303,25 +5303,63 @@ public class Models {
    */
   @Getter
   @Jacksonized
+  @RequiredArgsConstructor
   @Setter
   @SuperBuilder
   public static class JsonRpcError {
-    @JsonProperty(value = "error")
-    private final JsonNode error;
     @Default
     @JsonProperty(value = "code")
     private int code = -1;
     @Default
     @JsonProperty(value = "message")
     private String message = "Unknown Error";
-
-    public JsonRpcError(@JsonProperty(value = "error") JsonNode error) {
-      this.error = error;
-    }
+    @JsonProperty(value = "error")
+    @Valid
+    private Error error;
 
     @JsonProperty(value = "name")
     public String getName() {
       return "JSONRPCError";
+    }
+
+    @Getter
+    @Jacksonized
+    @RequiredArgsConstructor
+    @Setter
+    @SuperBuilder
+    public static class Error extends ResponseResult<Error.Data> implements IAdditionalProperties {
+      @Singular
+      @JsonAnySetter
+      private Map<String, Object> additionalProperties;
+
+      public void addAdditionalProperty(String key, Object value) {
+        this.additionalProperties.put(key, value);
+      }
+
+      @JsonAnyGetter
+      public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+      }
+
+      @Getter
+      @Jacksonized
+      @RequiredArgsConstructor
+      @Setter
+      @SuperBuilder
+      public static class Data implements IAdditionalProperties {
+        @Singular
+        @JsonAnySetter
+        private Map<String, Object> additionalProperties;
+
+        public void addAdditionalProperty(String key, Object value) {
+          this.additionalProperties.put(key, value);
+        }
+
+        @JsonAnyGetter
+        public Map<String, Object> getAdditionalProperties() {
+          return this.additionalProperties;
+        }
+      }
     }
   }
 
@@ -5347,12 +5385,11 @@ public class Models {
 
     @Getter
     @Jacksonized
+    @RequiredArgsConstructor
     @Setter
     @SuperBuilder
     public static class ErrorUnknownError extends JsonRpcError {
-      public ErrorUnknownError(@JsonProperty(value = "error") JsonNode error) {
-        super(error);
-      }
+
     }
   }
 
@@ -5477,7 +5514,9 @@ public class Models {
   @Setter
   @SuperBuilder
   public static class JsonRpcResponse<T extends ResponseResult<?>> {
-    @JsonProperty(value = "result")
+    @JsonProperty(value = "result", required = true)
+    @JsonInclude
+    @NotNull
     @Valid
     private T result;
 
@@ -5493,7 +5532,7 @@ public class Models {
   @SuperBuilder
   public static class KYCNotification extends JsonRpcNotification<KYCNotification.Params> {
     public KYCNotification() {
-      super("KYC");
+      super("kyc");
     }
 
     @Getter
@@ -5580,7 +5619,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("KYC");
+        super.method = "kyc";
       }
 
       @Getter
@@ -5682,7 +5721,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("MerchantSettlement");
+        super.method = "MerchantSettlement";
       }
 
       @Getter
@@ -5735,7 +5774,7 @@ public class Models {
   @SuperBuilder
   public static class PayoutConfirmationNotification extends JsonRpcNotification<PayoutConfirmationNotification.Params> {
     public PayoutConfirmationNotification() {
-      super("PayoutConfirmation");
+      super("payoutconfirmation");
     }
 
     @Getter
@@ -5816,7 +5855,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("PayoutConfirmation");
+        super.method = "payoutconfirmation";
       }
     }
   }
@@ -5827,7 +5866,7 @@ public class Models {
   @SuperBuilder
   public static class PayoutFailedNotification extends JsonRpcNotification<PayoutFailedNotification.Params> {
     public PayoutFailedNotification() {
-      super("PayoutFailed");
+      super("payoutfailed");
     }
 
     @Getter
@@ -5926,7 +5965,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("PayoutFailed");
+        super.method = "payoutfailed";
       }
     }
   }
@@ -5974,7 +6013,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("pending");
+        super.method = "pending";
       }
     }
   }
@@ -6040,7 +6079,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("pending");
+        super.method = "pending";
       }
     }
   }
@@ -6083,7 +6122,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("pending");
+        super.method = "pending";
       }
     }
   }
@@ -6160,7 +6199,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("pending");
+        super.method = "pending";
       }
     }
   }
@@ -6216,7 +6255,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<AckData> {
       public Result() {
-        super("pending");
+        super.method = "pending";
       }
     }
   }
@@ -6375,7 +6414,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("RefundDirectDebit");
+        super.method = "RefundDirectDebit";
       }
 
       @Getter
@@ -6500,7 +6539,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("Refund");
+        super.method = "Refund";
       }
 
       @Getter
@@ -6856,7 +6895,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("RegisterAccountPayout");
+        super.method = "RegisterAccountPayout";
       }
 
       @Getter
@@ -7108,7 +7147,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("RegisterAccount");
+        super.method = "RegisterAccount";
       }
 
       @Getter
@@ -7202,12 +7241,9 @@ public class Models {
   @SuperBuilder
   @Jacksonized
   @Getter
+  @RequiredArgsConstructor
   @Setter
   public static class ResponseResult<TData> {
-    @JsonProperty(value = "method", required = true)
-    @JsonInclude
-    @NotNull
-    private final String method;
     @JsonProperty(value = "signature", required = true)
     @JsonInclude
     @NotNull
@@ -7221,10 +7257,10 @@ public class Models {
     @NotNull
     @Valid
     private TData data;
-
-    public ResponseResult(@JsonProperty(value = "method", required = true) String method) {
-      this.method = method;
-    }
+    @JsonProperty(value = "method", required = true)
+    @JsonInclude
+    @NotNull
+    private String method;
   }
 
   @Getter
@@ -7440,7 +7476,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("SelectAccount");
+        super.method = "SelectAccount";
       }
 
       @Getter
@@ -7574,7 +7610,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("SettlementReport");
+        super.method = "SettlementReport";
       }
 
       @Getter
@@ -7851,7 +7887,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("Swish");
+        super.method = "Swish";
       }
 
       @Getter
@@ -8178,7 +8214,7 @@ public class Models {
     @SuperBuilder
     public static class Result extends ResponseResult<Result.Data> {
       public Result() {
-        super("Withdraw");
+        super.method = "Withdraw";
       }
 
       @Getter
