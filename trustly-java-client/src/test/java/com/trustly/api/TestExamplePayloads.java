@@ -35,7 +35,7 @@ class TestExamplePayloads {
     try {
 
       this.doRequestResponse(
-        WithdrawRequest.Params.Data.class, WithdrawResponse.class,
+        WithdrawRequestData.class, WithdrawResponse.class,
         "Withdraw",
         "/requests/withdraw.json", "/responses/error_invalid_parameters.json"
       );
@@ -54,144 +54,146 @@ class TestExamplePayloads {
   void testRequestAndResponsePayload() throws Exception {
 
     this.doRequestResponse(
-      AccountLedgerRequest.Params.Data.class, AccountLedgerResponse.class,
+      AccountLedgerRequestData.class, AccountLedgerResponse.class,
       "AccountLedger",
       "/requests/accountledger.json", "/responses/accountledger.json"
     );
 
     // Same request, but this time we will respond with an Invalid Parameters error.
     Assertions.assertThrows(TrustlyRequestException.class, () -> this.doRequestResponse(
-      AccountLedgerRequest.Params.Data.class, AccountLedgerResponse.class,
+      AccountLedgerRequestData.class, AccountLedgerResponse.class,
       "AccountLedger",
       "/requests/accountledger.json", "/responses/error_invalid_parameters.json"
     ));
 
     this.doRequestResponse(
-      AccountPayoutRequest.Params.Data.class, AccountPayoutResponse.class,
+      AccountPayoutRequestData.class, AccountPayoutResponse.class,
       "AccountPayout",
       "/requests/accountpayout_1.json", "/responses/accountpayout.json"
     );
     this.doRequestResponse(
-      AccountPayoutRequest.Params.Data.class, AccountPayoutResponse.class,
+      AccountPayoutRequestData.class, AccountPayoutResponse.class,
       "AccountPayout",
       "/requests/accountpayout_2.json", "/responses/accountpayout.json"
     );
     this.doRequestResponse(
-      AccountPayoutRequest.Params.Data.class, AccountPayoutResponse.class,
+      AccountPayoutRequestData.class, AccountPayoutResponse.class,
       "AccountPayout",
       "/requests/accountpayout_3.json", "/responses/accountpayout.json"
     );
 
     this.doRequestResponse(
-      ApproveWithdrawalRequest.Params.Data.class, ApproveWithdrawalResponse.class,
+      ApproveWithdrawalRequestData.class, ApproveWithdrawalResponse.class,
       "ApproveWithdrawal",
       "/requests/approvewithdrawal.json", "/responses/approvewithdrawal.json"
     );
 
     this.doRequestResponse(
-      BalanceRequest.Params.Data.class, BalanceResponse.class,
+      BalanceRequestData.class, BalanceResponse.class,
       "Balance",
       "/requests/balance.json", "/responses/balance.json"
     );
 
     Assertions.assertThrows(TrustlyRequestException.class, () -> this.doRequestResponse(
-      CancelChargeRequest.Params.Data.class, CancelChargeResponse.class,
+      CancelChargeRequestData.class, CancelChargeResponse.class,
       "CancelCharge",
       "/requests/cancelcharge.json", "/responses/cancelcharge_fail.json"
     ));
     this.doRequestResponse(
-      CancelChargeRequest.Params.Data.class, CancelChargeResponse.class,
+      CancelChargeRequestData.class, CancelChargeResponse.class,
       "CancelCharge",
       "/requests/cancelcharge.json", "/responses/cancelcharge_ok.json"
     );
 
     this.doRequestResponse(
-      ChargeRequest.Params.Data.class, ChargeResponse.class,
+      ChargeRequestData.class, ChargeResponse.class,
       "Charge",
       "/requests/charge_1.json", "/responses/charge.json"
     );
     this.doRequestResponse(
-      ChargeRequest.Params.Data.class, ChargeResponse.class,
+      ChargeRequestData.class, ChargeResponse.class,
       "Charge",
       "/requests/charge_2.json", "/responses/charge.json"
     );
 
     this.doRequestResponse(
-      DenyWithdrawalRequest.Params.Data.class, DenyWithdrawalResponse.class,
+      DenyWithdrawalRequestData.class, DenyWithdrawalResponse.class,
       "DenyWithdrawal",
       "/requests/denywithdrawal.json", "/responses/denywithdrawal.json"
     );
 
     this.doRequestResponse(
-      DepositRequest.Params.Data.class, DepositResponse.class,
+      DepositRequestData.class, DepositResponse.class,
       "Deposit",
       "/requests/deposit_1.json", "/responses/deposit.json"
     );
     this.doRequestResponse(
-      DepositRequest.Params.Data.class, DepositResponse.class,
+      DepositRequestData.class, DepositResponse.class,
       "Deposit",
       "/requests/deposit_2.json", "/responses/deposit.json"
     );
     this.doRequestResponse(
-      DepositRequest.Params.Data.class, DepositResponse.class,
+      DepositRequestData.class, DepositResponse.class,
       "Deposit",
       "/requests/deposit_3.json", "/responses/deposit.json"
     );
     this.doRequestResponse(
-      DepositRequest.Params.Data.class, DepositResponse.class,
+      DepositRequestData.class, DepositResponse.class,
       "Deposit",
       "/requests/deposit_ideal.json", "/responses/deposit.json"
     );
 
     this.doRequestResponse(
-      GetWithdrawalsRequest.Params.Data.class, GetWithdrawalsResponse.class,
+      GetWithdrawalsRequestData.class, GetWithdrawalsResponse.class,
       "GetWithdrawals",
       "/requests/getwithdrawals.json", "/responses/getwithdrawals.json"
     );
 
     this.doRequestResponse(
-      RefundRequest.Params.Data.class, RefundResponse.class,
+      RefundRequestData.class, RefundResponse.class,
       "Refund",
       "/requests/refund.json", "/responses/refund.json"
     );
 
     this.doRequestResponse(
-      RegisterAccountRequest.Params.Data.class, RegisterAccountResponse.class,
+      RegisterAccountRequestData.class, RegisterAccountResponse.class,
       "RegisterAccount",
       "/requests/registeraccount.json", "/responses/registeraccount.json"
     );
     this.doRequestResponse(
-      RegisterAccountRequest.Params.Data.class, RegisterAccountResponse.class,
+      RegisterAccountRequestData.class, RegisterAccountResponse.class,
       "RegisterAccount",
       "/requests/registeraccount_2.json", "/responses/registeraccount.json"
     );
 
     this.doRequestResponse(
-      SelectAccountRequest.Params.Data.class, SelectAccountResponse.class,
+      SelectAccountRequestData.class, SelectAccountResponse.class,
       "SelectAccount",
       "/requests/selectaccount.json", "/responses/selectaccount.json"
     );
 
     this.doRequestResponse(
-      SettlementReportRequest.Params.Data.class, SettlementReportResponse.class,
+      SettlementReportRequestData.class, SettlementReportResponse.class,
       "ViewAutomaticSettlementDetailsCSV",
       "/requests/settlementreport.json", "/responses/settlementreport.json"
     );
 
     this.doRequestResponse(
-      WithdrawRequest.Params.Data.class, WithdrawResponse.class,
+      WithdrawRequestData.class, WithdrawResponse.class,
       "Withdraw",
       "/requests/withdraw.json", "/responses/withdraw.json"
     );
   }
 
   private <
+    TReqAttr extends AbstractRequestDataAttributes,
+    TReqData extends AbstractRequestData<TReqAttr>,
     TResData,
     TResResult extends ResponseResult<TResData>,
     TRes extends JsonRpcResponse<TResResult>
     >
   void doRequestResponse(
-    Class<? extends AbstractRequestData> requestDataClass,
+    Class<TReqData> requestDataClass,
     Class<TRes> responseDataClass,
     String method,
     String requestClassPath,

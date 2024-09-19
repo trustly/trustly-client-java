@@ -64,8 +64,8 @@ class NotificationsTest {
 
   static Stream<Arguments> testNotificationsWithoutSignatureVerification() {
 
-    var generalOk = AckData.builder().status(AckData.Status.OK).build();
-    var debitOk = DebitNotificationResponseData.builder().status(DebitNotificationResponseData.Status.OK).build();
+    var generalOk = AckData.builder().status(AckDataStatus.OK).build();
+    var debitOk = DebitNotificationResponseData.builder().status(DebitNotificationResponseDataStatus.OK).build();
 
     return Stream.of(
       Arguments.of(new Scenario<>("account", AccountNotification.class, AccountNotificationResponse.class, () -> generalOk)),
@@ -227,7 +227,7 @@ class NotificationsTest {
       client.addOnCancelListener(args -> {
 
         receivedNotificationDataCounter.incrementAndGet();
-        args.respondWith(AckData.builder().status(AckData.Status.OK).build());
+        args.respondWith(AckData.builder().status(AckDataStatus.OK).build());
       });
 
       final InputStream is = this.getClass().getResourceAsStream("/notifications/incoming/cancel.json");

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.trustly.api.client.JsonRpcFactory;
 import com.trustly.api.client.JsonRpcValidator;
 import com.trustly.api.client.TrustlyApiClient;
+import com.trustly.api.domain.Models;
 import com.trustly.api.domain.Models.AckData;
 import com.trustly.api.domain.Models.DepositRequest;
 import com.trustly.api.domain.Models.RegisterAccountResponse;
@@ -21,6 +22,8 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import java.io.InputStream;
 import java.util.UUID;
 
+import static com.trustly.api.domain.Models.*;
+
 @Execution(ExecutionMode.CONCURRENT)
 class SerializerTest {
 
@@ -29,14 +32,14 @@ class SerializerTest {
     Serializer serializer = new Serializer();
     JsonRpcFactory factory = new JsonRpcFactory();
 
-    DepositRequest.Params.Data request = new DepositRequest.Params.Data();
+    DepositRequestData request = new DepositRequestData();
     request.setUsername("merchant_username");
     request.setPassword("merchant_password");
     request.setNotificationUrl("URL_to_your_notification_service");
     request.setEndUserId("12345");
     request.setMessageId("your_unique_deposit_id");
 
-    DepositRequest.Params.Data.Attributes attributes = new DepositRequest.Params.Data.Attributes();
+    DepositRequestDataAttributes attributes = new DepositRequestDataAttributes();
     attributes.setLocale("sv_SE");
     attributes.setCurrency("SEK");
     attributes.setIp("123.123.123.123");
@@ -63,7 +66,7 @@ class SerializerTest {
   @Test
   void serializeResponseWithNonNullAnyMapAsPojo() {
 
-    RegisterAccountResponse.Result.Data data = RegisterAccountResponse.Result.Data.builder()
+    RegisterAccountResponseData data = RegisterAccountResponseData.builder()
       .accountID("123456789")
       .bank("BankA")
       .clearingHouse("SWEDEN")
@@ -78,7 +81,7 @@ class SerializerTest {
   @Test
   void serializeResponseWithNonEmptyAnyMapAsPOJO() {
 
-    RegisterAccountResponse.Result.Data data = RegisterAccountResponse.Result.Data.builder()
+    RegisterAccountResponseData data = RegisterAccountResponseData.builder()
       .accountID("123456789")
       .bank("BankA")
       .clearingHouse("SWEDEN")
@@ -94,7 +97,7 @@ class SerializerTest {
   @Test
   void serializeResponseWithNonEmptyAnyMapAsNode() {
 
-    RegisterAccountResponse.Result.Data data = RegisterAccountResponse.Result.Data.builder()
+    RegisterAccountResponseData data = RegisterAccountResponseData.builder()
       .accountID("123456789")
       .bank("BankA")
       .clearingHouse("SWEDEN")
@@ -132,7 +135,7 @@ class SerializerTest {
         "account",
         "e76ffbe5-e0f9-4402-8689-f868ed2021f8",
         AckData.builder()
-          .status(AckData.Status.OK)
+          .status(AckDataStatus.OK)
           .build()
       );
 
@@ -160,14 +163,14 @@ class SerializerTest {
     JsonRpcValidator validator = new JsonRpcValidator();
 
     var jsonRpc = factory.create(
-      DepositRequest.Params.Data.builder()
+      DepositRequestData.builder()
         .username("merchant_username")
         .password("merchant_password")
         .notificationUrl("https://someurl.fake")
         .endUserId("12345")
         .messageId("your_unique_deposit_id")
         .attributes(
-          DepositRequest.Params.Data.Attributes.builder()
+          DepositRequestDataAttributes.builder()
             .country("SE")
             .locale("sv_SE")
             .currency("SEK")
@@ -208,14 +211,14 @@ class SerializerTest {
     JsonRpcValidator validator = new JsonRpcValidator();
 
     var jsonRpc = factory.create(
-      DepositRequest.Params.Data.builder()
+      DepositRequestData.builder()
         .username("merchant_username")
         .password("merchant_password")
         .notificationUrl("https://someurl.fake")
         .endUserId("12345")
         .messageId("your_unique_deposit_id")
         .attributes(
-          DepositRequest.Params.Data.Attributes.builder()
+          DepositRequestDataAttributes.builder()
             .country("SE")
             .locale("sv_SE")
             .currency("SEK")
@@ -254,14 +257,14 @@ class SerializerTest {
     JsonRpcValidator validator = new JsonRpcValidator();
 
     var jsonRpc = factory.create(
-      SelectAccountRequest.Params.Data.builder()
+      SelectAccountRequestData.builder()
         .username("merchant_username")
         .password("merchant_password")
         .notificationUrl("https://someurl.fake")
         .endUserId("12345")
         .messageId("your_unique_deposit_id")
         .attributes(
-          SelectAccountRequest.Params.Data.Attributes.builder()
+          SelectAccountRequestDataAttributes.builder()
             .country("SE")
             .locale("sv_SE")
             .ip("123.123.123.123")

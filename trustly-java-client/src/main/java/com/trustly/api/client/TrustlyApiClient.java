@@ -131,15 +131,15 @@ public class TrustlyApiClient implements Closeable {
 
   // Methods
 
-  public List<AccountLedgerResponse.Result.DataEntry> accountLedger(AccountLedgerRequest.Params.Data data) throws TrustlyRequestException {
+  public List<AccountLedgerResponseDataEntry> accountLedger(AccountLedgerRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new AccountLedgerRequest(), data, AccountLedgerResponse.class);
   }
 
-  public AccountPayoutResponse.Result.Data accountPayout(AccountPayoutRequest.Params.Data data) throws TrustlyRequestException {
+  public AccountPayoutResponseData accountPayout(AccountPayoutRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new AccountPayoutRequest(), data, AccountPayoutResponse.class);
   }
 
-  public ApproveWithdrawalResponse.Result.Data approveWithdrawal(ApproveWithdrawalRequest.Params.Data data) throws TrustlyRequestException {
+  public ApproveWithdrawalResponseData approveWithdrawal(ApproveWithdrawalRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new ApproveWithdrawalRequest(), data, ApproveWithdrawalResponse.class);
   }
 
@@ -148,95 +148,107 @@ public class TrustlyApiClient implements Closeable {
    * <p>
    * 🚧 Please do not use this method more than once every 15 minutes.
    */
-  public List<BalanceResponse.Result.DataEntry> balance(BalanceRequest.Params.Data data) throws TrustlyRequestException {
+  public List<BalanceResponseDataEntry> balance(BalanceRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new BalanceRequest(), data, BalanceResponse.class);
   }
 
-  public CancelChargeResponse.Result.Data cancelCharge(CancelChargeRequest.Params.Data data) throws TrustlyRequestException {
+  public CancelChargeResponseData cancelCharge(CancelChargeRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new CancelChargeRequest(), data, CancelChargeResponse.class);
   }
 
-  public ChargeResponse.Result.Data charge(ChargeRequest.Params.Data data) throws TrustlyRequestException {
+  public ChargeResponseData charge(ChargeRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new ChargeRequest(), data, ChargeResponse.class);
   }
 
-  public DenyWithdrawalResponse.Result.Data denyWithdrawal(DenyWithdrawalRequest.Params.Data data) throws TrustlyRequestException {
+  public DenyWithdrawalResponseData denyWithdrawal(DenyWithdrawalRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new DenyWithdrawalRequest(), data, DenyWithdrawalResponse.class);
   }
 
-  public DepositResponse.Result.Data deposit(DepositRequest.Params.Data data) throws TrustlyRequestException {
+  public DepositResponseData deposit(DepositRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new DepositRequest(), data, DepositResponse.class);
   }
 
-  public List<GetWithdrawalsResponse.Result.DataEntry> getWithdrawals(GetWithdrawalsRequest.Params.Data data) throws TrustlyRequestException {
+  public List<GetWithdrawalsResponseDataEntry> getWithdrawals(GetWithdrawalsRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new GetWithdrawalsRequest(), data, GetWithdrawalsResponse.class);
   }
 
-  public RefundResponse.Result.Data refund(RefundRequest.Params.Data data) throws TrustlyRequestException {
+  public RefundResponseData refund(RefundRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new RefundRequest(), data, RefundResponse.class);
   }
 
-  public CreateAccountResponse.Result.Data createAccount(CreateAccountRequest.Params.Data data) throws TrustlyRequestException {
+  public CreateAccountResponseData createAccount(CreateAccountRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new CreateAccountRequest(), data, CreateAccountResponse.class);
   }
 
-  public SelectAccountResponse.Result.Data selectAccount(SelectAccountRequest.Params.Data data) throws TrustlyRequestException {
+  public SelectAccountResponseData selectAccount(SelectAccountRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new SelectAccountRequest(), data, SelectAccountResponse.class);
   }
 
-  public RegisterAccountResponse.Result.Data registerAccount(RegisterAccountRequest.Params.Data data) throws TrustlyRequestException {
+  public RegisterAccountResponseData registerAccount(RegisterAccountRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new RegisterAccountRequest(), data, RegisterAccountResponse.class);
   }
 
-  public RegisterAccountPayoutResponse.Result.Data registerAccountPayout(RegisterAccountPayoutRequest.Params.Data data) throws TrustlyRequestException {
+  public RegisterAccountPayoutResponseData registerAccountPayout(RegisterAccountPayoutRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new RegisterAccountPayoutRequest(), data, RegisterAccountPayoutResponse.class);
   }
 
-  public MerchantSettlementResponse.Result.Data merchantSettlement(MerchantSettlementRequest.Params.Data data) throws TrustlyRequestException {
+  public MerchantSettlementResponseData merchantSettlement(MerchantSettlementRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new MerchantSettlementRequest(), data, MerchantSettlementResponse.class);
   }
 
-  public SettlementReportResponse.Result.Data settlementReport(SettlementReportRequest.Params.Data data) throws TrustlyRequestException {
+  public SettlementReportResponseData settlementReport(SettlementReportRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new SettlementReportRequest(), data, SettlementReportResponse.class);
   }
 
-  public WithdrawResponse.Result.Data withdraw(WithdrawRequest.Params.Data data) throws TrustlyRequestException {
+  public WithdrawResponseData withdraw(WithdrawRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new WithdrawRequest(), data, WithdrawResponse.class);
   }
 
-  public DirectDebitMandateResponse.Result.Data directDebitMandate(DirectDebitMandateRequest.Params.Data data) throws TrustlyRequestException {
+  public DirectDebitMandateResponseData directDebitMandate(DirectDebitMandateRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new DirectDebitMandateRequest(), data, DirectDebitMandateResponse.class);
   }
 
-  public CancelDirectDebitMandateResponse.Result.Data cancelDirectDebitMandate(CancelDirectDebitMandateRequest.Params.Data data) throws TrustlyRequestException {
+  public CancelDirectDebitMandateResponseData cancelDirectDebitMandate(CancelDirectDebitMandateRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new CancelDirectDebitMandateRequest(), data, CancelDirectDebitMandateResponse.class);
   }
 
-  public ImportDirectDebitMandateResponse.Result.Data cancelDirectDebitMandate(ImportDirectDebitMandateRequest.Params.Data data) throws TrustlyRequestException {
+  public ImportDirectDebitMandateResponseData cancelDirectDebitMandate(ImportDirectDebitMandateRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new ImportDirectDebitMandateRequest(), data, ImportDirectDebitMandateResponse.class);
   }
 
-  public DirectDebitResponse.Result.Data cancelDirectDebitMandate(CancelDirectDebitRequest.Params.Data data) throws TrustlyRequestException {
+  public DirectDebitResponseData cancelDirectDebitMandate(CancelDirectDebitRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new CancelDirectDebitRequest(), data, DirectDebitResponse.class);
   }
 
-  public CancelDirectDebitResponse.Result.Data cancelDirectDebit(CancelDirectDebitRequest.Params.Data data) throws TrustlyRequestException {
+  public CancelDirectDebitResponseData cancelDirectDebit(CancelDirectDebitRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new CancelDirectDebitRequest(), data, CancelDirectDebitResponse.class);
   }
 
-  public DirectCreditResponse.Result.Data directCredit(DirectCreditRequest.Params.Data data) throws TrustlyRequestException {
+  public DirectCreditResponseData directCredit(DirectCreditRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new DirectCreditRequest(), data, DirectCreditResponse.class);
   }
 
-  public RefundDirectDebitResponse.Result.Data directCredit(RefundDirectDebitRequest.Params.Data data) throws TrustlyRequestException {
+  public RefundDirectDebitResponseData directCredit(RefundDirectDebitRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new RefundDirectDebitRequest(), data, RefundDirectDebitResponse.class);
   }
 
-  public DirectPaymentBatchResponse.Result.Data directCredit(DirectPaymentBatchRequest.Params.Data data) throws TrustlyRequestException {
+  public DirectPaymentBatchResponseData directCredit(DirectPaymentBatchRequestData data) throws TrustlyRequestException {
     return this.sendRequest(new DirectPaymentBatchRequest(), data, DirectPaymentBatchResponse.class);
   }
 
   // Notifications
+
+  /**
+   * Convenience method for adding a listener where the `TAckData` can be inferred from the given listener.
+   */
+  public <
+    TCallbackData,
+    TCallback extends JsonRpcNotification<? extends JsonRpcNotificationParams<TCallbackData>>,
+    TAckData extends Models.NotificationResponseDataBase<TAckStatus>,
+    TAckStatus
+    > void addNotificationListener(String method, Class<TCallback> notificationClass, NotificationEvent<TCallbackData, TAckData> listener) {
+    this.addNotificationListener(method, notificationClass, null, listener);
+  }
 
   /**
    * Add a custom listener for a certain notification type.
@@ -244,14 +256,12 @@ public class TrustlyApiClient implements Closeable {
    * This method should only be used if there is no existing {@code addOnXyzListener} method for the notification you want.
    */
   public <
-    TCallback extends JsonRpcNotification<? extends JsonRpcNotificationParams<TCallbackData>>,
     TCallbackData,
-
+    TCallback extends JsonRpcNotification<? extends JsonRpcNotificationParams<TCallbackData>>,
     TAck extends Models.JsonRpcResponse<TAckRes>,
     TAckRes extends Models.ResponseResult<TAckData>,
     TAckData extends Models.NotificationResponseDataBase<TAckStatus>,
     TAckStatus
-
     > void addNotificationListener(
     String method,
     Class<TCallback> notificationClass,
@@ -259,7 +269,7 @@ public class TrustlyApiClient implements Closeable {
     NotificationEvent<TCallbackData, TAckData> listener
   ) {
 
-    var meta = (NotificationMeta) this.onNotification.computeIfAbsent(method, k -> new NotificationMeta<>(notificationClass));
+    var meta = (NotificationMeta<TCallback, TCallbackData, TAckData, TAckStatus>) this.onNotification.computeIfAbsent(method, k -> new NotificationMeta<>(notificationClass));
     if (!meta.getClazz().equals(notificationClass)) {
       throw new IllegalArgumentException(
         String.format("Each notification method must be registered with the same type (%s vs %s)", notificationClass, meta.getClazz()));
@@ -268,36 +278,36 @@ public class TrustlyApiClient implements Closeable {
     meta.getListeners().add(listener);
   }
 
-  public void addOnAccountListener(NotificationEvent<AccountNotification.Params.Data, AckData> listener) {
-    this.addNotificationListener("account", AccountNotification.class, AccountNotificationResponse.class, listener);
+  public void addOnAccountListener(NotificationEvent<AccountNotificationData, AckData> listener) {
+    this.addNotificationListener("account", AccountNotification.class, listener);
   }
 
-  public void addOnCancelListener(NotificationEvent<CancelNotification.Params.Data, AckData> listener) {
-    this.addNotificationListener("cancel", CancelNotification.class, CancelNotificationResponse.class, listener);
+  public void addOnCancelListener(NotificationEvent<CancelNotificationData, AckData> listener) {
+    this.addNotificationListener("cancel", CancelNotification.class, listener);
   }
 
-  public void addOnCreditListener(NotificationEvent<CreditNotification.Params.Data, AckData> listener) {
-    this.addNotificationListener("credit", CreditNotification.class, CreditNotificationResponse.class, listener);
+  public void addOnCreditListener(NotificationEvent<CreditNotificationData, AckData> listener) {
+    this.addNotificationListener("credit", CreditNotification.class, listener);
   }
 
-  public void addOnDebitListener(NotificationEvent<DebitNotification.Params.Data, DebitNotificationResponseData> listener) {
-    this.addNotificationListener("debit", DebitNotification.class, DebitNotificationResponse.class, listener);
+  public void addOnDebitListener(NotificationEvent<DebitNotificationData, DebitNotificationResponseData> listener) {
+    this.addNotificationListener("debit", DebitNotification.class, listener);
   }
 
-  public void addOnPayoutConfirmation(NotificationEvent<PayoutConfirmationNotification.Params.Data, AckData> listener) {
-    this.addNotificationListener("payoutconfirmation", PayoutConfirmationNotification.class, PayoutConfirmationNotificationResponse.class, listener);
+  public void addOnPayoutConfirmation(NotificationEvent<PayoutConfirmationNotificationData, AckData> listener) {
+    this.addNotificationListener("payoutconfirmation", PayoutConfirmationNotification.class,  listener);
   }
 
-  public void addOnPending(NotificationEvent<PendingNotification.Params.Data, AckData> listener) {
-    this.addNotificationListener("pending", PendingNotification.class, PendingNotificationResponse.class, listener);
+  public void addOnPending(NotificationEvent<PendingNotificationData, AckData> listener) {
+    this.addNotificationListener("pending", PendingNotification.class, listener);
   }
 
-  public void addOnKYC(NotificationEvent<KYCNotification.Params.Data, KYCNotificationResponse.Result.Data> listener) {
-    this.addNotificationListener("kyc", KYCNotification.class, KYCNotificationResponse.class, listener);
+  public void addOnKYC(NotificationEvent<KYCNotificationData, KYCNotificationResponseData> listener) {
+    this.addNotificationListener("kyc", KYCNotification.class, listener);
   }
 
   public void addOnUnknownNotification(NotificationEvent<UnknownNotification.Params.Data, UnknownNotificationAckData> listener) {
-    this.addNotificationListener("", UnknownNotification.class, UnknownNotificationResponse.class, listener);
+    this.addNotificationListener("", UnknownNotification.class, listener);
   }
 
   // Base functionality
@@ -308,7 +318,7 @@ public class TrustlyApiClient implements Closeable {
    * @param method       The method of the JsonRpc package
    * @param uuid         The UUID for the message, if null one will be generated for you
    * @param responseData The response data that was received remotely
-   * @param <R>          The type of the response data
+   * @param <D>          The type of the response data
    * @return A signed and validated JsonRpc response package
    * @throws TrustlyValidationException Thrown if the response does not pass proper validations
    */

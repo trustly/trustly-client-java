@@ -32,12 +32,12 @@ class RequestsTest {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
-      DepositRequest.Params.Data request = DepositRequest.Params.Data.builder()
+      DepositRequestData request = DepositRequestData.builder()
         .notificationUrl("https://fake.test.notification.trustly.com")
         .endUserId("john.doe@trustly.com")
         .messageId(UUID.randomUUID().toString())
         .attributes(
-          DepositRequest.Params.Data.Attributes.builder()
+          DepositRequestDataAttributes.builder()
             .currency("EUR")
             .amount("100.00")
             .firstname("John")
@@ -53,7 +53,7 @@ class RequestsTest {
         )
         .build();
 
-      DepositResponse.Result.Data response = client.deposit(request);
+      DepositResponseData response = client.deposit(request);
 
       Assertions.assertNotNull(response);
       Assertions.assertNotNull(response.getURL());
@@ -65,7 +65,7 @@ class RequestsTest {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
-      AccountPayoutRequest.Params.Data data = AccountPayoutRequest.Params.Data.builder()
+      AccountPayoutRequestData data = AccountPayoutRequestData.builder()
         .accountId("AccountID")
         .accountId("AccountID")
         .endUserId("EndUserId")
@@ -74,7 +74,7 @@ class RequestsTest {
         .currency("SEK")
         .notificationUrl("https://notify.me")
         .attributes(
-          AccountPayoutRequest.Params.Data.Attributes.builder()
+          AccountPayoutRequestDataAttributes.builder()
             .pspMerchant("Merchant Ltd.")
             .shopperStatement("MyBrand.com")
             .externalReference("23423525234")
@@ -82,7 +82,7 @@ class RequestsTest {
             .pspMerchantUrl("www.merchant.com")
             .senderInformation(
               SenderInformation.builder()
-                .partytype(RecipientOrSenderInformation.PartyTypeKind.PERSON)
+                .partytype(PartyTypeKind.PERSON)
                 .address("Street 1, 12345 Barcelona")
                 .countryCode("SE")
                 .firstname("Steve")
@@ -113,7 +113,7 @@ class RequestsTest {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
-      CancelChargeRequest.Params.Data data = CancelChargeRequest.Params.Data.builder()
+      CancelChargeRequestData data = CancelChargeRequestData.builder()
         .orderId("orderId")
         .build();
 
@@ -135,7 +135,7 @@ class RequestsTest {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
-      ChargeRequest.Params.Data data = ChargeRequest.Params.Data.builder()
+      ChargeRequestData data = ChargeRequestData.builder()
         .accountId("accountId")
         .notificationUrl("https://notify.me")
         .endUserId("EndUserId")
@@ -143,7 +143,7 @@ class RequestsTest {
         .amount("99.90")
         .currency("SEK")
         .attributes(
-          ChargeRequest.Params.Data.Attributes.builder()
+          ChargeRequestDataAttributes.builder()
             .shopperStatement("Shopper statement")
             .pspMerchant("Merchant Ltd.")
             .externalReference("External reference")
@@ -172,12 +172,12 @@ class RequestsTest {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
-      RefundRequest.Params.Data data = RefundRequest.Params.Data.builder()
+      RefundRequestData data = RefundRequestData.builder()
         .orderId("123456")
         .amount("22")
         .currency("SEK")
         .attributes(
-          RefundRequest.Params.Data.Attributes.builder()
+          RefundRequestDataAttributes.builder()
             .externalReference("123")
             .build()
         )
@@ -203,8 +203,8 @@ class RequestsTest {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
-      RegisterAccountResponse.Result.Data registerAccountResponse = client.registerAccount(
-        RegisterAccountRequest.Params.Data.builder()
+      RegisterAccountResponseData registerAccountResponse = client.registerAccount(
+        RegisterAccountRequestData.builder()
           .accountNumber("69706212")
           .clearingHouse("SWEDEN")
           .bankNumber("6112")
@@ -212,7 +212,7 @@ class RequestsTest {
           .firstname("Steve")
           .lastname("Smith")
           .attributes(
-            RegisterAccountRequest.Params.Data.Attributes.builder()
+            RegisterAccountRequestDataAttributes.builder()
               .addressCountry("SE")
               .dateOfBirth("1990-01-20")
               .email("test@trustly.com")
@@ -231,13 +231,13 @@ class RequestsTest {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
-      SelectAccountResponse.Result.Data selectAccountResponse = client.selectAccount(
-        SelectAccountRequest.Params.Data.builder()
+      SelectAccountResponseData selectAccountResponse = client.selectAccount(
+        SelectAccountRequestData.builder()
           .endUserId("EndUserId")
           .notificationUrl("https://notify.me")
           .messageId(UUID.randomUUID().toString())
           .attributes(
-            SelectAccountRequest.Params.Data.Attributes.builder()
+            SelectAccountRequestDataAttributes.builder()
               .country("SE")
               .firstname("Steve")
               .lastname("Smith")
@@ -262,13 +262,13 @@ class RequestsTest {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
-      WithdrawRequest.Params.Data data = WithdrawRequest.Params.Data.builder()
+      WithdrawRequestData data = WithdrawRequestData.builder()
         .endUserId(UUID.randomUUID().toString())
         .messageId(UUID.randomUUID().toString())
         .notificationUrl("https://test.trustly.com/trustlynotification")
         .currency("SEK")
         .attributes(
-          WithdrawRequest.Params.Data.Attributes.builder()
+          WithdrawRequestDataAttributes.builder()
             .firstname("Jon")
             .lastname("Doe")
             .email("test@example.com")
@@ -289,7 +289,7 @@ class RequestsTest {
         )
         .build();
 
-      WithdrawResponse.Result.Data response = client.withdraw(data);
+      WithdrawResponseData response = client.withdraw(data);
 
       Assertions.assertNotNull(response.getURL());
       Assertions.assertNotEquals(0, response.getOrderID());
@@ -303,8 +303,8 @@ class RequestsTest {
 
       String uniqueMessageId = UUID.randomUUID().toString();
 
-      RegisterAccountPayoutResponse.Result.Data registerAccountPayoutResponse = client.registerAccountPayout(
-        RegisterAccountPayoutRequest.Params.Data.builder()
+      RegisterAccountPayoutResponseData registerAccountPayoutResponse = client.registerAccountPayout(
+        RegisterAccountPayoutRequestData.builder()
           .endUserId("123123")
           .clearingHouse("SWEDEN")
           .bankNumber("6112")
@@ -316,7 +316,7 @@ class RequestsTest {
           .amount("99.99")
           .currency("SEK")
           .attributes(
-            RegisterAccountPayoutRequest.Params.Data.Attributes.builder()
+            RegisterAccountPayoutRequestDataAttributes.builder()
               .pspMerchant("Merchant Ltd.")
               .shopperStatement("MyBrand.com")
               .externalReference("23423525234")
@@ -326,7 +326,7 @@ class RequestsTest {
               .merchantCategoryCode("5499")
               .senderInformation(
                 SenderInformation.builder()
-                  .partytype(RecipientOrSenderInformation.PartyTypeKind.PERSON)
+                  .partytype(PartyTypeKind.PERSON)
                   .address("Street 1, 12345 Barcelona")
                   .countryCode("SE")
                   .firstname("Steve")
@@ -348,14 +348,14 @@ class RequestsTest {
   }
 
   @Test
-  void testMerchantSettlement() throws Exception {
+  void testMerchantSettlement() {
 
     try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
 
       String uniqueMessageId = UUID.randomUUID().toString();
 
       var ex = Assertions.assertThrows(TrustlyRequestException.class, () -> client.merchantSettlement(
-        MerchantSettlementRequest.Params.Data.builder()
+        MerchantSettlementRequestData.builder()
           .messageId(uniqueMessageId)
           .amount("4.99")
           .currency("EUR")
