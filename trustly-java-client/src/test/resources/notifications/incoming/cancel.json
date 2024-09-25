@@ -1,0 +1,15 @@
+{
+  "method": "cancel",
+  "params": {
+    "signature": "LNo4v7Iyvje+PurM2HYy1zqkmQxAH5KJouH2wTzRz+og56eiWjLRa1U0ww9g/YoPbyEI1znBIq4Fogi/McMbOUwVy8sQhqutuqlnRR2rDPfGHpOkX5ctiTdvP/0CmUVNwTLJzo93QrGvx7bcRx9W/D6iuipKP8Sh08KIk9LIUxnnwQnyz82ckG7+5GYK8Q2sGMjQIM+F8AhkA+wax3gnmoQJN8FrdHGRLROGDozBx27uIHIUzZTRrQdpFgH9asivr3+zVI4gZLt8OBMkqP9v3/YECwiucyEY51FmQCpTwVXDVNJ4uP4nhUvZzxtPQIhWeEW9Imw7sBIQqz/H5tC0Aw==",
+    "uuid": "8f003dba-4f90-4afe-91e9-6c2e6ad0f8a9",
+    "data": {
+      "messageid": "98348932",
+      "orderid": "87654567",
+      "enduserid": "32123",
+      "notificationid": "4876513450",
+      "timestamp": "2013-12-20 14:42:04.675645+01"
+    }
+  },
+  "version": "1.1"
+}
