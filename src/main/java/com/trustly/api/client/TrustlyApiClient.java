@@ -79,6 +79,11 @@ import java.util.Locale;
 import java.util.Map;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+import com.trustly.api.domain.methods.verifyaccount.VerifyAccountRequestData;
+import com.trustly.api.domain.methods.verifyaccount.VerifyAccountResponseData;
+
+import com.trustly.api.domain.methods.getaccounttransactions.GetAccountTransactionsRequestData;
+import com.trustly.api.domain.methods.getaccounttransactions.GetAccountTransactionsResponseData;
 
 @Slf4j
 public class TrustlyApiClient implements Closeable {
@@ -439,6 +444,14 @@ public class TrustlyApiClient implements Closeable {
    */
   public WithdrawResponseData withdraw(WithdrawRequestData request) throws TrustlyRequestException {
     return this.sendRequest(request, WithdrawResponseData.class, "Withdraw", null);
+  }
+
+  public VerifyAccountResponseData verifyAccount(VerifyAccountRequestData request) throws TrustlyRequestException {
+    return this.sendRequest(request, VerifyAccountResponseData.class, "VerifyAccount", null);
+  }
+
+  public GetAccountTransactionsResponseData getAccountTransactions(GetAccountTransactionsRequestData request) throws TrustlyRequestException {
+    return this.sendRequest(request, GetAccountTransactionsResponseData.class, "GetAccountTransactions", null);
   }
 
   // Notifications

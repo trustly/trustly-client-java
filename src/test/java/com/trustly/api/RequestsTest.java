@@ -13,6 +13,9 @@ import com.trustly.api.domain.methods.charge.ChargeRequestDataAttributes;
 import com.trustly.api.domain.methods.deposit.DepositRequestData;
 import com.trustly.api.domain.methods.deposit.DepositRequestDataAttributes;
 import com.trustly.api.domain.methods.deposit.DepositResponseData;
+import com.trustly.api.domain.methods.getaccounttransactions.GetAccountTransactionsRequestData;
+import com.trustly.api.domain.methods.getaccounttransactions.GetAccountTransactionsRequestDataAttributes;
+import com.trustly.api.domain.methods.getaccounttransactions.GetAccountTransactionsResponseData;
 import com.trustly.api.domain.methods.merchantsettlement.MerchantSettlementRequestData;
 import com.trustly.api.domain.methods.merchantsettlement.MerchantSettlementResponseData;
 import com.trustly.api.domain.methods.refund.RefundRequestData;
@@ -29,7 +32,9 @@ import com.trustly.api.domain.methods.selectaccount.SelectAccountResponseData;
 import com.trustly.api.domain.methods.withdraw.WithdrawRequestData;
 import com.trustly.api.domain.methods.withdraw.WithdrawRequestDataAttributes;
 import com.trustly.api.domain.methods.withdraw.WithdrawResponseData;
+
 import java.util.UUID;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -395,6 +400,67 @@ class RequestsTest {
       }
 
       Assertions.fail("Unexpected error: " + ex, ex);
+    }
+  }
+
+  @Test
+  void testVerifyAccount() throws Exception {
+
+    try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
+
+      VerifyAccountRequestData request = VerifyAccountRequestData.builder()
+        .notificationUrl("https://fake.test.notification.trustly.com")
+        .endUserId("john.doe@trustly.com")
+        .messageId(UUID.randomUUID().toString())
+        .attributes(
+          VerifyAccountRequestDataAttributes.builder()
+            .locale("sv_SE")
+            .firstname("John")
+            .lastname("Doe")
+            .email("john.doe@trustly.com")
+            .country("SE")
+            .successUrl("https://google.com")
+            .failUrl("https://google.com")
+            .mobilePhone("0701234567")
+            .build()
+        )
+        .build();
+
+      VerifyAccountResponseData response = client.verifyAccount(request);
+
+      Assertions.assertNotNull(response);
+      Assertions.assertNotNull(response.getUrl());
+    }
+  }
+
+  @Test
+  void testGetAccountTransactions() throws Exception {
+
+    try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
+
+      GetAccountTransactionsRequestData request = GetAccountTransactionsRequestData.builder()
+        .notificationUrl("https://fake.test.notification.trustly.com")
+        .locale("sv_SE")
+        .country("SE")
+        .successUrl("https://google.com")
+        .failUrl("https://google.com")
+        .endUserId("john.doe@trustly.com")
+        .messageId(UUID.randomUUID().toString())
+        .attributes(
+          GetAccountTransactionsRequestDataAttributes.builder()
+            .firstname("John")
+            .lastname("Doe")
+            .email("john.doe@trustly.com")
+            .mobilePhone("0701234567")
+            .dateOfBirth("1979-01-31")
+            .build()
+        )
+        .build();
+
+      GetAccountTransactionsResponseData response = client.getAccountTransactions(request);
+
+      Assertions.assertNotNull(response);
+      Assertions.assertNotNull(response.getUrl());
     }
   }
 }
