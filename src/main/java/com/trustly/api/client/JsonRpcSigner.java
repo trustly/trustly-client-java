@@ -15,7 +15,7 @@ public interface JsonRpcSigner {
 
   <T extends IResponseResultData> JsonRpcResponse<T> sign(JsonRpcResponse<T> response);
 
-  <D extends IRequestParamsData, P extends IRequestParams<D>> void verify(IRequest<P> request) throws TrustlySignatureException;
+  <D extends IRequestParamsData, P extends IRequestParams<D>> void verify(IRequest<P> request, JsonNode dataNode) throws TrustlySignatureException;
 
   <T extends IResponseResultData> void verify(JsonRpcResponse<T> response, JsonNode nodeResponse) throws TrustlySignatureException;
 }

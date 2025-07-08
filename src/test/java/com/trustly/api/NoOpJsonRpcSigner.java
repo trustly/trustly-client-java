@@ -22,7 +22,7 @@ class NoOpJsonRpcSigner implements JsonRpcSigner {
   }
 
   @Override
-  public <D extends IRequestParamsData, P extends IRequestParams<D>> void verify(IRequest<P> request) {
+  public <D extends IRequestParamsData, P extends IRequestParams<D>> void verify(IRequest<P> request, JsonNode dataNode) {
 
   }
 

@@ -26,7 +26,10 @@ public class NotificationArgs<D extends IRequestParamsData> {
   @Valid
   private final D data;
 
+  @Getter
   private final String method;
+
+  @Getter
   private final String uuid;
 
   private final NotificationOkHandler onOK;

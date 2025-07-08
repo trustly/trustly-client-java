@@ -95,13 +95,13 @@ public class DefaultJsonRpcSigner implements JsonRpcSigner {
   }
 
   @Override
-  public <D extends IRequestParamsData, P extends IRequestParams<D>> void verify(IRequest<P> request) throws TrustlySignatureException {
+  public <D extends IRequestParamsData, P extends IRequestParams<D>> void verify(IRequest<P> request, JsonNode dataNode) throws TrustlySignatureException {
 
     String uuid = (request.getParams() == null) ? null : request.getParams().getUuid();
     String signature = (request.getParams() == null) ? null : request.getParams().getSignature();
     D data = (request.getParams() == null) ? null : request.getParams().getData();
 
-    this.verify(request.getMethod(), uuid, signature, data, null);
+    this.verify(request.getMethod(), uuid, signature, data, dataNode);
   }
 
   @Override

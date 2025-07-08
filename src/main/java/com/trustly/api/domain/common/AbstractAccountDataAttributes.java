@@ -138,9 +138,21 @@ public class AbstractAccountDataAttributes extends AbstractRequestParamsDataAttr
   String unchangeableNationalIdentificationNumber;
 
   /**
+   * @deprecated (see ReturnToAppURL)
    * If you are using Trustly from within your native iOS app, this attribute should be sent so that we can redirect the users back to your
    * app in case an external app is used for authentication (for example Mobile Bank ID in Sweden).
    */
+  @Deprecated
   @JsonProperty("URLScheme")
   String urlScheme;
+
+  /**
+   * When rendering the Trustly Checkout in a native app you are required to pass your application’s url as an attribute to the order
+   * initiation request. By doing so, Trustly can redirect users back to your app after using external identification apps such as
+   * Mobile BankID: Please visit this link for more info. It must not be included for transactions that are not originating from an app.
+   * NOTE! This value is only used for redirecting users back to the native app within the flows.
+   * See also SuccessURL and FailURL descriptions.
+   */
+  @JsonProperty("ReturnToAppURL")
+  String returnToAppURL;
 }

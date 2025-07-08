@@ -720,12 +720,19 @@ public class TrustlyApiClient implements Closeable {
     NotificationFailHandler onFailed
   ) throws IOException, TrustlyValidationException, TrustlySignatureException {
 
+    // Get the JsonNode for the data field for verifying later
+    JsonNode jsonToken = this.objectMapper.readTree(jsonString);
+    JsonNode dataToken = null;
+    if (jsonToken.at("/params/data") != null) {
+      dataToken = jsonToken.at("/params/data");
+    }
+
     JavaType javaRequestType = this.objectMapper.getTypeFactory().constructParametricType(NotificationRequest.class, meta.getDataClass());
     NotificationRequest<D> rpcRequest = this.objectMapper.readValue(jsonString, javaRequestType);
 
     // Verify the notification (RpcRequest from Trustly) signature.
     try {
-      this.signer.verify(rpcRequest);
+      this.signer.verify(rpcRequest, dataToken);
     } catch (TrustlySignatureException ex) {
       throw new TrustlySignatureException(
         "Could not validate signature of notification from Trustly. Is the public key for Trustly the correct one, for test or production?",
