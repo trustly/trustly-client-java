@@ -181,4 +181,11 @@ public class DepositRequestDataAttributes extends AbstractAmountConstrainedAccou
    */
   @JsonProperty(value = "RequestKYC")
   private String requestKyc;
+
+  /**
+   * The Deposit request starts the deposit process at Trustly. It includes the same parameters as a standard deposit request,
+   * along with an additional Azura object containing attributes.
+   */
+  @JsonProperty(value = "Azura")
+  private DepositRequestDataAzura azura;
 }

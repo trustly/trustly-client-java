@@ -13,6 +13,9 @@ import com.trustly.api.domain.methods.charge.ChargeRequestDataAttributes;
 import com.trustly.api.domain.methods.deposit.DepositRequestData;
 import com.trustly.api.domain.methods.deposit.DepositRequestDataAttributes;
 import com.trustly.api.domain.methods.deposit.DepositResponseData;
+import com.trustly.api.domain.methods.deposit.azura.AzuraDepositRequestData;
+import com.trustly.api.domain.methods.deposit.azura.AzuraDepositRequestDataAttributes;
+import com.trustly.api.domain.methods.deposit.azura.AzuraDepositResponseData;
 import com.trustly.api.domain.methods.merchantsettlement.MerchantSettlementRequestData;
 import com.trustly.api.domain.methods.merchantsettlement.MerchantSettlementResponseData;
 import com.trustly.api.domain.methods.refund.RefundRequestData;
@@ -394,6 +397,30 @@ class RequestsTest {
         }
       }
 
+      Assertions.fail("Unexpected error: " + ex, ex);
+    }
+  }
+
+  @Test
+  void testAzuraDeposit() {
+    try (TrustlyApiClient client = new TrustlyApiClient(settings)) {
+      String uniqueMessageId = UUID.randomUUID().toString();
+
+      AzuraDepositRequestData request = AzuraDepositRequestData.builder()
+        .messageId(uniqueMessageId)
+        .attributes(AzuraDepositRequestDataAttributes.builder()
+          .email("test@trustly.com")
+          .mobilePhone("0701234567")
+          .endUserID("john.doe@trustly.com")
+          .country("SE")
+          .currency("SEK")
+          .build())
+        .build();
+
+      AzuraDepositResponseData azuraDepositResponse = client.azuraDeposit(request);
+
+      Assertions.assertNotNull(azuraDepositResponse);
+    } catch (TrustlyRequestException ex) {
       Assertions.fail("Unexpected error: " + ex, ex);
     }
   }

@@ -39,6 +39,10 @@ import com.trustly.api.domain.methods.denywithdrawal.DenyWithdrawalRequestData;
 import com.trustly.api.domain.methods.denywithdrawal.DenyWithdrawalResponseData;
 import com.trustly.api.domain.methods.deposit.DepositRequestData;
 import com.trustly.api.domain.methods.deposit.DepositResponseData;
+import com.trustly.api.domain.methods.deposit.azura.AzuraDepositRequestData;
+import com.trustly.api.domain.methods.deposit.azura.AzuraDepositResponseData;
+import com.trustly.api.domain.methods.deposit.azura.AzuraRemoveAccountRequestData;
+import com.trustly.api.domain.methods.deposit.azura.AzuraRemoveAccountResponseData;
 import com.trustly.api.domain.methods.getwithdrawals.GetWithdrawalsRequestData;
 import com.trustly.api.domain.methods.getwithdrawals.GetWithdrawalsResponseData;
 import com.trustly.api.domain.methods.merchantsettlement.MerchantSettlementRequestData;
@@ -441,6 +445,20 @@ public class TrustlyApiClient implements Closeable {
     return this.sendRequest(request, WithdrawResponseData.class, "Withdraw", null);
   }
 
+  /**
+   * TODO insert javadoc
+   */
+  public AzuraDepositResponseData azuraDeposit(AzuraDepositRequestData request) throws TrustlyRequestException {
+    return this.sendRequest(request, AzuraDepositResponseData.class, "AzuraDeposit", null);
+  }
+
+  /**
+   * TODO insert javadoc
+   */
+  public AzuraRemoveAccountResponseData azuraRemoveAccount(AzuraRemoveAccountRequestData request) throws TrustlyRequestException {
+    return this.sendRequest(request, AzuraRemoveAccountResponseData.class, "RemoveAzuraAccount", null);
+  }
+
   // Notifications
 
   /**
@@ -720,12 +738,19 @@ public class TrustlyApiClient implements Closeable {
     NotificationFailHandler onFailed
   ) throws IOException, TrustlyValidationException, TrustlySignatureException {
 
+    // Get the JsonNode for the data field for verifying later
+    JsonNode jsonToken = this.objectMapper.readTree(jsonString);
+    JsonNode dataToken = null;
+    if (jsonToken.at("/params/data") != null) {
+      dataToken = jsonToken.at("/params/data");
+    }
+
     JavaType javaRequestType = this.objectMapper.getTypeFactory().constructParametricType(NotificationRequest.class, meta.getDataClass());
     NotificationRequest<D> rpcRequest = this.objectMapper.readValue(jsonString, javaRequestType);
 
     // Verify the notification (RpcRequest from Trustly) signature.
     try {
-      this.signer.verify(rpcRequest);
+      this.signer.verify(rpcRequest, dataToken);
     } catch (TrustlySignatureException ex) {
       throw new TrustlySignatureException(
         "Could not validate signature of notification from Trustly. Is the public key for Trustly the correct one, for test or production?",

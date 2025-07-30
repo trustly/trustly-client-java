@@ -30,4 +30,10 @@ public class CancelNotificationData extends AbstractFromTrustlyRequestData<Empty
 
   @JsonProperty("timestamp")
   String timestamp;
+
+  @JsonProperty("lastorderstep")
+  String lastOrderStep;
+
+  @JsonProperty("orderstatuses")
+  String orderStatuses;
 }
