@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trustly.api.client.NotificationArgs.NotificationFailHandler;
 import com.trustly.api.client.NotificationArgs.NotificationOkHandler;
+import com.trustly.api.client.NotificationArgs.NotificationOkStatusHandler;
 import com.trustly.api.domain.base.IFromTrustlyRequestData;
 import com.trustly.api.domain.base.IRequestParamsData;
 import com.trustly.api.domain.base.IResponseResultData;
@@ -694,6 +695,7 @@ public class TrustlyApiClient implements Closeable {
   public void handleNotification(
     String jsonString,
     NotificationOkHandler onOK,
+    NotificationOkStatusHandler onOkStatus,
     NotificationFailHandler onFailed
   ) throws IOException, TrustlyNoNotificationListenerException, TrustlyValidationException, TrustlySignatureException {
 
@@ -710,13 +712,14 @@ public class TrustlyApiClient implements Closeable {
       }
     }
 
-    this.handleNotification(jsonString, mapper, onOK, onFailed);
+    this.handleNotification(jsonString, mapper, onOK, onOkStatus, onFailed);
   }
 
   private <D extends IFromTrustlyRequestData> void handleNotification(
     String jsonString,
     NotificationMeta<D> meta,
     NotificationOkHandler onOK,
+    NotificationOkStatusHandler onOkStatus,
     NotificationFailHandler onFailed
   ) throws IOException, TrustlyValidationException, TrustlySignatureException {
 
@@ -742,7 +745,7 @@ public class TrustlyApiClient implements Closeable {
       rpcRequest.getParams().getData(),
       rpcRequest.getMethod(),
       rpcRequest.getParams().getUuid(),
-      onOK, onFailed
+      onOK, onFailed, onOkStatus
     );
 
     try {

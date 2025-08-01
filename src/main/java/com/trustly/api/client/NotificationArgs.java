@@ -14,6 +14,13 @@ public class NotificationArgs<D extends IRequestParamsData> {
   public interface NotificationOkHandler {
 
     void handle(String method, String uuid) throws IOException, TrustlyValidationException;
+
+  }
+
+  @FunctionalInterface
+  public interface NotificationOkStatusHandler {
+
+    void handle(String method, String uuid, String status) throws IOException, TrustlyValidationException;
   }
 
   @FunctionalInterface
@@ -31,9 +38,14 @@ public class NotificationArgs<D extends IRequestParamsData> {
 
   private final NotificationOkHandler onOK;
   private final NotificationFailHandler onFailed;
+  private final NotificationOkStatusHandler onOKStatus;
 
   public void respondWithOk() throws TrustlyValidationException, IOException {
     this.onOK.handle(this.method, this.uuid);
+  }
+
+  public void respondWithOk(String status) throws TrustlyValidationException, IOException {
+    this.onOKStatus.handle(this.method, this.uuid, status);
   }
 
   public void respondWithFailed(String message) throws TrustlyValidationException, IOException {

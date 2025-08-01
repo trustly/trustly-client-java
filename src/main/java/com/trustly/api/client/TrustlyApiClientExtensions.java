@@ -51,6 +51,10 @@ public class TrustlyApiClientExtensions {
           responseCount.incrementAndGet();
           TrustlyApiClientExtensions.respond(client, responder, method, uuid, "OK", null, 200);
         },
+        (method, uuid, status) -> {
+          responseCount.incrementAndGet();
+          TrustlyApiClientExtensions.respond(client, responder, method, uuid, status, null, 200);
+        },
         (method, uuid, message) -> {
           responseCount.incrementAndGet();
           TrustlyApiClientExtensions.respond(client, responder, method, uuid, "FAILED", message, 500);
